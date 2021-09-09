@@ -12,11 +12,11 @@ from drf_yasg import openapi
 # Bổ trợ sinh api document, thông tin này sẽ hiện lên ở swagger
 schema_view = get_schema_view(
     openapi.Info(
-        title="Employment Agency API",
+        title="Tài liệu API cho Website giới thiệu việc làm",
         default_version='v1',
-        description="APIs for Employment Agenct app",
+        description="Tài liệu tra cứu sử dụng API",
         contact=openapi.Contact(email="1851050127tan@ou.edu.vn"),
-        license=openapi.License(name="Quốc Vin & Quốc Tấn @2021"),
+        license=openapi.License(name="Trần Quốc Tấn @2021"),
     ),
     public=True,
     permission_classes=(permissions.AllowAny,),
@@ -25,7 +25,7 @@ schema_view = get_schema_view(
 # Khai báo các route/path dẫn đến các app được sử dụng
 urlpatterns = [
     # Đầu tiên nhất dẫn vào trong app của mình
-    path('', include('employment_app.urls')),
+    path('', include('gioithieuvieclam_app.urls')),
     # Đường dẫn vào trang admin mặc định
     path('admin/', admin.site.urls),
     # Đường dẫn oauth2 để lấy token, app chứng thực, /o tên khác vẫn được

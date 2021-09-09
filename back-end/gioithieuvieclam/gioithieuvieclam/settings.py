@@ -26,7 +26,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # App tự tạo
-    'employment_app.apps.EmploymentAppConfig',
+    'gioithieuvieclam_app.apps.GioithieuvieclamAppConfig',
     # Trình soạn thảo richtext
     'ckeditor',
     'ckeditor_uploader',
@@ -79,7 +79,7 @@ INTERNAL_IPS = [
     '127.0.0.1'
 ]
 
-ROOT_URLCONF = 'employment_agency.urls'
+ROOT_URLCONF = 'gioithieuvieclam.urls'
 
 TEMPLATES = [
     {
@@ -97,7 +97,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'employment_agency.wsgi.application'
+WSGI_APPLICATION = 'gioithieuvieclam.wsgi.application'
 
 
 # Cấu hình cơ sở dữ liệu
@@ -113,7 +113,7 @@ DATABASES = {
 }
 
 # Khai báo lớp user được sử dụng để chứng thực
-AUTH_USER_MODEL = 'employment_app.NguoiDung'
+AUTH_USER_MODEL = 'gioithieuvieclam_app.NguoiDung'
 
 # Cấu hình chứng thực bằng mật khẩu
 
@@ -150,7 +150,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 
 STATIC_URL = '/static/'
-MEDIA_ROOT = '%s/employment_app/' % BASE_DIR
+MEDIA_ROOT = '%s/gioithieuvieclam_app/' % BASE_DIR
 CKEDITOR_UPLOAD_PATH = 'ckeditor/'
 
 # Default primary key field type
