@@ -1,0 +1,50 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Arvo:wght@700&display=swap');
+
+body {
+    font-family: "Roboto" Arial, Helvetica, sans-serif;
+    color: #333;
+}
+
+h1, h2, h3, nav {
+    font-family: "Nunito", Arial, Helvetica, sans-serif;
+}
+
+.brand {
+    font-family: "Arvo", Arial, Helvetica, sans-serif;
+    font-weight: 800;
+    font-size: 1.5rem;
+}
+
+.sub-brand {
+    font-size: .75rem;
+    font-weight: lighter;
+}
+
+.brand-font {
+    font-family: "Arvo", Arial, Helvetica, sans-serif;
+}
+
+.landing-page-carousel {
+    height: 20rem;
+}
+
+.no-decoration, 
+.no-decoration:hover {
+    text-decoration: none;
+    color: inherit;
+}
+
+.orange-gradient {
+    background: #de6262; /* fallback for old browsers */
+    background: -webkit-linear-gradient(
+        to right,
+        #d73350,
+        #fc6f69
+    ); /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(
+        to right,
+        #ffb88c,
+        #de6262
+    ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
