@@ -11,12 +11,14 @@ import pic3 from "../assets/image/3.jpg";
 import "animate.css";
 
 export default function HomePage() {
-
 	// Đoạn chữ cạnh hình (carousel)
 	const CarouselCaption = (props) => {
 		return (
 			<div className="d-flex flex-column animate__animated animate__fadeIn">
-				<b style={{fontSize: "3rem"}} className="pt-4">
+				<b
+					style={{ fontSize: "3rem", fontFamily: "Nunito" }}
+					className="pt-4"
+				>
 					{props.title}
 				</b>
 				<p>{props.text}</p>
@@ -40,8 +42,7 @@ export default function HomePage() {
 			title="Dễ dàng tìm công việc phù hợp"
 			text={
 				<>
-					Với
-					<span className="brand-font">Job on the go! </span>
+					Với <span className="brand-font">Job on the go! </span>
 					bạn có thể dễ dàng tìm kiếm các công việc phù hợp với trình
 					độ, kỹ năng của bản thân.
 				</>
@@ -86,7 +87,7 @@ export default function HomePage() {
 			<div className="orange-gradient" style={{ height: "25rem" }}>
 				<Container>
 					<Row>
-						<Col sm={12} md={6} style={{height: "25rem"}}>
+						<Col sm={12} md={6} style={{ height: "25rem" }}>
 							{carouselCaption[slideIndex]}
 						</Col>
 						<Col sm={12} md={6}>
@@ -129,30 +130,93 @@ export default function HomePage() {
 				</Container>
 			</div>
 			<Container>
-				<div style={{ height: "20rem" }}>
-					<p>
-						Lorem ipsum dolor, sit amet consectetur adipisicing
-						elit. Sed maiores ipsum dicta! Aut rem in quasi
-						voluptate esse quae facere provident, asperiores
-						delectus dolorem quis veniam, nobis iusto sed adipisci!
-					</p>
-				</div>
-				<div style={{ height: "20rem" }}>
-					<p>
-						Lorem ipsum dolor, sit amet consectetur adipisicing
-						elit. Sed maiores ipsum dicta! Aut rem in quasi
-						voluptate esse quae facere provident, asperiores
-						delectus dolorem quis veniam, nobis iusto sed adipisci!
-					</p>
-				</div>
-				<div style={{ height: "20rem" }}>
-					<p>
-						Lorem ipsum dolor, sit amet consectetur adipisicing
-						elit. Sed maiores ipsum dicta! Aut rem in quasi
-						voluptate esse quae facere provident, asperiores
-						delectus dolorem quis veniam, nobis iusto sed adipisci!
-					</p>
-				</div>
+				{/* Văn bản giả */}
+				<Row className="my-5 d-flex flex-row align-items-center">
+					<Col sm={12} md={6}>
+						<Image src={pic3} fluid />
+					</Col>
+					<Col
+						sm={12}
+						md={6}
+					>
+						<div>
+							<h2 className="fw-bold">Lorem islum dolo</h2>
+							<p style={{ textAlign: "justify" }}>
+								Lorem ipsum dolor sit amet, consectetur
+								adipiscing elit. Curabitur ut est blandit,
+								venenatis risus in, sollicitudin sem. Integer
+								laoreet quam augue, sit amet accumsan urna
+								laoreet viverra. Suspendisse arcu tortor,
+								blandit id libero ac, laoreet sodales nulla.
+								Maecenas mattis ligula leo, non congue lacus
+								rhoncus nec. Sed convallis mi lectus, in
+								facilisis metus maximus non. Donec odio sapien,
+								dignissim eleifend lacinia quis, varius eget
+								ligula. Proin a eros suscipit, pellentesque nibh
+								sit amet, lacinia ante. Etiam quis consequat
+								justo. Quisque non leo metus.
+							</p>
+						</div>
+					</Col>
+				</Row>
+				<hr />
+				<Row className="my-5 d-flex flex-row align-items-center">
+					<Col
+						sm={12}
+						md={6}
+					>
+						<div>
+							<h2 className="fw-bold">Lorem islum dolo</h2>
+							<p style={{ textAlign: "justify" }}>
+								Lorem ipsum dolor sit amet, consectetur
+								adipiscing elit. Curabitur ut est blandit,
+								venenatis risus in, sollicitudin sem. Integer
+								laoreet quam augue, sit amet accumsan urna
+								laoreet viverra. Suspendisse arcu tortor,
+								blandit id libero ac, laoreet sodales nulla.
+								Maecenas mattis ligula leo, non congue lacus
+								rhoncus nec. Sed convallis mi lectus, in
+								facilisis metus maximus non. Donec odio sapien,
+								dignissim eleifend lacinia quis, varius eget
+								ligula. Proin a eros suscipit, pellentesque nibh
+								sit amet, lacinia ante. Etiam quis consequat
+								justo. Quisque non leo metus.
+							</p>
+						</div>
+					</Col>
+					<Col sm={12} md={6}>
+						<Image src={pic2} fluid />
+					</Col>
+				</Row>
+				<hr/>
+				<Row className="my-5 d-flex flex-row align-items-center">
+					<Col sm={12} md={6}>
+						<Image src={pic1} fluid />
+					</Col>
+					<Col
+						sm={12}
+						md={6}
+					>
+						<div>
+							<h2 className="fw-bold">Lorem islum dolo</h2>
+							<p style={{ textAlign: "justify" }}>
+								Lorem ipsum dolor sit amet, consectetur
+								adipiscing elit. Curabitur ut est blandit,
+								venenatis risus in, sollicitudin sem. Integer
+								laoreet quam augue, sit amet accumsan urna
+								laoreet viverra. Suspendisse arcu tortor,
+								blandit id libero ac, laoreet sodales nulla.
+								Maecenas mattis ligula leo, non congue lacus
+								rhoncus nec. Sed convallis mi lectus, in
+								facilisis metus maximus non. Donec odio sapien,
+								dignissim eleifend lacinia quis, varius eget
+								ligula. Proin a eros suscipit, pellentesque nibh
+								sit amet, lacinia ante. Etiam quis consequat
+								justo. Quisque non leo metus.
+							</p>
+						</div>
+					</Col>
+				</Row>
 			</Container>
 		</>
 	);

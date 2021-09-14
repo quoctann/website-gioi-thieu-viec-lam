@@ -10,9 +10,16 @@ const SimpleInput = (props) => {
 					<InputGroup.Text>
 						<FontAwesomeIcon icon={props.faIcon} />
 					</InputGroup.Text>
-					<Form.Control type={props.type} placeholder={props.placeholder} />
+					<Form.Control
+						type={props.type} 
+						placeholder={props.placeholder} 
+						required={props.required}
+						value={props.value}
+						onChange={props.onChange}
+						name={props.name}
+					/>
 				</InputGroup>
-			</Form.Group>
+			</Form.Group>		
 		</>
 	);
 };

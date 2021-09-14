@@ -10,18 +10,25 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "animate.css";
 
 import LandingPage from "./pages/LandingPage";
+import Footer from "./components/Footer";
 import NavigationBar from "./components/NavigationBar";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 
+// Lưu chuỗi đường dẫn tự cấu hình
+import Routes from "./routes"
+
 ReactDOM.render(
 	<BrowserRouter>
-		<NavigationBar />
-		<Switch>
-			<Route exact path="/" component={LandingPage} />
-			<Route exact path="/login" component={LoginPage} />
-			<Route exact path="/register" component={RegisterPage} />
-		</Switch>
+		<div className="wrapper">
+			<NavigationBar />
+			<Switch>
+				<Route exact path={Routes.LandingPage.path} component={LandingPage} />
+				<Route exact path={Routes.LoginPage.path} component={LoginPage} />
+				<Route exact path={Routes.RegisterPage.path} component={RegisterPage} />
+			</Switch>
+			<Footer />
+		</div>
 	</BrowserRouter>,
 	document.getElementById("root")
 );

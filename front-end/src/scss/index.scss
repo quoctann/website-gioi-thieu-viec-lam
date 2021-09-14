@@ -1,50 +1,95 @@
-@import url('https://fonts.googleapis.com/css2?family=Nunito&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Arvo:wght@700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Nunito&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Arvo:wght@700&display=swap");
+// @import "../../node_modules/bootstrap/scss/bootstrap"; /* all of bootstrap - too much */
+// Just scss BOOTSTRAP component
+// Include functions first (so you can manipulate colors, SVGs, calc, etc)
+@import "../../node_modules/bootstrap/scss/functions";
+// Include remainder of required Bootstrap stylesheets
+@import "../../node_modules/bootstrap/scss/variables";
+@import ".../../node_modules/bootstrap/scss/mixins";
+// Include any optional Bootstrap components as you like
+@import "../../node_modules/bootstrap/scss/root";
+@import "../../node_modules/bootstrap/scss/reboot";
+@import "../../node_modules/bootstrap/scss/type";
+@import "../../node_modules/bootstrap/scss/images";
+@import "../../node_modules/bootstrap/scss/containers";
+@import "../../node_modules/bootstrap/scss/grid";
 
-body {
-    font-family: "Roboto" Arial, Helvetica, sans-serif;
-    color: #333;
+* {
+	font-family: "Roboto" Arial, Helvetica, sans-serif;
+	color: #333;
 }
 
-h1, h2, h3, nav {
-    font-family: "Nunito", Arial, Helvetica, sans-serif;
+h1,
+h2,
+h3,
+h5,
+nav {
+	font-family: "Nunito", Arial, Helvetica, sans-serif;
 }
 
 .brand {
-    font-family: "Arvo", Arial, Helvetica, sans-serif;
-    font-weight: 800;
-    font-size: 1.5rem;
+	font-family: "Arvo", Arial, Helvetica, sans-serif;
+	font-weight: 800;
+	font-size: 1.5rem;
 }
 
 .sub-brand {
-    font-size: .75rem;
-    font-weight: lighter;
+	font-size: 0.75rem;
+	font-weight: lighter;
+	font-family: "Nunito", Arial, Helvetica, sans-serif;
 }
 
 .brand-font {
-    font-family: "Arvo", Arial, Helvetica, sans-serif;
+	font-family: "Arvo", Arial, Helvetica, sans-serif;
 }
 
 .landing-page-carousel {
-    height: 20rem;
+	height: 20rem;
 }
 
-.no-decoration, 
+.no-decoration,
 .no-decoration:hover {
-    text-decoration: none;
-    color: inherit;
+	text-decoration: none;
+	color: inherit;
 }
+
+$orange-gradient-fallback: #de6262; /* fallback for old browsers */
+$orange-gradient-chrome: -webkit-linear-gradient(to right, #d73350, #fc6f69); /* Chrome 10-25, Safari 5.1-6 */
+$orange-gradient-firefox: linear-gradient(to right, #ffb88c, #de6262); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 
 .orange-gradient {
-    background: #de6262; /* fallback for old browsers */
-    background: -webkit-linear-gradient(
-        to right,
-        #d73350,
-        #fc6f69
-    ); /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(
-        to right,
-        #ffb88c,
-        #de6262
-    ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+	background: $orange-gradient-fallback;
+	background: $orange-gradient-chrome;
+	background: $orange-gradient-firefox;
+}
+
+@include media-breakpoint-up(sm) {
+	.form-width {
+		width: 80vw;
+	}
+}
+
+@include media-breakpoint-up(md) {
+	.form-width {
+		width: 50vw;
+	}
+}
+
+// Thanh cuộn trang (scrollbar)
+::-webkit-scrollbar {
+	width: 0.5rem;
+	height: 0.5rem;
+}
+
+::-webkit-scrollbar-track {
+	box-shadow: inset 0 0 5px #bdc3c7;
+}
+
+::-webkit-scrollbar-thumb {
+	background: $orange-gradient-fallback;
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background: $orange-gradient-fallback;
 }
