@@ -1,19 +1,20 @@
-@import url("https://fonts.googleapis.com/css2?family=Nunito&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Arvo:wght@700&display=swap");
-// @import "../../node_modules/bootstrap/scss/bootstrap"; /* all of bootstrap - too much */
-// Just scss BOOTSTRAP component
-// Include functions first (so you can manipulate colors, SVGs, calc, etc)
+// Google Font
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200;0,300;0,400;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,600;1,700;1,800;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Arvo:wght@700&display=swap');
+
+// Bootstrap 5
 @import "../../node_modules/bootstrap/scss/functions";
-// Include remainder of required Bootstrap stylesheets
 @import "../../node_modules/bootstrap/scss/variables";
 @import ".../../node_modules/bootstrap/scss/mixins";
-// Include any optional Bootstrap components as you like
 @import "../../node_modules/bootstrap/scss/root";
 @import "../../node_modules/bootstrap/scss/reboot";
 @import "../../node_modules/bootstrap/scss/type";
 @import "../../node_modules/bootstrap/scss/images";
 @import "../../node_modules/bootstrap/scss/containers";
 @import "../../node_modules/bootstrap/scss/grid";
+
+// Style chung toàn cục
 
 * {
 	font-family: "Roboto" Arial, Helvetica, sans-serif;
@@ -54,9 +55,17 @@ nav {
 	color: inherit;
 }
 
-$orange-gradient-fallback: #de6262; /* fallback for old browsers */
-$orange-gradient-chrome: -webkit-linear-gradient(to right, #d73350, #fc6f69); /* Chrome 10-25, Safari 5.1-6 */
-$orange-gradient-firefox: linear-gradient(to right, #ffb88c, #de6262); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+$orange-gradient-fallback: #de6262; /* Trình duyệt cũ không hỗ trợ */
+$orange-gradient-chrome: -webkit-linear-gradient(
+	to right,
+	#d73350,
+	#fc6f69
+); /* Chrome 10-25, Safari 5.1-6 */
+$orange-gradient-firefox: linear-gradient(
+	to right,
+	#ffb88c,
+	#de6262
+); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 
 .orange-gradient {
 	background: $orange-gradient-fallback;

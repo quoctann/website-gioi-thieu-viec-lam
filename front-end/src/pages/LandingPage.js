@@ -135,10 +135,7 @@ export default function HomePage() {
 					<Col sm={12} md={6}>
 						<Image src={pic3} fluid />
 					</Col>
-					<Col
-						sm={12}
-						md={6}
-					>
+					<Col sm={12} md={6}>
 						<div>
 							<h2 className="fw-bold">Lorem islum dolo</h2>
 							<p style={{ textAlign: "justify" }}>
@@ -161,10 +158,7 @@ export default function HomePage() {
 				</Row>
 				<hr />
 				<Row className="my-5 d-flex flex-row align-items-center">
-					<Col
-						sm={12}
-						md={6}
-					>
+					<Col sm={12} md={6}>
 						<div>
 							<h2 className="fw-bold">Lorem islum dolo</h2>
 							<p style={{ textAlign: "justify" }}>
@@ -188,15 +182,12 @@ export default function HomePage() {
 						<Image src={pic2} fluid />
 					</Col>
 				</Row>
-				<hr/>
+				<hr />
 				<Row className="my-5 d-flex flex-row align-items-center">
 					<Col sm={12} md={6}>
 						<Image src={pic1} fluid />
 					</Col>
-					<Col
-						sm={12}
-						md={6}
-					>
+					<Col sm={12} md={6}>
 						<div>
 							<h2 className="fw-bold">Lorem islum dolo</h2>
 							<p style={{ textAlign: "justify" }}>

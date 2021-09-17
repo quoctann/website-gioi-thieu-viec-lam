@@ -1,16 +1,42 @@
 import { Card, Button, Container, Form } from "react-bootstrap";
 import { faAngleLeft, faKey, faUser } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
+import cookies from "react-cookies";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import SimpleInput from "../components/SimpleInput";
-import useSubmitForm from "../utils/CustomHooks"
+import useSubmitForm from "../utils/CustomHooks";
+import API, { endpoints } from "../utils/API";
+import { connect } from "react-redux";
+import { authUser } from "../redux/actions";
 
-const LoginPage = () => {
-
+const LoginPage = (props) => {
 	const login = async () => {
-		console.log("OK")
-		console.log(inputs)
-	}
+		try {
+			const info = await API.get(endpoints["oauth2-info"]);
+			const res = await API.post(endpoints["login"], {
+				client_id: info.data.client_id,
+				client_secret: info.data.client_secret,
+				username: inputs.username,
+				password: inputs.password,
+				grant_type: "password",
+			});
+
+			// console.log(res.data);
+			cookies.save("access_token", res.data.access_token);
+
+			const user = await API.get(endpoints["current-user"], {
+				headers: {
+					Authorization: `Bearer ${cookies.load("access_token")}`,
+				},
+			});
+			// console.log("Get user data: \n", user.data)
+			cookies.save("user", user.data);
+			// Dispatch lên store thông tin user (ko render trang này nữa)
+			props.emitUser(user.data);
+		} catch (err) {
+			console.log(err);
+		}
+	};
 
 	const { inputs, handleInputChange, handleSubmit } = useSubmitForm(login);
 
@@ -22,7 +48,7 @@ const LoginPage = () => {
 						icon={faAngleLeft}
 						className="text-secondary"
 					/>{" "}
-					<Link to="/" className="link-secondary">
+					<Link to="/" className="link-secondary no-decoration">
 						Trở về trang chủ
 					</Link>
 				</div>
@@ -83,4 +109,23 @@ const LoginPage = () => {
 		</>
 	);
 };
-export default LoginPage;
+/*
+	Redux connect() ko truyền gì cả vẫn sử dụng được, thông thường nó nhận 2
+	tham số optional: state và dispatch để map tới props, dùng props để truy cập
+	những thằng này thay vì gọi dispatch trực tiếp trong component. Lưu ý nên
+	trả ra nguyên một state và khi sử dụng trong component cần gì thì trỏ đến
+	chi tiết, để khi state nào thay đổi nó sẽ render lại chỉ component dùng
+	state đó thôi
+*/
+export default connect(
+	(state) => {
+		return {
+			userData: state,
+		};
+	},
+	(dispatch) => {
+		return {
+			emitUser: (user) => dispatch(authUser(user)),
+		};
+	}
+)(LoginPage);

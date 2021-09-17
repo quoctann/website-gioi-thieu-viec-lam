@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
+import { Provider } from "react-redux";
 
 // css tự cấu hình
 import "./scss/index.scss";
@@ -18,9 +19,12 @@ import RegisterPage from "./pages/RegisterPage";
 // Lưu chuỗi đường dẫn tự cấu hình
 import Routes from "./routes"
 
+// "Kho chứa" trung tâm
+import store from "./redux/store"
+
 ReactDOM.render(
-	<BrowserRouter>
-		<div className="wrapper">
+	<Provider store={store}>
+		<BrowserRouter >
 			<NavigationBar />
 			<Switch>
 				<Route exact path={Routes.LandingPage.path} component={LandingPage} />
@@ -28,7 +32,8 @@ ReactDOM.render(
 				<Route exact path={Routes.RegisterPage.path} component={RegisterPage} />
 			</Switch>
 			<Footer />
-		</div>
-	</BrowserRouter>,
+		</BrowserRouter>
+	</Provider>,
 	document.getElementById("root")
 );
+

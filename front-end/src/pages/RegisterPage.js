@@ -1,12 +1,5 @@
 import React, { useState } from "react";
-import {
-	Container,
-	Form,
-	Card,
-	Button,
-	Modal,
-	FormGroup,
-} from "react-bootstrap";
+import { Container, Form, Card, Button, Modal } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -15,68 +8,31 @@ import {
 	faUser,
 	faAddressCard,
 	faEnvelope,
-	faBuilding,
-	faMapMarkerAlt,
 } from "@fortawesome/free-solid-svg-icons";
 import { faQuestionCircle } from "@fortawesome/free-regular-svg-icons";
 // Một ô thành phần input tùy chỉnh
 import SimpleInput from "../components/SimpleInput";
-// Thư viện UI chọn ngày tháng
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
 // Thư viện thực hiện gọi API tương tác server
-// import API from "../api/API"
+import API, { endpoints } from "../utils/API";
 import useSubmitForm from "../utils/CustomHooks";
 
 const RegisterPage = () => {
-	
-	// Gửi request lên server
-	const register = async () => {
-		console.log(inputs)
-		if (inputs.password === inputs.confirm_password) {
-			const formData = new FormData();
-			for (let k in inputs) {
-				console.info(k, inputs[k]);
-				formData.append(k, inputs[k]);
-			}
-		}
-	}
+	// Các thông tin đều hợp lệ, sẵn sàng post lên server
+	let isValid = true;
 
-	// Custom hook để xử lý tác vụ thường gặp với form
-	const { inputs, handleInputChange, handleSubmit } = useSubmitForm(register);
+	const [isSuccess, setIsSuccess] = useState(false);
 
-	/*
-	Note: trước khi post sv check pass & confirm pass,
-	set vai_tro, rộng hơn có check username, email có 
-	trùng ko, nếu có thì hiện lỗi. (form chung)
-	NTD: giới thiệu có thể cập nhật sau khi tạo tk, set đợi xét duyệt = true
-	*/
-	// Lưu trạng thái hiển thị đăng ký ứng viên hay nhà tuyển dụng
-	const HIRING = "Nhà tuyển dụng";
+	// Vai trò tương tụ dưới csdl
+	const HIRING = "TUYEN DUNG";
 
-	const APPLICANT = "Ứng viên";
+	const APPLICANT = "UNG VIEN";
 
+	// State loại tài khoản muốn đăng ký
 	const [registerType, setRegisterType] = useState("");
-	
-	// Lưu media file
+
+	// Lưu media file (ảnh đại diện)
 	const avatar = React.createRef();
-
-	// Lưu ngày sinh (chỉ đối với ứng viên)
-	const [birthday, setBirthday] = useState(new Date());
-
-	// Lưu quy mô công ty (chỉ đối với nhà tuyển dụng)
-	const companySize = {
-		small: "sm",
-		medium: "md",
-		large: "lg",
-	};
-
-	// Handle nút bấm chọn loại tài khoản cần đăng ký
-	const toggleSelection = () => {
-		if (registerType === APPLICANT) setRegisterType(HIRING);
-		else setRegisterType(APPLICANT);
-	};
-
+	
 	// Handle chức năng xem điều khoản và điều kiện
 	const [showTerm, setShowTerm] = useState(false);
 
@@ -84,65 +40,59 @@ const RegisterPage = () => {
 
 	const handleShowTerm = () => setShowTerm(true);
 
-	// Conditional render form tùy loại tài khoản
-	let specificContent = null;
+	// Gửi request lên server
+	const register = async () => {
+		const formData = new FormData();
+		// Lấy các trường trừ confirm_input
+		if (inputs.password === inputs.confirm_password) {
+			for (let k in inputs) {
+				if (k !== "confirm_password") formData.append(k, inputs[k]);
+			}
+		}
 
-	if (registerType === HIRING)
-		specificContent = (
-			<>
-				<SimpleInput
-					label="Tên công ty"
-					faIcon={faBuilding}
-					type="text"
-					placeholder="Công ty TNHH XYZ"
-					required
-					value={inputs.ten_cong_ty}
-					onChange={handleInputChange}
-					name="ten_cong_ty"
-				/>
+		formData.append("anh_dai_dien", avatar.current.files[0]);
 
-				<SimpleInput
-					label="Địa chỉ"
-					faIcon={faMapMarkerAlt}
-					type="text"
-					placeholder="123 Lê Thánh Tôn"
-					required
-					value={inputs.dia_chi}
-					onChange={handleInputChange}
-					name="dia_chi"
-				/>
+		switch (registerType) {
+			case HIRING:
+				formData.append("vai_tro", HIRING);
+				break;
+			case APPLICANT:
+				formData.append("vai_tro", APPLICANT);
+				break;
+			default:
+				isValid = false;
+				alert("Invalid request!");
+				break;
+		}
 
-				<FormGroup>
-					<Form.Label>Quy mô công ty</Form.Label>
-					<Form.Select required>
-						<option value={companySize.small}>
-							Nhỏ (dưới 200 nhân viên)
-						</option>
-						<option value={companySize.medium}>
-							Vừa (200 đến dưới 100 nhân viên)
-						</option>
-						<option vvalue={companySize.large}>
-							Lớn (trên 1000 nhân viên)
-						</option>
-					</Form.Select>
-				</FormGroup>
-			</>
-		);
+		for (var key of formData.keys()) {
+			console.log(key, formData.get(key));
+		}
 
-	if (registerType === APPLICANT)
-		specificContent = (
-			<>
-				<Form.Group>
-					<Form.Label>Ngày sinh</Form.Label>
-					<DatePicker
-						selected={birthday}
-						onChange={(date) => setBirthday(date)}
-						className="form-control"
-					/>
-				</Form.Group>
-			</>
-		);
-	
+		if (isValid) {
+			try {
+				let res = await API.post(endpoints["nguoi-dung"], formData, {
+					headers: {
+						"Content-Type": "multipart/form-data",
+					},
+				});
+				if(res)
+					setIsSuccess(true);
+			} catch (err) {
+				console.log("ERROR:\n", err);
+			}
+		}
+	};
+
+	// Hook dùng chung để xử lý trạng thái của form
+	const { inputs, handleInputChange, handleSubmit } = useSubmitForm(register);
+
+	// Handle nút bấm chọn loại tài khoản cần đăng ký
+	const toggleSelection = () => {
+		if (registerType === APPLICANT) setRegisterType(HIRING);
+		else setRegisterType(APPLICANT);
+	};
+
 	// Hộp thoại lựa chọn loại tài khoản (khi trang nạp lần đầu)
 	const question = (
 		<Modal.Dialog className="animate__animated animate__fadeIn">
@@ -166,7 +116,7 @@ const RegisterPage = () => {
 			</Modal.Footer>
 		</Modal.Dialog>
 	);
-	
+
 	// Khi trang nạp lần đầu hiện hộp thoại lựa chọn
 	if (registerType === "") return question;
 
@@ -175,12 +125,12 @@ const RegisterPage = () => {
 		return (
 			<>
 				<Container className="animate__animated animate__fadeIn">
-					<div className="my-4 text-center">
+					<div className="my-4 text-center text-secondary">
 						<FontAwesomeIcon
 							icon={faAngleLeft}
 							className="text-secondary"
 						/>{" "}
-						<Link to="/" className="link-secondary no-decoration">
+						<Link to="/" className="text-secondary no-decoration">
 							Trở về trang chủ
 						</Link>
 					</div>
@@ -194,7 +144,10 @@ const RegisterPage = () => {
 							</h3>
 
 							<div className="alert alert-secondary">
-								Loại tài khoản: {registerType}{" "}
+								Loại tài khoản:{" "}
+								{registerType === HIRING
+									? "Nhà tuyển dụng"
+									: "Ứng viên"}{" "}
 								<strong
 									onClick={toggleSelection}
 									className="text-link"
@@ -203,9 +156,9 @@ const RegisterPage = () => {
 									<u>(Thay đổi)</u>
 								</strong>
 							</div>
-
+							<span>Các trường có dấu <small className="text-danger">*</small> là bắt buộc</span>
 							<SimpleInput
-								label="Tên người dùng"
+								label="Tên người dùng *"
 								faIcon={faUser}
 								type="text"
 								placeholder="tran_quoc_tan"
@@ -216,7 +169,7 @@ const RegisterPage = () => {
 							/>
 
 							<SimpleInput
-								label="Tên của bạn"
+								label="Tên của bạn *"
 								faIcon={faAddressCard}
 								type="text"
 								placeholder="Tấn"
@@ -227,7 +180,7 @@ const RegisterPage = () => {
 							/>
 
 							<SimpleInput
-								label="Họ của bạn"
+								label="Họ của bạn *"
 								faIcon={faAddressCard}
 								type="text"
 								placeholder="Trần Quốc"
@@ -238,7 +191,7 @@ const RegisterPage = () => {
 							/>
 
 							<SimpleInput
-								label="Email"
+								label="Email *"
 								faIcon={faEnvelope}
 								type="email"
 								placeholder="nguoidung@mail.com"
@@ -249,7 +202,7 @@ const RegisterPage = () => {
 							/>
 
 							<SimpleInput
-								label="Mật khẩu"
+								label="Mật khẩu *"
 								faIcon={faKey}
 								type="password"
 								placeholder="********"
@@ -260,7 +213,7 @@ const RegisterPage = () => {
 							/>
 
 							<SimpleInput
-								label="Nhập lại mật khẩu"
+								label="Nhập lại mật khẩu *"
 								faIcon={faKey}
 								type="password"
 								placeholder="********"
@@ -270,11 +223,13 @@ const RegisterPage = () => {
 								name="confirm_password"
 							/>
 
-							{specificContent}
-
 							<Form.Group className="my-4" controlId="avatar">
-								<Form.Label>Avatar</Form.Label>
-								<Form.Control type="file" ref={avatar} />
+								<Form.Label>Avatar *</Form.Label>
+								<Form.Control
+									type="file"
+									ref={avatar}
+									required
+								/>
 							</Form.Group>
 
 							<Form.Group className="my-2">
@@ -335,6 +290,21 @@ const RegisterPage = () => {
 					<Modal.Footer>
 						<Button variant="primary" onClick={handleCloseTerm}>
 							Đã hiểu
+						</Button>
+					</Modal.Footer>
+				</Modal>
+
+				{/* Modal dùng để show đăng nhập thành công */}
+				<Modal show={isSuccess} onHide={handleCloseTerm}>
+					<Modal.Body>
+						Đăng ký thành công, bạn có thể đăng nhập để bổ sung thông tin và sử dụng ngay bây giờ!
+					</Modal.Body>
+					<Modal.Footer>
+						<Button variant="primary" as={Link} to="/login">
+							Đến trang đăng nhập
+						</Button>
+						<Button variant="secondary" onClick={() => setIsSuccess(false)}>
+							Đóng
 						</Button>
 					</Modal.Footer>
 				</Modal>
