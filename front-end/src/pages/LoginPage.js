@@ -32,7 +32,8 @@ const LoginPage = (props) => {
 			// console.log("Get user data: \n", user.data)
 			cookies.save("user", user.data);
 			// Dispatch lên store thông tin user (ko render trang này nữa)
-			props.emitUser(user.data);
+			props.emitUser(cookies.load("user"));
+			console.log("FROM LOGIN\n", props.userData.userReducer);
 		} catch (err) {
 			console.log(err);
 		}
@@ -87,7 +88,7 @@ const LoginPage = (props) => {
 								label="Giữ tôi luôn đăng nhập"
 							/>
 							<Form.Label>
-								<Link className="text-secondary">
+								<Link to="/forgot-password" className="text-secondary">
 									Quên mật khẩu?
 								</Link>
 							</Form.Label>

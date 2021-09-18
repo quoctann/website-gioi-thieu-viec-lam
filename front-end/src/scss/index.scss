@@ -45,6 +45,10 @@ nav {
 	font-family: "Arvo", Arial, Helvetica, sans-serif;
 }
 
+.fa-light > path {
+	color: $light;
+}
+
 .landing-page-carousel {
 	height: 20rem;
 }

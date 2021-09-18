@@ -1,8 +1,56 @@
 import { Container, Nav, Navbar, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import SimpleLogo from "./SimpleLogo"
+import SimpleLogo from "./SimpleLogo";
+import { connect } from "react-redux";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
+import { authUser } from "../redux/actions";
 
-const NavigationBar = () => {
+const NavigationBar = (props) => {
+	
+	const user = props.userInfo.userReducer;
+
+	let rightCorner = (
+		<>
+			<Nav.Item>
+				<Button
+					as={Link}
+					to="/register"
+					className="me-1"
+					variant="outline-dark"
+				>
+					Đăng ký
+				</Button>
+				<Button as={Link} to="/login" className="ms-1" variant="dark">
+					Đăng nhập
+				</Button>
+			</Nav.Item>
+		</>
+	);
+
+	if (user) {
+		rightCorner = (
+			<>
+				<Nav.Item>
+					<Button
+						as={Link}
+						to="/"
+						className="ms-1"
+						variant="outline-dark"
+					>
+						Xin chào {user.first_name} {user.last_name}!
+					</Button>
+					<Button className="ms-1" variant="dark">
+						<FontAwesomeIcon
+							icon={faSignOutAlt}
+							className="fa-light"
+						/>{" "}
+						Đăng xuất
+					</Button>
+				</Nav.Item>
+			</>
+		);
+	}
 	return (
 		<>
 			<Navbar
@@ -12,7 +60,7 @@ const NavigationBar = () => {
 				sticky="top"
 			>
 				<Container>
-					<Navbar.Brand>
+					<Navbar.Brand as={Link} to="/">
 						<SimpleLogo />
 					</Navbar.Brand>
 					<Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -28,16 +76,7 @@ const NavigationBar = () => {
 								Dashboard
 							</Nav.Link>
 						</Nav>
-						<Nav className="ms-auto">
-							<Nav.Item>
-								<Button className="me-1" variant="outline-dark">
-									<Link to="/register" className="no-decoration">Đăng ký</Link>
-								</Button>
-								<Button className="ms-1" variant="dark">
-									<Link to="/login" className="no-decoration">Đăng nhập</Link>
-								</Button>
-							</Nav.Item>
-						</Nav>
+						<Nav className="ms-auto">{rightCorner}</Nav>
 					</Navbar.Collapse>
 				</Container>
 			</Navbar>
@@ -45,4 +84,15 @@ const NavigationBar = () => {
 	);
 };
 
-export default NavigationBar;
+export default connect(
+	(state) => {
+		return {
+			userInfo: state,
+		};
+	},
+	(dispatch) => {
+		return {
+			emitUser: (user) => dispatch(authUser(user)),
+		};
+	}
+)(NavigationBar);

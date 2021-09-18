@@ -2,7 +2,8 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import { Provider } from "react-redux";
-
+import { PersistGate } from 'redux-persist/integration/react'
+ 
 // css tự cấu hình
 import "./scss/index.scss";
 
@@ -19,20 +20,22 @@ import RegisterPage from "./pages/RegisterPage";
 // Lưu chuỗi đường dẫn tự cấu hình
 import Routes from "./routes"
 
-// "Kho chứa" trung tâm
-import store from "./redux/store"
+// "Kho chứa" trung tâm, lưu trữ các biến cục bộ
+import { store, persistor } from "./redux/store"
 
 ReactDOM.render(
 	<Provider store={store}>
-		<BrowserRouter >
-			<NavigationBar />
-			<Switch>
-				<Route exact path={Routes.LandingPage.path} component={LandingPage} />
-				<Route exact path={Routes.LoginPage.path} component={LoginPage} />
-				<Route exact path={Routes.RegisterPage.path} component={RegisterPage} />
-			</Switch>
-			<Footer />
-		</BrowserRouter>
+		<PersistGate loading={null} persistor={persistor}>
+			<BrowserRouter >
+				<NavigationBar />
+				<Switch>
+					<Route exact path={Routes.LandingPage.path} component={LandingPage} />
+					<Route exact path={Routes.LoginPage.path} component={LoginPage} />
+					<Route exact path={Routes.RegisterPage.path} component={RegisterPage} />
+				</Switch>
+				<Footer />
+			</BrowserRouter>
+		</PersistGate>
 	</Provider>,
 	document.getElementById("root")
 );
