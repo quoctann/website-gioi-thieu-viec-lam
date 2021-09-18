@@ -4,43 +4,52 @@ import SimpleLogo from "./SimpleLogo";
 import { connect } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
-import { authUser } from "../redux/actions";
+import { logout } from "../redux/actions";
+import Routes from "../routes"
+import cookies from "react-cookies";
 
 const NavigationBar = (props) => {
 	
-	const user = props.userInfo.userReducer;
+	let user = props.userInfo.userReducer;
+	// console.log("NAV\n", user)
+
+	const signOut = () => {
+		cookies.remove("user");
+		cookies.remove("access_token");
+		props.signOut()
+	}
 
 	let rightCorner = (
 		<>
 			<Nav.Item>
 				<Button
 					as={Link}
-					to="/register"
+					to={Routes.RegisterPage.path}
 					className="me-1"
 					variant="outline-dark"
 				>
 					Đăng ký
 				</Button>
-				<Button as={Link} to="/login" className="ms-1" variant="dark">
+				<Button as={Link} to={Routes.LoginPage.path} className="ms-1" variant="dark">
 					Đăng nhập
 				</Button>
 			</Nav.Item>
 		</>
 	);
-
-	if (user) {
+	// Nếu user không rỗng
+	if (user.hasOwnProperty("username")) {
 		rightCorner = (
 			<>
 				<Nav.Item>
 					<Button
 						as={Link}
-						to="/"
+						to={Routes.UserDetailPage.path}
 						className="ms-1"
 						variant="outline-dark"
 					>
 						Xin chào {user.first_name} {user.last_name}!
 					</Button>
-					<Button className="ms-1" variant="dark">
+					<Button className="ms-1" variant="dark" onClick={signOut}>
 						<FontAwesomeIcon
 							icon={faSignOutAlt}
 							className="fa-light"
@@ -60,19 +69,19 @@ const NavigationBar = (props) => {
 				sticky="top"
 			>
 				<Container>
-					<Navbar.Brand as={Link} to="/">
+					<Navbar.Brand as={Link} to={Routes.LandingPage.path}>
 						<SimpleLogo />
 					</Navbar.Brand>
 					<Navbar.Toggle aria-controls="basic-navbar-nav" />
 					<Navbar.Collapse id="basic-navbar-nav">
 						<Nav>
-							<Nav.Link as={Link} to="/">
+							<Nav.Link as={Link} to={Routes.LandingPage.path}>
 								Trang chủ
 							</Nav.Link>
-							<Nav.Link as={Link} to="/login">
+							<Nav.Link as={Link} to={Routes.ViewPostPage.path}>
 								Xem tin tuyển dụng
 							</Nav.Link>
-							<Nav.Link as={Link} to="/login">
+							<Nav.Link as={Link} to={Routes.LoginPage.path}>
 								Dashboard
 							</Nav.Link>
 						</Nav>
@@ -92,7 +101,7 @@ export default connect(
 	},
 	(dispatch) => {
 		return {
-			emitUser: (user) => dispatch(authUser(user)),
+			signOut: () => dispatch(logout())
 		};
 	}
 )(NavigationBar);

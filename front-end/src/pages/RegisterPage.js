@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Container, Form, Card, Button, Modal } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
 	faKey,
@@ -15,8 +15,12 @@ import SimpleInput from "../components/SimpleInput";
 // Thư viện thực hiện gọi API tương tác server
 import API, { endpoints } from "../utils/API";
 import useSubmitForm from "../utils/CustomHooks";
+import Routes from "../routes";
+import cookies from "react-cookies";
+import { connect } from "react-redux";
 
-const RegisterPage = () => {
+const RegisterPage = (props) => {
+
 	// Các thông tin đều hợp lệ, sẵn sàng post lên server
 	let isValid = true;
 
@@ -117,6 +121,10 @@ const RegisterPage = () => {
 		</Modal.Dialog>
 	);
 
+	// Nếu đã đăng nhập thì redirect về trang chủ
+	if (cookies.load("user") || props.userInfo.userReducer.hasOwnProperty("username"))
+		return <Redirect to={Routes.LandingPage.path} />;
+
 	// Khi trang nạp lần đầu hiện hộp thoại lựa chọn
 	if (registerType === "") return question;
 
@@ -130,7 +138,7 @@ const RegisterPage = () => {
 							icon={faAngleLeft}
 							className="text-secondary"
 						/>{" "}
-						<Link to="/" className="text-secondary no-decoration">
+						<Link to={Routes.LandingPage.path} className="text-secondary no-decoration">
 							Trở về trang chủ
 						</Link>
 					</div>
@@ -258,7 +266,7 @@ const RegisterPage = () => {
 							</Button>
 						</Form>
 						<p className="my-2 text-center">
-							Đã có tài khoản? <Link to="/login">Đăng nhập</Link>
+							Đã có tài khoản? <Link to={Routes.LoginPage.path}>Đăng nhập</Link>
 						</p>
 					</Card>
 				</Container>
@@ -300,7 +308,7 @@ const RegisterPage = () => {
 						Đăng ký thành công, bạn có thể đăng nhập để bổ sung thông tin và sử dụng ngay bây giờ!
 					</Modal.Body>
 					<Modal.Footer>
-						<Button variant="primary" as={Link} to="/login">
+						<Button variant="primary" as={Link} to={Routes.LoginPage.path}>
 							Đến trang đăng nhập
 						</Button>
 						<Button variant="secondary" onClick={() => setIsSuccess(false)}>
@@ -312,4 +320,10 @@ const RegisterPage = () => {
 		);
 };
 
-export default RegisterPage;
+export default connect(
+	(state) => {
+		return {
+			userInfo: state,
+		};
+	}
+)(RegisterPage);

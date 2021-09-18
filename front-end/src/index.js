@@ -12,10 +12,12 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "animate.css";
 
 import LandingPage from "./pages/LandingPage";
-import Footer from "./components/Footer";
+// import Footer from "./components/Footer";
 import NavigationBar from "./components/NavigationBar";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
+import UserDetailPage from "./pages/UserDetailPage";
+import ViewPostPage from "./pages/ViewPostPage";
 
 // Lưu chuỗi đường dẫn tự cấu hình
 import Routes from "./routes"
@@ -32,8 +34,10 @@ ReactDOM.render(
 					<Route exact path={Routes.LandingPage.path} component={LandingPage} />
 					<Route exact path={Routes.LoginPage.path} component={LoginPage} />
 					<Route exact path={Routes.RegisterPage.path} component={RegisterPage} />
+					<Route exact path={Routes.UserDetailPage.path} component={UserDetailPage} />
+					<Route exact path={Routes.ViewPostPage.path} component={ViewPostPage} />
 				</Switch>
-				<Footer />
+				{/* <Footer /> */}
 			</BrowserRouter>
 		</PersistGate>
 	</Provider>,
