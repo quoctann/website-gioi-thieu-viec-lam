@@ -75,7 +75,7 @@ const RegisterPage = (props) => {
 
 		if (isValid) {
 			try {
-				let res = await API.post(endpoints["nguoi-dung"], formData, {
+				let res = await API.post(endpoints["user"], formData, {
 					headers: {
 						"Content-Type": "multipart/form-data",
 					},

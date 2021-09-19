@@ -21,8 +21,9 @@ const LoginPage = (props) => {
 				grant_type: "password",
 			});
 
-			// console.log(res.data);
-			cookies.save("access_token", res.data.access_token);
+			
+			console.log(res);
+			await cookies.save("access_token", res.data.access_token);
 
 			const user = await API.get(endpoints["current-user"], {
 				headers: {
@@ -32,8 +33,8 @@ const LoginPage = (props) => {
 			// console.log("Get user data: \n", user.data)
 			cookies.save("user", user.data);
 			// Dispatch lên store thông tin user (ko render trang này nữa)
-			props.signIn(cookies.load("user"));
-			console.log("FROM LOGIN\n", props.userData.userReducer);
+			await props.signIn(cookies.load("user"));
+			await console.log("FROM LOGIN\n", props.userData.userReducer);
 		} catch (err) {
 			console.log(err);
 		}
