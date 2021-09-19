@@ -18,6 +18,7 @@ import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import UserDetailPage from "./pages/UserDetailPage";
 import ViewPostPage from "./pages/ViewPostPage";
+import PostDetailPage from "./pages/PostDetailPage";
 
 // Lưu chuỗi đường dẫn tự cấu hình
 import Routes from "./routes"
@@ -36,6 +37,8 @@ ReactDOM.render(
 					<Route exact path={Routes.RegisterPage.path} component={RegisterPage} />
 					<Route exact path={Routes.UserDetailPage.path} component={UserDetailPage} />
 					<Route exact path={Routes.ViewPostPage.path} component={ViewPostPage} />
+					<Route exact path={Routes.PostDetailPage.path} component={PostDetailPage} />
+				
 				</Switch>
 				{/* <Footer /> */}
 			</BrowserRouter>

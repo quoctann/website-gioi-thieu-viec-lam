@@ -22,7 +22,7 @@ const LoginPage = (props) => {
 			});
 
 			
-			console.log(res);
+			// console.log(res);
 			await cookies.save("access_token", res.data.access_token);
 
 			const user = await API.get(endpoints["current-user"], {
@@ -34,7 +34,7 @@ const LoginPage = (props) => {
 			cookies.save("user", user.data);
 			// Dispatch lên store thông tin user (ko render trang này nữa)
 			await props.signIn(cookies.load("user"));
-			await console.log("FROM LOGIN\n", props.userData.userReducer);
+			// await console.log("FROM LOGIN\n", props.userData.userReducer);
 		} catch (err) {
 			console.log(err);
 		}

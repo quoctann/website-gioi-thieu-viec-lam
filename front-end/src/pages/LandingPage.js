@@ -3,9 +3,9 @@ import React, { useEffect, useState } from "react";
 import { Container, Carousel, Row, Col, Image } from "react-bootstrap";
 
 // Ảnh của carousel
-import pic1 from "../assets/image/1.jpg";
-import pic2 from "../assets/image/2.jpg";
-import pic3 from "../assets/image/3.jpg";
+import pic1 from "../assets/images/1.jpg";
+import pic2 from "../assets/images/2.jpg";
+import pic3 from "../assets/images/3.jpg";
 
 // Thư viện hoạt ảnh
 import "animate.css";

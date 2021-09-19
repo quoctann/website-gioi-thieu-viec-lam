@@ -4,9 +4,10 @@ import axios from "axios";
 export let endpoints = {
     "user": "/nguoi-dung/",
     "login": "/o/token/",
-    "current-user": "/nguoi-dung/current-user/",
+    "current-user": "/nguoi-dung/hien-tai/",
     "oauth2-info": "/oauth2-info/",
-    "posts": "/viec-lam/?page="
+    "posts": "/viec-lam/?page=",
+    "post-detail": "/viec-lam/",
 }
 
 export default axios.create({
