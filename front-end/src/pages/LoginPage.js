@@ -8,8 +8,12 @@ import useSubmitForm from "../utils/CustomHooks";
 import API, { endpoints } from "../utils/API";
 import { connect } from "react-redux";
 import { login } from "../redux/actions";
+import { useState } from "react";
 
 const LoginPage = (props) => {
+	// Thông báo lỗi nếu gửi thông tin đăng nhập sai/không chính xác
+	const [errMsg, setErrMsg] = useState(<></>)
+
 	const login = async () => {
 		try {
 			const info = await API.get(endpoints["oauth2-info"]);
@@ -36,7 +40,20 @@ const LoginPage = (props) => {
 			await props.signIn(cookies.load("user"));
 			// await console.log("FROM LOGIN\n", props.userData.userReducer);
 		} catch (err) {
-			console.log(err);
+			if (
+				err.response.data.error === "invalid_grant" &&
+				err.response.data.error_description ===
+					"Invalid credentials given."
+			)
+				setErrMsg(
+					<div className="alert alert-danger">
+						Tên người dùng hoặc mật khẩu không đúng!
+					</div>
+				);
+			else
+				setErrMsg(
+					<div className="alert alert-danger">Lỗi hệ thống</div>
+				);
 		}
 	};
 
@@ -70,6 +87,8 @@ const LoginPage = (props) => {
 								Đăng nhập để sử dụng ngay!
 							</h3>
 
+							{errMsg}
+
 							<SimpleInput
 								label="Tên người dùng"
 								faIcon={faUser}
@@ -89,8 +108,8 @@ const LoginPage = (props) => {
 								value={inputs.password}
 								name="password"
 							/>
-
-							<Form.Group className="my-2 d-flex justify-content-between">
+							{/* Tính năng tạm thời chưa phát triển */}
+							{/* <Form.Group className="my-2 d-flex justify-content-between">
 								<Form.Check
 									type="checkbox"
 									label="Giữ tôi luôn đăng nhập"
@@ -103,7 +122,7 @@ const LoginPage = (props) => {
 										Quên mật khẩu?
 									</Link>
 								</Form.Label>
-							</Form.Group>
+							</Form.Group> */}
 							<Button
 								variant="dark"
 								type="submit"

@@ -4,7 +4,7 @@ import SimpleLogo from "./SimpleLogo";
 import { connect } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
-import { logout } from "../redux/actions";
+import { logout, login } from "../redux/actions";
 import Routes from "../routes"
 import cookies from "react-cookies";
 
@@ -101,7 +101,8 @@ export default connect(
 	},
 	(dispatch) => {
 		return {
-			signOut: () => dispatch(logout())
+			signOut: () => dispatch(logout()),
+			signInByCookies: (user) => dispatch(login(user))
 		};
 	}
 )(NavigationBar);

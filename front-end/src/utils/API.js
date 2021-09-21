@@ -8,6 +8,8 @@ export let endpoints = {
     "oauth2-info": "/oauth2-info/",
     "posts": "/viec-lam/?page=",
     "post-detail": "/viec-lam/",
+    "apply-offer": "/ung-tuyen/",
+    "apply-valid": "/ung-tuyen/hop-le/",
 }
 
 export default axios.create({
