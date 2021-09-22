@@ -14,6 +14,10 @@
 @import "../../node_modules/bootstrap/scss/containers";
 @import "../../node_modules/bootstrap/scss/grid";
 
+
+// Trang ngoai
+@import "./style/404page";
+
 // Style chung toàn cục
 
 * {
@@ -48,6 +52,10 @@ nav {
 
 .brand-font {
 	font-family: "Arvo", Arial, Helvetica, sans-serif;
+}
+
+.fa-width {
+	width: 1rem;
 }
 
 .fa-light > path {

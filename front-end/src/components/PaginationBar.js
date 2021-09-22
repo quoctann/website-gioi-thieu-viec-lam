@@ -14,6 +14,7 @@ const PaginationBar = (props) => {
 	let pages = 0;
 
 	// Một trang render defaultGet bài viết, nếu có lẻ ra thì phân nó qua trang mới
+	// count lưu tổng số bản ghi
 	if (props.count % defaultGet !== 0) {
 		// Tổng số trang cần render
 		pages = Math.ceil(props.count / defaultGet);
@@ -51,12 +52,12 @@ const PaginationBar = (props) => {
                     // Server ko trả ra trang trước thì disable nút 
 					disabled={props.previous == null ? true : false}
 					onClick={() => {
-						let num;
+						let currentPage;
 						// Do trang đầu tiên không có params page=số
-						if (pagActive === 2) num = 1;
-						else num = props.previous.substr(props.previous.length - 1);
-						props.getPosts(num);
-						setPagActive(parseInt(num));
+						if (pagActive === 2) currentPage = 1;
+						else currentPage = props.previous.substr(props.previous.length - 1);
+						props.getPosts(currentPage);
+						setPagActive(parseInt(currentPage));
 					}}
 				/>
 				{pagItems}
@@ -64,9 +65,9 @@ const PaginationBar = (props) => {
                     // Server ko trả ra trang sau thì disable nút 
 					disabled={props.next == null ? true : false}
 					onClick={() => {
-						let num = props.next.substr(props.next.length - 1);
-						props.getPosts(num);
-						setPagActive(parseInt(num));
+						let currentPage = props.next.substr(props.next.length - 1);
+						props.getPosts(currentPage);
+						setPagActive(parseInt(currentPage));
 					}}
 				/>
 				<Pagination.Last

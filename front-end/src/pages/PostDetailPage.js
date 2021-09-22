@@ -128,20 +128,14 @@ const PostDetailPage = (props) => {
 									<h2 className="fw-bold">{post.tieu_de}</h2>
 								</Card.Title>
 								<Card.Subtitle>
-									<div className="d-flex flex-row align-items-center mb-3">
-										<h5 className="m-0 ms-1 fw-bold">
-                                            <span className="me-2">
-                                                <FontAwesomeIcon icon={faBuilding} />
-                                            </span>
-											{post.nha_tuyen_dung.ten_cong_ty}
-										</h5>
-									</div>
-									<div className="d-flex flex-row align-items-center mb-3">
-										<h5 className="m-0 ms-1 fw-bold">
-                                            <span className="me-2">
-                                                <FontAwesomeIcon icon={faCommentDollar}/>
-                                            </span>
-											Mức lương:{" "}
+                                    <Row as="h5" className="fw-bold">
+                                        <Col sm={1}><FontAwesomeIcon icon={faBuilding} /></Col>
+                                        <Col>{post.nha_tuyen_dung.ten_cong_ty}</Col>
+                                    </Row>
+                                    <Row as="h5" className=" fw-bold">
+                                        <Col sm={1}><FontAwesomeIcon icon={faCommentDollar}/></Col>
+                                        <Col>
+                                            Mức lương:{" "}
                                             <span className="text-danger">
                                                 {post.luong === 0
                                                     ? "Thương lượng"
@@ -153,8 +147,8 @@ const PostDetailPage = (props) => {
                                                             }
                                                     ).format(post.luong)}
                                             </span>
-										</h5>
-									</div>
+                                        </Col>
+                                    </Row>
 								</Card.Subtitle>
 								<hr />
 								<Card.Body>
@@ -168,26 +162,26 @@ const PostDetailPage = (props) => {
 						<Col sm={12} md={4} className="mb-2">
 							<Card className="p-4" border="dark">
 								<Card.Body>
-									<p>
-										<FontAwesomeIcon icon={faCalendar} />{" "}
-										Ngày đăng: {formatDate(post.ngay_tao)}
-									</p>
-									<p>
-                                        <FontAwesomeIcon icon={faCalendarTimes} />{" "}
-                                        Ngày hết hạn: {formatDate(post.ngay_het_han)}
-                                    </p>
-									<p>
-                                        <FontAwesomeIcon icon={faMapMarkerAlt} />{"  "}
-                                        Địa chỉ: {post.nha_tuyen_dung.dia_chi}
-                                    </p>
-                                    <p>
-                                        <FontAwesomeIcon icon={faUsers} />{"  "}
-                                        Quy mô: {post.nha_tuyen_dung.quy_mo} nhân viên
-                                    </p>
-                                    <p>
-                                        <FontAwesomeIcon icon={faStar} />{"  "}
-                                        Điểm đánh giá công ty: {post.nha_tuyen_dung.diem_danh_gia_tb} 
-                                    </p>
+									<Row as="p">
+										<Col sm={1}><FontAwesomeIcon icon={faCalendar} /></Col>
+										<Col>Ngày đăng: {formatDate(post.ngay_tao)}</Col>
+									</Row>
+									<Row as="p">
+                                        <Col sm={1}><FontAwesomeIcon icon={faCalendarTimes} /></Col>
+                                        <Col>Ngày hết hạn: {formatDate(post.ngay_het_han)}</Col>
+                                    </Row>
+									<Row as="p">
+                                        <Col sm={1}><FontAwesomeIcon icon={faMapMarkerAlt} /></Col>
+                                        <Col>Địa chỉ: {post.nha_tuyen_dung.dia_chi}</Col>
+                                    </Row>
+                                    <Row as="p">
+                                        <Col sm={1}><FontAwesomeIcon icon={faUsers} /></Col>
+                                        <Col>Quy mô công ty: {post.nha_tuyen_dung.quy_mo} nhân viên</Col>
+                                    </Row>
+                                    <Row as="p">
+                                        <Col sm={1}><FontAwesomeIcon icon={faStar} /></Col>
+                                        <Col>Điểm đánh giá công ty: {post.nha_tuyen_dung.diem_danh_gia_tb}</Col> 
+                                    </Row>
 									<hr />
                                     {infoDetail({
                                         icon: faCheckDouble,

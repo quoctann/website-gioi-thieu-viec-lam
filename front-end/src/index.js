@@ -19,12 +19,16 @@ import RegisterPage from "./pages/RegisterPage";
 import UserDetailPage from "./pages/UserDetailPage";
 import ViewPostPage from "./pages/ViewPostPage";
 import PostDetailPage from "./pages/PostDetailPage";
+import HiringDetailPage from "./pages/HiringDetailPage";
 
 // Lưu chuỗi đường dẫn tự cấu hình
 import Routes from "./routes"
 
 // "Kho chứa" trung tâm, lưu trữ các biến cục bộ
 import { store, persistor } from "./redux/store"
+import NotFoundPage from "./pages/NotFoundPage";
+import ServerErrorPage from "./pages/ServerErrorPage";
+
 
 ReactDOM.render(
 	<Provider store={store}>
@@ -38,7 +42,9 @@ ReactDOM.render(
 					<Route exact path={Routes.UserDetailPage.path} component={UserDetailPage} />
 					<Route exact path={Routes.ViewPostPage.path} component={ViewPostPage} />
 					<Route exact path={Routes.PostDetailPage.path} component={PostDetailPage} />
-				
+					<Route exact path={Routes.HiringDetailPage.path} component={HiringDetailPage} />
+					<Route exact path={Routes.NotFoundPage.path} component={NotFoundPage} />
+					<Route exact path={Routes.ServerError.path} component={ServerErrorPage} />
 				</Switch>
 				{/* <Footer /> */}
 			</BrowserRouter>

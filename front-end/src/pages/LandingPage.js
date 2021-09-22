@@ -1,6 +1,6 @@
 // LandingPage: trang đầu tiên nạp khi người dùng vào website
 import React, { useEffect, useState } from "react";
-import { Container, Carousel, Row, Col, Image, InputGroup, FormControl, Button, Card, Spinner, Alert } from "react-bootstrap";
+import { Container, Carousel, Row, Col, Image, InputGroup, FormControl, Button, Card, Alert } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch, faStar } from "@fortawesome/free-solid-svg-icons";
 import PaginationBar from "../components/PaginationBar"
@@ -15,8 +15,13 @@ import "animate.css";
 
 // Enpoint để gửi request
 import API, { endpoints } from "../utils/API";
+import { connect } from "react-redux";
 
-const LandingPage = () => {
+// Tương tác với dữ liệu global redux
+import { viewHiringPage } from "../redux/actions"
+import Routes from "../routes";
+
+const LandingPage = (props) => {
 	// Đoạn chữ cạnh hình (carousel)
 	const CarouselCaption = (props) => {
 		return (
@@ -73,27 +78,36 @@ const LandingPage = () => {
 		setSlideIndex(selectedIndex);
 	};
 
+	// Handle chức năng tìm kiếm nhà tuyển dụng
 	const [showSearchResult, setShowSearchResult] = useState(false)
 
 	const [searchResult, setSearchResult] = useState([])
 
 	const [searchInput, setSearchInput] = useState("")
 
+	// Hứng res trả ra từ server để hiện thanh phân trang
+	const [count, setCount] = useState(0);
+
+	const [next, setNext] = useState("");
+
+	const [previous, setPrevious] = useState("");
+
 	const handleSearch = async (text = searchInput, page = 1) => {
 		const res = await API.get(endpoints["search-hiring-by-name"] + `?name=${text}&page=${page}`)
 		
-		if (res.data.length > 0) {
+		if (res.data) {
+			// console.log(res.data.result)
 			let result = [];
-			for (let i = 0; i < res.data.length; i++) {
-				result.push(res.data[i])
+			for (let i = 0; i < res.data.result.length; i++) {
+				result.push(res.data.result[i])
 			}
+			// console.log(res.data)
 			setSearchResult(result);
-			setShowSearchResult(true);
-		} else if (res.data.length === 0) {
-			setSearchResult([])
-			setShowSearchResult(true);
+			setNext(res.data.next);
+			setPrevious(res.data.previous)
+			setCount(res.data.count)
+			setShowSearchResult(true);		
 		}
-
 	}
 
 	useEffect(() => {
@@ -206,8 +220,14 @@ const LandingPage = () => {
 														<Card.Text className="text-justify">
 															{result.gioi_thieu.substr(0,245)}...
 														</Card.Text>
-														<Button variant="primary">
-															Xem chi tiết công ty
+														<Button 
+															onClick={() => {
+																props.viewHiringPage(result.nguoi_dung_id);
+																props.history.push(Routes.HiringDetailPage.path);
+															}} 
+															variant="primary"
+														>
+															Xem chi tiết nhà tuyển dụng
 														</Button>
 													</Card.Body>
 												</Card>
@@ -227,11 +247,11 @@ const LandingPage = () => {
 							</Row>
 							<div className="d-flex justify-content-center">
 								<PaginationBar
-									defaultGet="6"
-									count={searchResult.length}
-									getPosts={(number) => handleSearch(searchInput, number)}
-									next={null}
-									previous={null}
+									defaultGet={6}
+									count={count}
+									getPosts={(page) => handleSearch(searchInput, page)}
+									next={next}
+									previous={previous}
 								/>
 								</div>
 						</div>
@@ -270,5 +290,13 @@ const LandingPage = () => {
 		</>
 	);
 }
-
-export default LandingPage;
+export default connect(
+	(state) => {
+		return {}
+	},
+	(dispatch) => {
+		return {
+			viewHiringPage: (id) => dispatch(viewHiringPage(id)),
+		}
+	}
+)(LandingPage);

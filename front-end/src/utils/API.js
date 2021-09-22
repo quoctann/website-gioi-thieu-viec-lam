@@ -11,6 +11,8 @@ export let endpoints = {
     "apply-offer": "/ung-tuyen/",
     "apply-valid": "/ung-tuyen/hop-le/",
     "search-hiring-by-name": "/nha-tuyen-dung/tim-kiem-theo-ten/",
+    "hiring": "/nha-tuyen-dung/",
+    "hiring-rating": "/danh-gia-nha-tuyen-dung/chi-tiet/"
 }
 
 export default axios.create({
