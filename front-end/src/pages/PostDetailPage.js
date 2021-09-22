@@ -40,12 +40,18 @@ const PostDetailPage = (props) => {
 
     // Đổi định dạng yyyy/mm/dd thành dd/mm/yyyy
     const formatDate = (date) => {
-        let datePart = date.match(/\d+/g),
-        year = datePart[0], // get only two digits
-        month = datePart[1], day = datePart[2];
-        
-        return day+'/'+month+'/'+year;
-    }
+        /* Sử dụng regex:
+            \d : lấy giá trị là digit 0-9
+            /c/g : tìm global ký tự c
+            n+ : với n là bất kỳ, lấy nguyên chuỗi nếu thỏa đk, kết hợp với /n+/g
+        */
+		let datePart = date.match(/\d+/g),
+			year = datePart[0],
+			month = datePart[1],
+			day = datePart[2];
+
+		return day + "/" + month + "/" + year;
+	};
 
     const infoDetail = (item) => {
         return (

@@ -10,6 +10,7 @@ export let endpoints = {
     "post-detail": "/viec-lam/",
     "apply-offer": "/ung-tuyen/",
     "apply-valid": "/ung-tuyen/hop-le/",
+    "search-hiring-by-name": "/nha-tuyen-dung/tim-kiem-theo-ten/",
 }
 
 export default axios.create({

@@ -54,8 +54,24 @@ nav {
 	color: $light;
 }
 
+.fa-warning > path {
+	color: $warning;
+}
+
 .landing-page-carousel {
 	height: 20rem;
+}
+
+@include media-breakpoint-up(sm) {
+	.sm-hidden  {
+		display: none;
+	}
+}
+
+@include media-breakpoint-up(md) {
+	.sm-hidden  {
+		display: block;
+	}
 }
 
 .no-decoration,
