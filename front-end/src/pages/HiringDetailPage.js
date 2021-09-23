@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { connect } from "react-redux"
-import { Card, Container, Row, Col, Button, Image } from "react-bootstrap"
+import { Card, Container, Row, Col, Button, Image, Spinner } from "react-bootstrap"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faMapMarkerAlt, faStar, faUsers} from "@fortawesome/free-solid-svg-icons"
 import API, { endpoints } from "../utils/API"
@@ -39,6 +39,17 @@ const HiringDetailPage = (props) => {
         setDetail(detail.data)
     };
 
+    // Render số ngôi sao tương ứng với điểm đánh giá
+    const ratingStar = (rate, obj) => {
+        let items = [];
+        for (let number = 1; number < obj.diem_danh_gia; number++) {
+            items.push(
+              <FontAwesomeIcon icon={faStar} className="fa-warning" />
+            );
+          }
+        return items;
+    }
+
     useEffect(() => {
         getDetail();
         getRating(); 
@@ -51,7 +62,7 @@ const HiringDetailPage = (props) => {
                 <Container>
                     <Row className="my-5">
                         <Col sm={12} md={8} className="mb-2">
-                            <Card className="p-4 mb-2" border="dark">
+                            <Card className="p-4 mb-4" border="dark">
                                 <Card.Title>
                                     <Row className="d-flex align-items-center">
                                         <Col sm={2}><h2><Image src={detail.nguoi_dung.anh_dai_dien} rounded fluid /></h2></Col>
@@ -63,28 +74,48 @@ const HiringDetailPage = (props) => {
                                     <Card.Text className="text-justify">{detail.gioi_thieu}</Card.Text>
                                 </Card.Body>
                             </Card>
-                            <Card className="p-2 mb-2" border="dark">
-                                <Card.Title>Đánh giá</Card.Title>
+                            <Card className="p-2 mb-4" border="dark">
                                 <Card.Body>
-                                    {ratings.map((rating, index) => {
-                                        return (
-                                            <>  
-                                                <Card className="p-2 mb-2">
-                                                    <p>Name: {rating.ung_vien.nguoi_dung.last_name} {rating.ung_vien.nguoi_dung.first_name}</p>
-                                                    <p>Rate: {rating.diem_danh_gia}</p>
-                                                    <p>Content: {rating.noi_dung}</p>
-                                                </Card>
-
-                                            </>
+                                    <h3 className="my-4 fw-bold">
+                                        Điểm đánh giá:  
+                                        <span className="text-warning mx-1">{detail.diem_danh_gia_tb}</span>
+                                        <FontAwesomeIcon icon={faStar} className="fa-warning" />
+                                    </h3>
+                                    {ratings.length > 0 
+                                    ? ratings.map((rating, index) => {
+                                        return ( 
+                                            <Card className="p-2 mb-2">
+                                                <Row>
+                                                    <Col sm={3} className="fw-bold text-primary">
+                                                        {rating.ung_vien.nguoi_dung.last_name} {rating.ung_vien.nguoi_dung.first_name}
+                                                    </Col>
+                                                    <Col sm={4}>
+                                                        <span>Đánh giá: </span> 
+                                                        {ratingStar(rating.diem_danh_gia, rating).map((item, idx) => {
+                                                            return item
+                                                        })}
+                                                        <FontAwesomeIcon icon={faStar} className="fa-warning" />
+                                                    </Col>
+                                                    <p className="small text-secondary">Đã ứng tuyển cho vị trí: {rating.viec_lam.tieu_de}</p>
+                                                </Row>
+                                                <p className="text-justify">{rating.noi_dung}</p>
+                                            </Card>
                                         )
-                                    })}
-                                    <PaginationBar
-                                        count={count}
-                                        next={next}
-                                        previous={previous}
-                                        defaultGet={6}
-                                        getPosts={(page) => getRating(hiringid, page)}
-                                    />
+                                    })
+                                    : (
+                                        <Spinner animation="border" role="status">
+                                            <span className="visually-hidden">Loading...</span>
+                                        </Spinner>
+                                    )} 
+                                    <div className="d-flex justify-content-center">
+                                        <PaginationBar
+                                            count={count}
+                                            next={next}
+                                            previous={previous}
+                                            defaultGet={6}
+                                            getPosts={(page) => getRating(hiringid, page)}
+                                        />
+                                    </div>
                                 </Card.Body>
                             </Card>
                         </Col>
@@ -93,7 +124,7 @@ const HiringDetailPage = (props) => {
                                 <Card.Body>
                                     <Row as="p">
                                         <Col sm={1}><FontAwesomeIcon icon={faMapMarkerAlt} /></Col>
-                                        <Col>Dia chi: {detail.dia_chi}</Col>
+                                        <Col>Địa chỉ: {detail.dia_chi}</Col>
                                     </Row>
                                     <Row as="p">
                                         <Col sm={1}><FontAwesomeIcon icon={faUsers} /></Col>
