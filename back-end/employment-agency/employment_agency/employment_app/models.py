@@ -68,7 +68,6 @@ class UngVien(models.Model):
     dia_chi = models.CharField(max_length=150, null=True)
     cv = models.FileField(upload_to='static/upload/%Y/%m', null=True)
     gioi_thieu = RichTextField(null=True)
-    chuc_danh = models.ManyToManyField('ChucDanh', blank=True, default=None)
 
 
 # User với vai trò là Quản lý

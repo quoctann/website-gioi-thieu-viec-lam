@@ -324,10 +324,10 @@ const LandingPage = (props) => {
 									</span>
 								}
 							>
-								<Form.Select name="degree" onChange={(event) => handleSelectChange(event)}>
+								<Form.Select defaultValue={1} name="degree" onChange={(event) => handleSelectChange(event)}>
 									{degrees.map((deg, index) => {
 										return (
-											<option selected={index===0?true:false} value={deg.id}>{deg.ten}</option>
+											<option value={deg.id}>{deg.ten}</option>
 										)
 									})}
 								</Form.Select>
@@ -342,10 +342,10 @@ const LandingPage = (props) => {
 									</span>
 								}
 							>
-								<Form.Select name="skill" onChange={(event) => handleSelectChange(event)}>
+								<Form.Select defaultValue={1} name="skill" onChange={(event) => handleSelectChange(event)}>
 									{skills.map((skill, index) => {
 										return (
-											<option selected={index===0?true:false} value={skill.id}>{skill.ten}</option>
+											<option value={skill.id}>{skill.ten}</option>
 										)
 									})}
 								</Form.Select>
@@ -362,10 +362,10 @@ const LandingPage = (props) => {
 									</span>
 								}
 							>
-								<Form.Select name="career" onChange={(event) => handleSelectChange(event)}>
+								<Form.Select defaultValue={1} name="career" onChange={(event) => handleSelectChange(event)}>
 									{careers.map((career, index) => {
 										return (
-											<option selected={index===0?true:false} value={career.id}>{career.ten}</option>
+											<option value={career.id}>{career.ten}</option>
 										)
 									})}
 								</Form.Select>
@@ -380,10 +380,10 @@ const LandingPage = (props) => {
 									</span>
 								}
 							>
-								<Form.Select name="experience" onChange={(event) => handleSelectChange(event)}>
+								<Form.Select defaultValue={1} name="experience" onChange={(event) => handleSelectChange(event)}>
 									{experiences.map((exp, index) => {
 										return (
-											<option selected={index===0?true:false} value={exp.id}>{exp.ten}</option>
+											<option value={exp.id}>{exp.ten}</option>
 										)
 									})}
 								</Form.Select>
