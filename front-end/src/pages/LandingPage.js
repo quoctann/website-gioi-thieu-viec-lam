@@ -1,9 +1,10 @@
 // LandingPage: trang đầu tiên nạp khi người dùng vào website
 import React, { useEffect, useState } from "react";
-import { Container, Carousel, Row, Col, Image, InputGroup, FormControl, Button, Card, Alert } from "react-bootstrap";
+import { Container, Carousel, Row, Col, Image, InputGroup, FormControl, Button, Card, Alert, Form, FloatingLabel } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearch, faStar } from "@fortawesome/free-solid-svg-icons";
+import { faBriefcase, faBuilding, faCogs, faCommentDollar, faFilter, faGraduationCap, faMedal, faSearch, faStar } from "@fortawesome/free-solid-svg-icons";
 import PaginationBar from "../components/PaginationBar"
+import { HomeFakeParagraph } from "../utils/Placeholder"
 
 // Ảnh của carousel
 import pic1 from "../assets/images/1.jpg";
@@ -18,7 +19,7 @@ import API, { endpoints } from "../utils/API";
 import { connect } from "react-redux";
 
 // Tương tác với dữ liệu global redux
-import { viewHiringPage } from "../redux/actions"
+import { viewHiringPage, viewPostPage } from "../redux/actions"
 import Routes from "../routes";
 
 const LandingPage = (props) => {
@@ -78,20 +79,32 @@ const LandingPage = (props) => {
 		setSlideIndex(selectedIndex);
 	};
 
+	// setInterval cho nó tự chạy slide carousel - nội dung (caption)
+	const animateCarousel = () => {
+		let tempIdx = slideIndex;
+		const interval = setInterval(() => {
+			if (tempIdx < carouselCaption.length) {
+				setSlideIndex(tempIdx);
+				tempIdx++;
+			} else {
+				tempIdx = 0;
+				setSlideIndex(tempIdx);
+			}
+		}, 3250);
+		return () => clearInterval(interval);
+	}
+
 	// Handle chức năng tìm kiếm nhà tuyển dụng
 	const [showSearchResult, setShowSearchResult] = useState(false)
-
 	const [searchResult, setSearchResult] = useState([])
-
 	const [searchInput, setSearchInput] = useState("")
 
 	// Hứng res trả ra từ server để hiện thanh phân trang
 	const [count, setCount] = useState(0);
-
 	const [next, setNext] = useState("");
-
 	const [previous, setPrevious] = useState("");
-
+	
+	// Handle chức năng tìm kiếm nhà tuyển dụng theo tên
 	const handleSearch = async (text = searchInput, page = 1) => {
 		const res = await API.get(endpoints["search-hiring-by-name"] + `?name=${text}&page=${page}`)
 		
@@ -110,20 +123,55 @@ const LandingPage = (props) => {
 		}
 	}
 
+	// Get thông tin có sẵn trên server các danh mục để lọc
+	const [degrees, setDegrees] = useState([]);
+	const [skills, setSkills] = useState([]);
+	const [experiences, setExperiences] = useState([])
+	const [careers, setCareers] = useState([]);
+
+	// Gửi request để lấy dữ liệu
+	const getFilterCategory = async () => {
+		const degreesRes = await API.get(endpoints["degree"]);
+		const skillsRes = await API.get(endpoints["skill"]);
+		const expRes = await API.get(endpoints["experience"]);
+		const careersRes = await API.get(endpoints["career"]);
+		setDegrees(degreesRes.data)
+		setSkills(skillsRes.data)
+		setExperiences(expRes.data)
+		setCareers(careersRes.data) 
+	}
+
+	// Dữ liệu lọc sẽ được gửi lên server
+	const [filterData, setFilterData] = useState({
+		"career": "1",
+		"degree": "1",
+		"experience": "1",
+		"skill": "1",
+	})
+
+	// Handle thay đổi giá trị select của người dùng
+	const handleSelectChange = (event) => {
+		setFilterData({
+			...filterData,
+			[event.target.name]: event.target.value
+		})
+	}
+	
+	const [filterResult, setFilterResult] = useState({})
+	const [isFirstLoad, setIsFirstLoad] = useState(true)
+	// Tiến hành lọc trả ra kết quả cho người dùng (khi nhấn nút filter)
+	const handleFilter = async (page = 1) => {
+		const res = await API.get(endpoints["job-filter"] + 
+			`?career=${filterData.career}&degree=${filterData.degree}&experience=${filterData.experience}&skill=${filterData.skill}&page=${page}`
+		);
+		setFilterResult({...filterResult, ...res.data});
+		setIsFirstLoad(false);
+	}
+
 	useEffect(() => {
-		// setInterval cho nó tự chạy slide carousel - nội dung (caption)
-		let tempIdx = slideIndex;
-		const interval = setInterval(() => {
-			if (tempIdx < carouselCaption.length) {
-				setSlideIndex(tempIdx);
-				tempIdx++;
-			} else {
-				tempIdx = 0;
-				setSlideIndex(tempIdx);
-			}
-		}, 3250);
-		return () => clearInterval(interval);
-	});
+		getFilterCategory();
+		animateCarousel();
+	}, []);
 
 	return (
 		<>
@@ -261,31 +309,164 @@ const LandingPage = (props) => {
 				</div>
 
 				{/* Văn bản giả */}
-				<Row className="my-5 d-flex flex-row align-items-center">
-					<Col sm={12} md={6}>
-						<Image src={pic3} fluid />
-					</Col>
-					<Col sm={12} md={6}>
-						<div>
-							<h2 className="fw-bold">Lorem islum dolo</h2>
-							<p style={{ textAlign: "justify" }}>
-								Lorem ipsum dolor sit amet, consectetur
-								adipiscing elit. Curabitur ut est blandit,
-								venenatis risus in, sollicitudin sem. Integer
-								laoreet quam augue, sit amet accumsan urna
-								laoreet viverra. Suspendisse arcu tortor,
-								blandit id libero ac, laoreet sodales nulla.
-								Maecenas mattis ligula leo, non congue lacus
-								rhoncus nec. Sed convallis mi lectus, in
-								facilisis metus maximus non. Donec odio sapien,
-								dignissim eleifend lacinia quis, varius eget
-								ligula. Proin a eros suscipit, pellentesque nibh
-								sit amet, lacinia ante. Etiam quis consequat
-								justo. Quisque non leo metus.
-							</p>
-						</div>
-					</Col>
+				<HomeFakeParagraph image={pic1} />
+						
+				{/* Filter việc làm theo nhiều tiêu chí */}
+				<div className="my-5">
+					<h4 className="mb-4 mt-5 text-center text-primary">Tìm kiếm công việc phù hợp với bạn!</h4>
+					<Row className="mb-4">
+						<Col>
+							<FloatingLabel
+								controlId="floatingSelect" 
+								label={
+									<span>
+										<FontAwesomeIcon icon={faGraduationCap}/> Bằng cấp
+									</span>
+								}
+							>
+								<Form.Select name="degree" onChange={(event) => handleSelectChange(event)}>
+									{degrees.map((deg, index) => {
+										return (
+											<option selected={index===0?true:false} value={deg.id}>{deg.ten}</option>
+										)
+									})}
+								</Form.Select>
+							</FloatingLabel>
+						</Col>
+						<Col>
+							<FloatingLabel
+								controlId="floatingSelect" 
+								label={
+									<span>
+										<FontAwesomeIcon icon={faCogs}/> Kỹ năng
+									</span>
+								}
+							>
+								<Form.Select name="skill" onChange={(event) => handleSelectChange(event)}>
+									{skills.map((skill, index) => {
+										return (
+											<option selected={index===0?true:false} value={skill.id}>{skill.ten}</option>
+										)
+									})}
+								</Form.Select>
+							</FloatingLabel>
+						</Col>
+					</Row>
+					<Row className="mb-4">
+						<Col>
+							<FloatingLabel
+								controlId="floatingSelect" 
+								label={
+									<span>
+										<FontAwesomeIcon icon={faBriefcase}/> Ngành nghề
+									</span>
+								}
+							>
+								<Form.Select name="career" onChange={(event) => handleSelectChange(event)}>
+									{careers.map((career, index) => {
+										return (
+											<option selected={index===0?true:false} value={career.id}>{career.ten}</option>
+										)
+									})}
+								</Form.Select>
+							</FloatingLabel>
+						</Col>
+						<Col>
+							<FloatingLabel
+								controlId="floatingSelect" 
+								label={
+									<span>
+										<FontAwesomeIcon icon={faMedal}/> Kinh nghiệm
+									</span>
+								}
+							>
+								<Form.Select name="experience" onChange={(event) => handleSelectChange(event)}>
+									{experiences.map((exp, index) => {
+										return (
+											<option selected={index===0?true:false} value={exp.id}>{exp.ten}</option>
+										)
+									})}
+								</Form.Select>
+							</FloatingLabel>
+						</Col>
+					</Row>
+					<div className="d-flex justify-content-center">
+						<Button onClick={() => handleFilter()} className="w-25">
+							<FontAwesomeIcon icon={faFilter} className="fa-light me-2"/>
+							Lọc việc làm
+						</Button>	
+					</div>			
+				</div>
+
+				{/* Kết quả filter */}
+				<Row>
+					{filterResult.count > 0 
+					? (
+						(filterResult.result).map((post, index) => {
+							return (
+								<Col md={6} sm={12} className="p-2">
+									<Card className="animate__animated animate__fadeIn">
+										<Card.Body>
+											<Card.Title className="fw-bold">
+												<h4 className="fw-bold">{post.tieu_de}</h4>
+												<Row as="p">
+													<Col sm={1}><FontAwesomeIcon icon={faBuilding} /></Col>
+													<Col>{post.nha_tuyen_dung__ten_cong_ty}</Col>
+												</Row>
+												<Row as="p">
+													<Col sm={1}><FontAwesomeIcon icon={faCommentDollar}/></Col>
+													<Col>
+														Mức lương:{" "}
+														<span className="text-danger">
+															{post.luong === 0
+																? "Thương lượng"
+																: new Intl.NumberFormat(
+																		"vi-VN",
+																		{
+																			style: "currency",
+																			currency: "VND",
+																		}
+																).format(post.luong)}
+														</span>
+													</Col>
+												</Row>
+											</Card.Title>
+											<hr />
+											<Card.Text className="text-justify">
+												{post.noi_dung.substr(0,150)}...
+											</Card.Text>
+											<Button 
+												variant="primary"
+												onClick={() => {
+													// props.viewPostPage(post.id);
+													props.history.push(Routes.PostDetailPage.path + `?id=${post.id}`);
+												}} 
+											
+											>Xem chi tiết</Button>
+										</Card.Body>
+									</Card>
+								</Col>
+							)
+						})
+					) 
+					: (
+						(isFirstLoad ? (<></>) : (
+							<Col>
+								<Alert
+									variant="secondary"
+									className="form-width mx-auto text-center"
+								>
+									Không có kết quả phù hợp
+								</Alert>
+							</Col>
+						))
+					)
+					}
+						
 				</Row>
+
+
+				<HomeFakeParagraph image={pic2} />
 			</Container>
 		</>
 	);
