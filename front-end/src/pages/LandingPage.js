@@ -19,7 +19,7 @@ import API, { endpoints } from "../utils/API";
 import { connect } from "react-redux";
 
 // Tương tác với dữ liệu global redux
-import { viewHiringPage, viewPostPage } from "../redux/actions"
+import { viewHiringPage } from "../redux/actions"
 import Routes from "../routes";
 
 const LandingPage = (props) => {
@@ -106,16 +106,16 @@ const LandingPage = (props) => {
 	
 	// Handle chức năng tìm kiếm nhà tuyển dụng theo tên
 	const handleSearch = async (text = searchInput, page = 1) => {
-		const res = await API.get(endpoints["search-hiring-by-name"] + `?name=${text}&page=${page}`)
+		const res = await API.get(endpoints["hiring-search-by-name"](text) + `&page=${page}`)
 		
 		if (res.data) {
-			// console.log(res.data.result)
-			let result = [];
-			for (let i = 0; i < res.data.result.length; i++) {
-				result.push(res.data.result[i])
+			console.log(res.data)
+			let results = [];
+			for (let i = 0; i < res.data.results.length; i++) {
+				results.push(res.data.results[i])
 			}
 			// console.log(res.data)
-			setSearchResult(result);
+			setSearchResult(results);
 			setNext(res.data.next);
 			setPrevious(res.data.previous)
 			setCount(res.data.count)
@@ -161,9 +161,9 @@ const LandingPage = (props) => {
 	const [isFirstLoad, setIsFirstLoad] = useState(true)
 	// Tiến hành lọc trả ra kết quả cho người dùng (khi nhấn nút filter)
 	const handleFilter = async (page = 1) => {
-		const res = await API.get(endpoints["job-filter"] + 
-			`?career=${filterData.career}&degree=${filterData.degree}&experience=${filterData.experience}&skill=${filterData.skill}&page=${page}`
-		);
+		const res = await API.get(endpoints["posts-filter"](
+			filterData.career, filterData.degree, filterData.experience, filterData.skill) + `&page=${page}`);
+		console.log(res.data)
 		setFilterResult({...filterResult, ...res.data});
 		setIsFirstLoad(false);
 	}
@@ -270,7 +270,7 @@ const LandingPage = (props) => {
 														</Card.Text>
 														<Button 
 															onClick={() => {
-																props.viewHiringPage(result.nguoi_dung_id);
+																props.viewHiringPage(result.nguoi_dung.id);
 																props.history.push(Routes.HiringDetailPage.path);
 															}} 
 															variant="primary"
@@ -402,7 +402,7 @@ const LandingPage = (props) => {
 				<Row>
 					{filterResult.count > 0 
 					? (
-						(filterResult.result).map((post, index) => {
+						(filterResult.results).map((post, index) => {
 							return (
 								<Col md={6} sm={12} className="p-2">
 									<Card className="animate__animated animate__fadeIn">
@@ -411,7 +411,7 @@ const LandingPage = (props) => {
 												<h4 className="fw-bold">{post.tieu_de}</h4>
 												<Row as="p">
 													<Col sm={1}><FontAwesomeIcon icon={faBuilding} /></Col>
-													<Col>{post.nha_tuyen_dung__ten_cong_ty}</Col>
+													<Col>{post.nha_tuyen_dung.ten_cong_ty}</Col>
 												</Row>
 												<Row as="p">
 													<Col sm={1}><FontAwesomeIcon icon={faCommentDollar}/></Col>

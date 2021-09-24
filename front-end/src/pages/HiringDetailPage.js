@@ -1,22 +1,20 @@
 import { useEffect, useState } from "react"
 import { connect } from "react-redux"
-import { Card, Container, Row, Col, Button, Image, Spinner } from "react-bootstrap"
+import { Card, Container, Row, Col, Image, Spinner } from "react-bootstrap"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faMapMarkerAlt, faStar, faUsers} from "@fortawesome/free-solid-svg-icons"
 import API, { endpoints } from "../utils/API"
-
-import pic from "../assets/images/python.jpg"
 import LoadingOverlay from "../components/LoadingOverlay"
 import PaginationBar from "../components/PaginationBar"
 
 const HiringDetailPage = (props) => {
 
     // Hứng res trả ra để phân trang
-	const [count, setCount] = useState(0);
+	// const [count, setCount] = useState(0);
 
-	const [next, setNext] = useState("");
+	// const [next, setNext] = useState("");
 
-	const [previous, setPrevious] = useState("");
+	// const [previous, setPrevious] = useState("");
 
     const [detail, setDetail] = useState({})
 
@@ -25,16 +23,16 @@ const HiringDetailPage = (props) => {
     const hiringid = props.hiring.commonReducer.hiringId;
 
     const getRating = async(hiringId = hiringid, page = 1) => {
-        const rating = await API.get(endpoints["hiring-rating"] + `?hiring-id=${hiringId}&page=${page}`)
+        const rating = await API.get(endpoints["hiring-ratings"](hiringId) + `?page=${page}`)
         console.log(rating.data)
-        setCount(rating.data.count);
-        setNext(rating.data.next);
-        setPrevious(rating.data.previous);
-        setRatings(rating.data.result)
+        // setCount(rating.data.count);
+        // setNext(rating.data.next);
+        // setPrevious(rating.data.previous);
+        setRatings(rating.data)
     };
 
     const getDetail = async () => {
-        const detail = await API.get(endpoints["hiring"] + `${props.hiring.commonReducer.hiringId}/`)
+        const detail = await API.get(endpoints["hiring-detail"](props.hiring.commonReducer.hiringId))
         console.log(detail.data)
         setDetail(detail.data)
     };
@@ -56,7 +54,7 @@ const HiringDetailPage = (props) => {
     }, [])
 
     // So sánh == thì chạy ngon, === lỗi
-    if (!Object.keys(detail).length == 0)
+    if (detail.hasOwnProperty('ten_cong_ty'))
         return (
             <>
                 <Container>
@@ -107,7 +105,7 @@ const HiringDetailPage = (props) => {
                                             <span className="visually-hidden">Loading...</span>
                                         </Spinner>
                                     )} 
-                                    <div className="d-flex justify-content-center">
+                                    {/* <div className="d-flex justify-content-center">
                                         <PaginationBar
                                             count={count}
                                             next={next}
@@ -115,7 +113,7 @@ const HiringDetailPage = (props) => {
                                             defaultGet={6}
                                             getPosts={(page) => getRating(hiringid, page)}
                                         />
-                                    </div>
+                                    </div> */}
                                 </Card.Body>
                             </Card>
                         </Col>

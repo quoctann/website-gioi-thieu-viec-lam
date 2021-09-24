@@ -6,19 +6,30 @@ export let endpoints = {
     "login": "/o/token/",
     "current-user": "/nguoi-dung/hien-tai/",
     "oauth2-info": "/oauth2-info/",
-    "posts": "/viec-lam/?page=",
-    "post-detail": "/viec-lam/",
+    "posts": "/viec-lam/",
+    "posts-filter": (career, degree, experience, skill) => {
+        let url = "/viec-lam/?";
+        if(career)
+            url += `nganh-nghe=${career}&`;
+        if(degree)
+            url += `bang-cap=${degree}&`;
+        if(experience)
+            url += `kinh-nghiem=${experience}&`;
+        if(skill)
+            url += `ky-nang=${skill}&`;
+        return url;
+    },
+    "post-detail": (postId) => `/viec-lam/${postId}/`,
     "apply-offer": "/ung-tuyen/",
-    "apply-valid": "/ung-tuyen/hop-le/",
-    "search-hiring-by-name": "/nha-tuyen-dung/tim-kiem-theo-ten/",
     "hiring": "/nha-tuyen-dung/",
-    "hiring-rating": "/danh-gia-nha-tuyen-dung/chi-tiet/",
+    "hiring-ratings": (hiringId) => `/nha-tuyen-dung/${hiringId}/danh-gia/`,
+    "hiring-posts": (hiringId) => `/nha-tuyen-dung/${hiringId}/viec-lam/`,
+    "hiring-detail": (hiringId) => `/nha-tuyen-dung/${hiringId}/`,
+    "hiring-search-by-name": (text) => `/nha-tuyen-dung/?search=${text}`,
     "degree": "/bang-cap/",
     "skill": "/ky-nang/",
     "experience": "/kinh-nghiem/",
     "career": "/nganh-nghe/",
-    "job-filter": "/viec-lam/loc-dieu-kien/",
-
 }
 
 export default axios.create({

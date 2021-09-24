@@ -30,7 +30,7 @@ const PostDetailPage = (props) => {
 
 	const getPostDetail = async (id = postId) => {
 		try {
-			const res = await API.get(endpoints["post-detail"] + id + "/");
+			const res = await API.get(endpoints["post-detail"](id));
 			setPost(res.data);
 			// console.log(typeof res.data, res.data);
 		} catch (err) {
@@ -82,35 +82,22 @@ const PostDetailPage = (props) => {
 
         // Nếu hợp lệ thì tiến hành request tạo dữ liệu dưới csdl
         const apply = async () => {
-            let valid = false;
-
-            // Get request kiểm tra xem ứng viên này đã ứng tuyển công việc này chưa true nếu chưa ứng tuyển
-			const validInfo = await API.get(endpoints["apply-valid"] + `?viec-lam-id=${jobId}&ung-vien-id=${userId}`);
-            
-            if (validInfo)
-                valid = validInfo.data.valid;
-
-            if (valid === true) {
+            try {
                 const create = await API.post(endpoints["apply-offer"], {
                     "viec_lam": jobId,
-                    "ung_vien": userId
+                    "ung_vien": userId,
                 })
-
                 // Nếu tạo bản ghi dưới csdl thành công
-                if (create.status === 201) {
+                if (create.status === 201)
                     alert("Nộp đơn ứng tuyển thành công!");
-                }
-                else
-                    alert("Nộp đơn ứng tuyển thất bại!");
-            } else 
-                alert("Bạn đã nộp đơn ứng tuyển công việc này trước đó rồi!");
+            } catch (ex) {
+                // console.log(ex.response.status)
+                if (ex.response.status === 409)
+                    alert("Bạn đã nộp đơn ứng tuyển công việc này trước đó rồi, không thể nộp đơn nữa!")
+            } 
 		};
-
-        try {
-			apply();
-		} catch (err) {
-			console.log(err);
-		}
+        
+        apply()
     }
 
 	useEffect(() => {

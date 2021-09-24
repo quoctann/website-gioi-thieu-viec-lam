@@ -161,10 +161,6 @@ class UngTuyen(models.Model):
     # Trường cho biết là ứng viên nộp đơn ứng tuyển hay NTD gửi lời mời làm
     NHA_TUYEN_DUNG = 'NTD'
     UNG_VIEN = 'UV'
-    NGUOI_GUI = [
-        (NHA_TUYEN_DUNG, 'NTD gui loi moi lam viec cho UV'),
-        (UNG_VIEN, 'UV nop don ung tuyen')
-    ]
 
     viec_lam = models.ForeignKey(ViecLam, on_delete=models.SET_NULL, null=True)
     ung_vien = models.ForeignKey(UngVien, on_delete=models.SET_NULL, null=True)
@@ -174,11 +170,7 @@ class UngTuyen(models.Model):
         max_length=10,
         default=CHO_XU_LY
     )
-    nguoi_gui = models.CharField(
-        choices=NGUOI_GUI,
-        max_length=10,
-        default=UNG_VIEN
-    )
+    ung_vien_nop_don = models.BooleanField(default=True)
 
 
 # Thông tin các ngành nghề vd: xây dựng, làm đẹp,...
