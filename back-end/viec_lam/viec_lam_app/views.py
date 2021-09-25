@@ -22,13 +22,6 @@ from .serializers import *
 # Để ràng buộc chỉ user đã đăng nhập mới lấy được thông tin ta ghi đè lại phương
 # thức get_permission
 class NguoiDungViewSet(viewsets.ViewSet, generics.CreateAPIView):
-    # Phương thức để trả về swagger ko lỗi (do swagger không hỗ trợ nested
-    # serializer -> hiển thị dấu "." trong tên.trường_nested bị lỗi)
-    def get_parsers(self):
-        if getattr(self, 'swagger_fake_view', False):
-            return []
-        return super().get_parsers()
-
     # Chỉ định câu truy vấn
     queryset = NguoiDung.objects.filter(is_active=True)
     # Chỉ định lớp serializer
@@ -92,27 +85,27 @@ class ViecLamViewSet(viewsets.ViewSet, generics.ListAPIView):
 
     # Nếu có query param gửi lên để lọc thì lọc trả ra kết quả
     def get_queryset(self):
-        posts = ViecLam.objects.filter(trang_thai_viec_lam=ViecLam.DANG_MO)
+        viec_lam = ViecLam.objects.filter(trang_thai_viec_lam=ViecLam.DANG_MO)
 
         # Có param nào thì filter theo param đó, lưu ý giá trị gửi lên là id
-        career = self.request.query_params.get('nganh-nghe')
-        degree = self.request.query_params.get('bang-cap')
-        experience = self.request.query_params.get('kinh-nghiem')
-        skill = self.request.query_params.get('ky-nang')
+        nganh_nghe = self.request.query_params.get('nganh-nghe')
+        bang_cap = self.request.query_params.get('bang-cap')
+        kinh_nghiem = self.request.query_params.get('kinh-nghiem')
+        ky_nang = self.request.query_params.get('ky-nang')
 
-        if career is not None:
-            posts = posts.filter(nganh_nghe=int(career))
+        if nganh_nghe is not None:
+            viec_lam = viec_lam.filter(nganh_nghe=nganh_nghe)
 
-        if degree is not None:
-            posts = posts.filter(bang_cap=int(degree))
+        if bang_cap is not None:
+            viec_lam = viec_lam.filter(bang_cap=bang_cap)
 
-        if experience is not None:
-            posts = posts.filter(kinh_nghiem=experience)
+        if kinh_nghiem is not None:
+            viec_lam = viec_lam.filter(kinh_nghiem=kinh_nghiem)
 
-        if skill is not None:
-            posts = posts.filter(ky_nang=skill)
+        if ky_nang is not None:
+            viec_lam = viec_lam.filter(ky_nang=ky_nang)
 
-        return posts
+        return viec_lam
 
     # Override generic để lấy chi tiết nha_tuyen_dung
     def retrieve(self, request, pk=None):
@@ -129,33 +122,34 @@ class NhaTuyenDungViewSet(viewsets.ViewSet, generics.ListAPIView,generics.Retrie
 
     # Nếu có query param là search thì tiến hành query tìm kiếm ntd, không thì trả ra tất cả
     def get_queryset(self):
-        hiring = NhaTuyenDung.objects.filter(doi_xet_duyet=False)
+        ntd = NhaTuyenDung.objects.filter(doi_xet_duyet=False)
 
-        search = self.request.query_params.get('search')
-        if search is not None:
-            hiring = hiring.filter(ten_cong_ty__icontains=search)
+        tim_kiem = self.request.query_params.get('tim-kiem')
+        if tim_kiem is not None:
+            ntd = ntd.filter(ten_cong_ty__icontains=tim_kiem)
 
-        return hiring
+        return ntd
 
     # API trả ra tất cả bài viết (tin tuyển dụng việc làm) đang mở của một ntd cụ thể (id)
     @action(methods=['get'], detail=True, url_path='viec-lam')
-    def get_posts(self, request, pk):
-        posts = NhaTuyenDung.objects.get(pk=pk).vieclam_set.filter(trang_thai_viec_lam=ViecLam.DANG_MO)
+    def bai_viet(self, request, pk):
+        bai_viet = NhaTuyenDung.objects.get(pk=pk).vieclam_set.filter(trang_thai_viec_lam=ViecLam.DANG_MO)
 
         # Nhận vào req params (nếu có) để tìm tên việc làm đang mở
-        search = request.query_params.get('search')
-        if search is not None:
-            posts = posts.filter(tieu_de__icontains=search)
+        tim_kiem = request.query_params.get('tim-kiem')
+        if tim_kiem is not None:
+            bai_viet = bai_viet.filter(tieu_de__icontains=tim_kiem)
 
-        return Response(ViecLamSerializer(posts, many=True).data,
+        return Response(ViecLamSerializer(bai_viet, many=True).data,
                         status=status.HTTP_200_OK)
 
     # Lấy các bài đánh giá của một nhà tuyển dụng
     @action(methods=['get'], detail=True, url_path='danh-gia')
-    def get_ratings(self, request, pk):
-        ratings = DanhGiaNhaTuyenDung.objects.filter(nha_tuyen_dung_id=pk)
+    def danh_gia(self, request, pk):
+        danh_gia = DanhGiaNhaTuyenDung.objects.filter(nha_tuyen_dung_id=pk)
 
-        return Response(DanhGiaNhaTuyenDungSerializer(ratings, many=True).data, status=status.HTTP_200_OK)
+        return Response(DanhGiaNhaTuyenDungSerializer(danh_gia, many=True).data,
+                        status=status.HTTP_200_OK)
 
 
 class UngTuyenViewSet(viewsets.ViewSet, generics.ListAPIView):
@@ -169,7 +163,8 @@ class UngTuyenViewSet(viewsets.ViewSet, generics.ListAPIView):
         uv2ntd = request.data.get('ung_vien_nop_don')
         check = UngTuyen.objects.filter(ung_vien_id=uv_id, viec_lam_id=vl_id)
         if len(check) > 0:
-            return Response(data={'error': 'resource already exists, cannot overwrite it'}, status=status.HTTP_409_CONFLICT)
+            return Response(data={'error': 'resource already exists, cannot overwrite it'},
+                            status=status.HTTP_409_CONFLICT)
 
         if uv2ntd is not None:
             res = UngTuyen.objects.create(ung_vien_id=uv_id, viec_lam_id=vl_id, ung_vien_nop_don=uv2ntd)

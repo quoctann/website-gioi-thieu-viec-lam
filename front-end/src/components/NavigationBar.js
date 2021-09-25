@@ -43,7 +43,7 @@ const NavigationBar = (props) => {
 				<Nav.Item>
 					<Button
 						as={Link}
-						to={Routes.UserDetailPage.path}
+						to={Routes.UserDashboardPage.path}
 						className="ms-1"
 						variant="outline-dark"
 					>
@@ -81,8 +81,8 @@ const NavigationBar = (props) => {
 							<Nav.Link as={Link} to={Routes.ViewPostPage.path}>
 								Xem tin tuyển dụng
 							</Nav.Link>
-							<Nav.Link as={Link} to={Routes.LoginPage.path}>
-								Dashboard
+							<Nav.Link as={Link} to={Routes.AboutPage.path}>
+								Giới thiệu
 							</Nav.Link>
 						</Nav>
 						<Nav className="ms-auto">{rightCorner}</Nav>

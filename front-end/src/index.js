@@ -16,7 +16,7 @@ import LandingPage from "./pages/LandingPage";
 import NavigationBar from "./components/NavigationBar";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
-import UserDetailPage from "./pages/UserDetailPage";
+import UserDashboardPage from "./pages/UserDashboardPage";
 import ViewPostPage from "./pages/ViewPostPage";
 import PostDetailPage from "./pages/PostDetailPage";
 import HiringDetailPage from "./pages/HiringDetailPage";
@@ -28,6 +28,7 @@ import Routes from "./routes"
 import { store, persistor } from "./redux/store"
 import NotFoundPage from "./pages/NotFoundPage";
 import ServerErrorPage from "./pages/ServerErrorPage";
+import AboutPage from "./pages/AboutPage";
 
 
 ReactDOM.render(
@@ -39,12 +40,13 @@ ReactDOM.render(
 					<Route exact path={Routes.LandingPage.path} component={LandingPage} />
 					<Route exact path={Routes.LoginPage.path} component={LoginPage} />
 					<Route exact path={Routes.RegisterPage.path} component={RegisterPage} />
-					<Route exact path={Routes.UserDetailPage.path} component={UserDetailPage} />
+					<Route exact path={Routes.UserDashboardPage.path} component={UserDashboardPage} />
 					<Route exact path={Routes.ViewPostPage.path} component={ViewPostPage} />
 					<Route exact path={Routes.PostDetailPage.path} component={PostDetailPage} />
 					<Route exact path={Routes.HiringDetailPage.path} component={HiringDetailPage} />
 					<Route exact path={Routes.NotFoundPage.path} component={NotFoundPage} />
 					<Route exact path={Routes.ServerError.path} component={ServerErrorPage} />
+					<Route exact path={Routes.AboutPage.path} component={AboutPage} />
 				</Switch>
 				{/* <Footer /> */}
 			</BrowserRouter>

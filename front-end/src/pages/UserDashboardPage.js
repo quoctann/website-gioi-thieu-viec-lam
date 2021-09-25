@@ -7,7 +7,7 @@ import SimpleInput from "../components/SimpleInput"
 import { useSubmitForm } from "../utils/CustomHooks"
 import pic from "../assets/images/python.jpg"
 
-const UserDetailPage = (props) => {
+const UserDashboardPage = (props) => {
 	/*
 		anh_dai_dien: "/static/upload/2021/09/usecase_TmdZgWU.jpg"
 		email: "uv@mail.com"
@@ -129,4 +129,4 @@ export default connect((state) => {
 	return {
 		userInfo: state,
 	};
-})(UserDetailPage);
+})(UserDashboardPage);

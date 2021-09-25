@@ -17,7 +17,7 @@ const LoginPage = (props) => {
 	const login = async () => {
 		try {
 			const info = await API.get(endpoints["oauth2-info"]);
-			const res = await API.post(endpoints["login"], {
+			const res = await API.post(endpoints["dang-nhap"], {
 				client_id: info.data.client_id,
 				client_secret: info.data.client_secret,
 				username: inputs.username,
@@ -29,7 +29,7 @@ const LoginPage = (props) => {
 			// console.log(res);
 			await cookies.save("access_token", res.data.access_token);
 
-			const user = await API.get(endpoints["current-user"], {
+			const user = await API.get(endpoints["nguoi-dung-hien-tai"], {
 				headers: {
 					Authorization: `Bearer ${cookies.load("access_token")}`,
 				},

@@ -1,5 +1,5 @@
 """
-WSGI config for employment_agency project.
+WSGI config for viec_lam project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'employment_agency.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'viec_lam.settings')
 
 application = get_wsgi_application()

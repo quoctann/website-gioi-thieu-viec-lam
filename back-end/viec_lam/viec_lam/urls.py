@@ -14,7 +14,7 @@ schema_view = get_schema_view(
     openapi.Info(
         title="Website Giới thiệu việc làm API",
         default_version='v1',
-        description="API cho app (employment_app)",
+        description="Đồ án ngành Công nghệ thông tin, Đại học Mở TP. HCM K18",
         contact=openapi.Contact(email="1851050127tan@ou.edu.vn"),
         license=openapi.License(name="Trần Quốc Tấn @2021"),
     ),
@@ -25,7 +25,7 @@ schema_view = get_schema_view(
 # Khai báo các route/path dẫn đến các app được sử dụng
 urlpatterns = [
     # Đầu tiên nhất dẫn vào trong app của mình
-    path('', include('employment_app.urls')),
+    path('', include('viec_lam_app.urls')),
     # Đường dẫn vào trang admin mặc định
     path('admin/', admin.site.urls),
     # Đường dẫn oauth2 để lấy token, app chứng thực, /o tên khác vẫn được

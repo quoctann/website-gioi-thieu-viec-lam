@@ -106,7 +106,7 @@ const LandingPage = (props) => {
 	
 	// Handle chức năng tìm kiếm nhà tuyển dụng theo tên
 	const handleSearch = async (text = searchInput, page = 1) => {
-		const res = await API.get(endpoints["hiring-search-by-name"](text) + `&page=${page}`)
+		const res = await API.get(endpoints["nha-tuyen-dung-tim-kiem"](text) + `&page=${page}`)
 		
 		if (res.data) {
 			console.log(res.data)
@@ -131,10 +131,10 @@ const LandingPage = (props) => {
 
 	// Gửi request để lấy dữ liệu
 	const getFilterCategory = async () => {
-		const degreesRes = await API.get(endpoints["degree"]);
-		const skillsRes = await API.get(endpoints["skill"]);
-		const expRes = await API.get(endpoints["experience"]);
-		const careersRes = await API.get(endpoints["career"]);
+		const degreesRes = await API.get(endpoints["bang-cap"]);
+		const skillsRes = await API.get(endpoints["ky-nang"]);
+		const expRes = await API.get(endpoints["kinh-nghiem"]);
+		const careersRes = await API.get(endpoints["nganh-nghe"]);
 		setDegrees(degreesRes.data)
 		setSkills(skillsRes.data)
 		setExperiences(expRes.data)
@@ -161,7 +161,7 @@ const LandingPage = (props) => {
 	const [isFirstLoad, setIsFirstLoad] = useState(true)
 	// Tiến hành lọc trả ra kết quả cho người dùng (khi nhấn nút filter)
 	const handleFilter = async (page = 1) => {
-		const res = await API.get(endpoints["posts-filter"](
+		const res = await API.get(endpoints["viec-lam-loc"](
 			filterData.career, filterData.degree, filterData.experience, filterData.skill) + `&page=${page}`);
 		console.log(res.data)
 		setFilterResult({...filterResult, ...res.data});

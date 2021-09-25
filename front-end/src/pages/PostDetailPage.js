@@ -30,7 +30,7 @@ const PostDetailPage = (props) => {
 
 	const getPostDetail = async (id = postId) => {
 		try {
-			const res = await API.get(endpoints["post-detail"](id));
+			const res = await API.get(endpoints["viec-lam-chi-tiet"](id));
 			setPost(res.data);
 			// console.log(typeof res.data, res.data);
 		} catch (err) {
@@ -83,7 +83,7 @@ const PostDetailPage = (props) => {
         // Nếu hợp lệ thì tiến hành request tạo dữ liệu dưới csdl
         const apply = async () => {
             try {
-                const create = await API.post(endpoints["apply-offer"], {
+                const create = await API.post(endpoints["ung-tuyen"], {
                     "viec_lam": jobId,
                     "ung_vien": userId,
                 })

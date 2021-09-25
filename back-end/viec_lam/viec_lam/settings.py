@@ -4,14 +4,15 @@ from pathlib import Path
 # Tên rút gọn để dẫn vào thư mục project
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Tạm: u: admin p: matkhau123@
 
 # SECURITY: giữ key này bí mật trong môi trường production
 SECRET_KEY = 'django-insecure-xm4a2&s8^s=z(%!%3(-xrjw4$xpllu*woj9zj(frm#vz3zjr0^'
 
-# OAuth2 thông tin application (EmploymentAgency), gửi kèm rq để xin token
+# OAuth2 thông tin application (viec_lam_app), gửi kèm rq để xin token
 OAUTH2_INFO = {
-    'client_id': 'NEST0N7JhUcv3ObQ5wXM6ZNKGywvPvOhSHgTStTB',
-    'client_secret': 'ug2vT3qEBUZDL8d5KzItc1cwVgYVUanZppVRWqJG74hIl3ww5Nm9tgNgIXoz9FfzYbdzYsVI5qJrm4LQkRMPQI7HSL0RIYjTFs63TQ8dC8oJ2L8aEkDf2Bmk5PCHCiXs'
+    'client_id': '2YTHLpAnth0hmpsICYrL4QKfzQAoAQ5ik6ifQrQQ',
+    'client_secret': 'tkyS2frqerxZZaqGtdsTjj2GE1Bn2hD3YMtP29pg6PJch60aPCj6EESl3UmIdOKFqQ7SvCpOf8CZ9uHAT6yiJrqG0HbKTokd6456OROEtjoUgXLllx3UfzNPIzmS6iwf'
 }
 
 # Tắt khi đang deploy lên production
@@ -32,7 +33,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # App tự tạo
-    'employment_app.apps.EmploymentAppConfig',
+    'viec_lam_app.apps.ViecLamAppConfig',
     # Trình soạn thảo richtext
     'ckeditor',
     'ckeditor_uploader',
@@ -85,7 +86,7 @@ INTERNAL_IPS = [
     '127.0.0.1'
 ]
 
-ROOT_URLCONF = 'employment_agency.urls'
+ROOT_URLCONF = 'viec_lam.urls'
 
 TEMPLATES = [
     {
@@ -103,7 +104,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'employment_agency.wsgi.application'
+WSGI_APPLICATION = 'viec_lam.wsgi.application'
 
 
 # Cấu hình cơ sở dữ liệu
@@ -111,7 +112,7 @@ WSGI_APPLICATION = 'employment_agency.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'employment_agency',
+        'NAME': 'viec_lam',
         'USER': 'dev',
         'PASSWORD': 'P@ssw0rd',
         'HOST': ''
@@ -119,7 +120,7 @@ DATABASES = {
 }
 
 # Khai báo lớp user được sử dụng để chứng thực
-AUTH_USER_MODEL = 'employment_app.NguoiDung'
+AUTH_USER_MODEL = 'viec_lam_app.NguoiDung'
 
 # Cấu hình chứng thực bằng mật khẩu
 
@@ -156,7 +157,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 
 STATIC_URL = '/static/'
-MEDIA_ROOT = '%s/employment_app/' % BASE_DIR
+MEDIA_ROOT = '%s/viec_lam_app/' % BASE_DIR
 CKEDITOR_UPLOAD_PATH = 'ckeditor/'
 
 # Default primary key field type

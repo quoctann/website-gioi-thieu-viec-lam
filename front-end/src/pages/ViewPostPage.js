@@ -20,7 +20,7 @@ const ViewPostPage = (props) => {
 
 	const getPosts = async (page = 1) => {
 		try {
-			const res = await API.get(endpoints["posts"] + `?page=${page}`);
+			const res = await API.get(endpoints["viec-lam"] + `?page=${page}`);
 			setPosts(res.data.results);
 			setCount(res.data.count);
 			setPrevious(res.data.previous);

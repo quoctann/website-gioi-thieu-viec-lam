@@ -23,7 +23,7 @@ const HiringDetailPage = (props) => {
     const hiringid = props.hiring.commonReducer.hiringId;
 
     const getRating = async(hiringId = hiringid, page = 1) => {
-        const rating = await API.get(endpoints["hiring-ratings"](hiringId) + `?page=${page}`)
+        const rating = await API.get(endpoints["nha-tuyen-dung-danh-gia"](hiringId) + `?page=${page}`)
         console.log(rating.data)
         // setCount(rating.data.count);
         // setNext(rating.data.next);
@@ -32,7 +32,7 @@ const HiringDetailPage = (props) => {
     };
 
     const getDetail = async () => {
-        const detail = await API.get(endpoints["hiring-detail"](props.hiring.commonReducer.hiringId))
+        const detail = await API.get(endpoints["nha-tuyen-dung-chi-tiet"](props.hiring.commonReducer.hiringId))
         console.log(detail.data)
         setDetail(detail.data)
     };

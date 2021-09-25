@@ -2,34 +2,34 @@ import axios from "axios";
 // import cookies from "react-cookies";
 
 export let endpoints = {
-    "user": "/nguoi-dung/",
-    "login": "/o/token/",
-    "current-user": "/nguoi-dung/hien-tai/",
+    "nguoi-dung": "/nguoi-dung/",
+    "dang-nhap": "/o/token/",
+    "nguoi-dung-hien-tai": "/nguoi-dung/hien-tai/",
     "oauth2-info": "/oauth2-info/",
-    "posts": "/viec-lam/",
-    "posts-filter": (career, degree, experience, skill) => {
+    "viec-lam": "/viec-lam/",
+    "viec-lam-loc": (nganhNghe, bangCap, kinhNghiem, kyNang) => {
         let url = "/viec-lam/?";
-        if(career)
-            url += `nganh-nghe=${career}&`;
-        if(degree)
-            url += `bang-cap=${degree}&`;
-        if(experience)
-            url += `kinh-nghiem=${experience}&`;
-        if(skill)
-            url += `ky-nang=${skill}&`;
+        if(nganhNghe)
+            url += `nganh-nghe=${nganhNghe}&`;
+        if(bangCap)
+            url += `bang-cap=${bangCap}&`;
+        if(kinhNghiem)
+            url += `kinh-nghiem=${kinhNghiem}&`;
+        if(kyNang)
+            url += `ky-nang=${kyNang}&`;
         return url;
     },
-    "post-detail": (postId) => `/viec-lam/${postId}/`,
-    "apply-offer": "/ung-tuyen/",
-    "hiring": "/nha-tuyen-dung/",
-    "hiring-ratings": (hiringId) => `/nha-tuyen-dung/${hiringId}/danh-gia/`,
-    "hiring-posts": (hiringId) => `/nha-tuyen-dung/${hiringId}/viec-lam/`,
-    "hiring-detail": (hiringId) => `/nha-tuyen-dung/${hiringId}/`,
-    "hiring-search-by-name": (text) => `/nha-tuyen-dung/?search=${text}`,
-    "degree": "/bang-cap/",
-    "skill": "/ky-nang/",
-    "experience": "/kinh-nghiem/",
-    "career": "/nganh-nghe/",
+    "viec-lam-chi-tiet": (postId) => `/viec-lam/${postId}/`,
+    "ung-tuyen": "/ung-tuyen/",
+    "nha-tuyen-dung": "/nha-tuyen-dung/",
+    "nha-tuyen-dung-danh-gia": (hiringId) => `/nha-tuyen-dung/${hiringId}/danh-gia/`,
+    "nha-tuyen-dung-viec-lam": (hiringId) => `/nha-tuyen-dung/${hiringId}/viec-lam/`,
+    "nha-tuyen-dung-chi-tiet": (hiringId) => `/nha-tuyen-dung/${hiringId}/`,
+    "nha-tuyen-dung-tim-kiem": (text) => `/nha-tuyen-dung/?tim-kiem=${text}`,
+    "bang-cap": "/bang-cap/",
+    "ky-nang": "/ky-nang/",
+    "kinh-nghiem": "/kinh-nghiem/",
+    "nganh-nghe": "/nganh-nghe/",
 }
 
 export default axios.create({
