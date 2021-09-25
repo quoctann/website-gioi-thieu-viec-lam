@@ -48,9 +48,9 @@ class NguoiDungViewSet(viewsets.ViewSet, generics.CreateAPIView):
         vai_tro = request.data.get('vai_tro')
         if vai_tro is not None:
             if vai_tro == NguoiDung.NHA_TUYEN_DUNG:
-                ntd = NhaTuyenDung.objects.create(nguoi_dung_id=nguoi_dung.data.get('id'))
+                NhaTuyenDung.objects.create(nguoi_dung_id=nguoi_dung.data.get('id'))
             if vai_tro == NguoiDung.UNG_VIEN:
-                uv = UngVien.objects.create(nguoi_dung_id=nguoi_dung.data.get('id'))
+                UngVien.objects.create(nguoi_dung_id=nguoi_dung.data.get('id'))
 
         headers = self.get_success_headers(nguoi_dung.data)
         return Response(nguoi_dung.data, status=status.HTTP_201_CREATED, headers=headers)
@@ -58,9 +58,23 @@ class NguoiDungViewSet(viewsets.ViewSet, generics.CreateAPIView):
     # Tạo API get dữ liệu user sau khi đã chứng thực (đã đăng nhập)
     @action(methods=['get'], detail=False, url_path='hien-tai')
     def hien_tai(self, request):
-        # print(request)
-        return Response(self.serializer_class(request.user).data,
-                        status.HTTP_200_OK)
+        # Request gửi lên chỉ có header chứa token và đối tượng của NguoiDung
+        vai_tro = request.user.vai_tro
+        # Vai trò nào thì query trả ra thêm thông tin trong vai trò đó
+        if vai_tro == NguoiDung.UNG_VIEN:
+            query = UngVien.objects.get(pk=request.user.id)
+            data = UngVienSerializer(query, context={'request': request}).data
+        elif vai_tro == NguoiDung.NHA_TUYEN_DUNG:
+            query = NhaTuyenDung.objects.get(pk=request.user.id)
+            data = NhaTuyenDungSerializer(query, context={'request': request}).data
+        else:
+            data = None
+
+        if data is not None:
+            return Response(data, status=status.HTTP_200_OK)
+        else:
+            return Response(self.serializer_class(request.user, context={'request': request}).data,
+                            status.HTTP_200_OK)
 
 
 class PhucLoiViewSet(viewsets.ViewSet, generics.ListAPIView):
@@ -135,7 +149,7 @@ class ViecLamViewSet(viewsets.ViewSet, generics.ListAPIView):
         return Response(serializer.data)
 
 
-class NhaTuyenDungViewSet(viewsets.ViewSet, generics.ListAPIView,generics.RetrieveAPIView):
+class NhaTuyenDungViewSet(viewsets.ViewSet, generics.ListAPIView, generics.RetrieveAPIView):
     serializer_class = NhaTuyenDungSerializer
     queryset = NhaTuyenDung.objects.filter(doi_xet_duyet=False)
 

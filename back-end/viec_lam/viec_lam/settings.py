@@ -11,8 +11,8 @@ SECRET_KEY = 'django-insecure-xm4a2&s8^s=z(%!%3(-xrjw4$xpllu*woj9zj(frm#vz3zjr0^
 
 # OAuth2 thông tin application (viec_lam_app), gửi kèm rq để xin token
 OAUTH2_INFO = {
-    'client_id': '2YTHLpAnth0hmpsICYrL4QKfzQAoAQ5ik6ifQrQQ',
-    'client_secret': 'tkyS2frqerxZZaqGtdsTjj2GE1Bn2hD3YMtP29pg6PJch60aPCj6EESl3UmIdOKFqQ7SvCpOf8CZ9uHAT6yiJrqG0HbKTokd6456OROEtjoUgXLllx3UfzNPIzmS6iwf'
+    'client_id': 'sAWkAhXc1sWRtON4pBHiTLv6o8txra9ZpK38xcZM',
+    'client_secret': 'cia1tWOI3w1gCQ2WxbV1JuiDrppuoSCIc2UrovFiY9Bat9QyHG6jtcLohcut9jZLfjJsBmnG5yv33YxaXmlWkC9cZlmKLjGrhxNNaJU2SPOPmumtGrwWaWuyVJgz3SrR'
 }
 
 # Tắt khi đang deploy lên production

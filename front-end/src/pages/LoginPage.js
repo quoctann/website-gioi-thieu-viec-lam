@@ -62,7 +62,7 @@ const LoginPage = (props) => {
 	// Nếu đã đăng nhập thì redirect về trang chủ
 	if (
 		cookies.load("user") ||
-		props.userInfo.userReducer.hasOwnProperty("username")
+		props.userInfo.userReducer.hasOwnProperty("nguoi_dung")
 	)
 		return <Redirect to="/" />;
 	else

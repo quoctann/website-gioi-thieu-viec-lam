@@ -35,8 +35,7 @@ router.register('ung-tuyen', views.UngTuyenViewSet)
 urlpatterns = [
     # Sử dụng route của rest framework để tự sinh endpoint crud cơ bản
     path('', include(router.urls)),
-    # Trang admin mặc định
-    path('admin/', admin.site.urls),
+
     # Tự define url để lấy client_id/secret dùng chứng thực lấy token
     path('oauth2-info/', views.AuthInfo.as_view()),
 ]

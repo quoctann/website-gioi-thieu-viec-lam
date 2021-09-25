@@ -135,7 +135,7 @@ const RegisterPage = (props) => {
 	);
 
 	// Nếu đã đăng nhập thì redirect về trang chủ
-	if (cookies.load("user") || props.userInfo.userReducer.hasOwnProperty("username"))
+	if (cookies.load("user") || props.userInfo.userReducer.hasOwnProperty("nguoi_dung"))
 		return <Redirect to={Routes.LandingPage.path} />;
 
 	// Khi trang nạp lần đầu hiện hộp thoại lựa chọn

@@ -1,5 +1,5 @@
 import { Container, Nav, Navbar, Button } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import SimpleLogo from "./SimpleLogo";
 import { connect } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -9,14 +9,15 @@ import Routes from "../routes"
 import cookies from "react-cookies";
 
 const NavigationBar = (props) => {
-	
+	let history = useHistory()
 	let user = props.userInfo.userReducer;
 	// console.log("NAV\n", user)
 
 	const signOut = () => {
 		cookies.remove("user");
 		cookies.remove("access_token");
-		props.signOut()
+		props.signOut();
+		history.push(Routes.LandingPage.path);
 	}
 
 	let rightCorner = (
@@ -37,7 +38,7 @@ const NavigationBar = (props) => {
 		</>
 	);
 	// Nếu user không rỗng
-	if (user.hasOwnProperty("username")) {
+	if (user.hasOwnProperty("nguoi_dung")) {
 		rightCorner = (
 			<>
 				<Nav.Item>
@@ -47,7 +48,7 @@ const NavigationBar = (props) => {
 						className="ms-1"
 						variant="outline-dark"
 					>
-						Xin chào {user.first_name} {user.last_name}!
+						Xin chào {user.nguoi_dung.first_name} {user.nguoi_dung.last_name}!
 					</Button>
 					<Button className="ms-1" variant="dark" onClick={signOut}>
 						<FontAwesomeIcon

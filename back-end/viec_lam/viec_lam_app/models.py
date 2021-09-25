@@ -27,7 +27,7 @@ class NguoiDung(AbstractUser):
     ]
 
     email = models.CharField(max_length=50, null=False, unique=True)
-    so_dien_thoai = models.CharField(max_length=15, null=True, unique=True)
+    so_dien_thoai = models.CharField(max_length=15, blank=True, default="")
     anh_dai_dien = models.ImageField(upload_to='static/upload/%Y/%m', null=True)
     vai_tro = models.CharField(
         max_length=10,
@@ -66,8 +66,13 @@ class UngVien(models.Model):
     )
     ngay_sinh = models.DateField(null=True)
     dia_chi = models.CharField(max_length=150, null=True)
-    cv = models.FileField(upload_to='static/upload/%Y/%m', null=True)
+    cv = models.FileField(upload_to='upload/%Y/%m', null=True)
     gioi_thieu = RichTextField(null=True)
+
+    bang_cap = models.ManyToManyField('BangCap')
+    ky_nang = models.ManyToManyField('KyNang')
+    nganh_nghe = models.ManyToManyField('NganhNghe')
+    kinh_nghiem = models.ManyToManyField('KinhNghiem')
 
 
 # User với vai trò là Quản lý
@@ -186,7 +191,7 @@ class KyNang(models.Model):
     class Meta:
         db_table = 'ky_nang'
 
-    ten = models.TextField(max_length=50)
+    ten = models.CharField(max_length=50)
 
 
 # Thông tin các chế độ phúc lợi, bảo hiểm (có thể thêm bớt, thay đổi)
@@ -194,7 +199,7 @@ class PhucLoi(models.Model):
     class Meta:
         db_table = 'phuc_loi'
 
-    ten = models.TextField(max_length=50)
+    ten = models.CharField(max_length=50)
 
 
 # Thông tin các mức độ kinh nghiệm (thực tập sinh, quản lý cao cấp,...)
@@ -202,7 +207,7 @@ class KinhNghiem(models.Model):
     class Meta:
         db_table = 'kinh_nghiem'
 
-    ten = models.TextField(max_length=80)
+    ten = models.CharField(max_length=80)
 
 
 # Thông tin các chức danh của Ứng viên (job title)
@@ -219,41 +224,3 @@ class BangCap(models.Model):
         db_table = 'bang_cap'
 
     ten = models.CharField(max_length=50)
-
-# Trung gian cho QH n-n ứng viên & kinh nghiệm, bằng cấp, kỹ năng, ngành nghề
-
-
-class UngVienKinhNghiem(models.Model):
-    class Meta:
-        db_table = 'ung_vien_kinh_nghiem'
-
-    ung_vien = models.ForeignKey(UngVien, on_delete=models.CASCADE)
-    kinh_nghiem = models.ForeignKey(KinhNghiem, on_delete=models.CASCADE)
-    mo_ta = models.CharField(max_length=150)
-
-
-class UngVienNganhNghe(models.Model):
-    class Meta:
-        db_table = 'ung_vien_nganh_nghe'
-
-    ung_vien = models.ForeignKey(UngVien, on_delete=models.CASCADE)
-    nganh_nghe = models.ForeignKey(NganhNghe, on_delete=models.CASCADE)
-    mo_ta = models.CharField(max_length=150)
-
-
-class UngVienKyNang(models.Model):
-    class Meta:
-        db_table = 'ung_vien_ky_nang'
-
-    ung_vien = models.ForeignKey(UngVien, on_delete=models.CASCADE)
-    ky_nang = models.ForeignKey(KyNang, on_delete=models.CASCADE)
-    mo_ta = models.CharField(max_length=150)
-
-
-class UngVienBangCap(models.Model):
-    class Meta:
-        db_table = 'ung_vien_bang_cap'
-
-    ung_vien = models.ForeignKey(UngVien, on_delete=models.CASCADE)
-    bang_cap = models.ForeignKey('BangCap', on_delete=models.CASCADE)
-    mo_ta = models.CharField(max_length=150)

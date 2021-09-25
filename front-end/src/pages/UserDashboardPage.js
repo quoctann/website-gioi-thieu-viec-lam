@@ -4,32 +4,29 @@ import cookies from "react-cookies";
 import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
 import SimpleInput from "../components/SimpleInput"
-import { useSubmitForm } from "../utils/CustomHooks"
-import pic from "../assets/images/python.jpg"
+import useSubmitForm from "../utils/CustomHooks"
 import API, { endpoints } from "../utils/API"
+import { VAI_TRO } from "../utils/GlobalConstants"
+import { faAddressCard, faEnvelope, faKey } from "@fortawesome/free-solid-svg-icons";
 
 const UserDashboardPage = (props) => {
-	/*
-		anh_dai_dien: "/static/upload/2021/09/usecase_TmdZgWU.jpg"
-		email: "uv@mail.com"
-		first_name: "Quốc"
-		id: 3
-		last_name: "Tấn"
-		username: "uv"
-		vai_tro: "UNG VIEN"
-		kiểu object
-	*/
-
+	const updateUserInfo = () => {}
+	const updateSpecificInfo = () => {}
+	const { handleSubmit, handleInputChange, inputs } = useSubmitForm(updateUserInfo);
 	// Nếu user đã đăng nhập mới render, không thì redirect đến trang đăng nhập
-	if (props.userInfo.userReducer.hasOwnProperty("username")) {
-		let user = props.userInfo.userReducer;
-		
-		// const getSpecificInfo = async () => {
-		// 	if (user.vai_tro === "UNG VIEN") {
-		// 		const info = await API.get("ung")
-		// 	}
-		// }
+	if (props.userInfo.userReducer.hasOwnProperty("nguoi_dung")) {
 
+		let user = props.userInfo.userReducer;
+		let danhGia;
+		let loaiTaiKhoan;
+		let extra;
+		if (user.nguoi_dung.vai_tro === VAI_TRO.TUYEN_DUNG) {
+			danhGia = <p className="mb-2 text-center">Điểm đánh giá: {user.diem_danh_gia_tb}</p>
+			loaiTaiKhoan = "Nhà tuyển dụng"						
+		}
+		if (user.nguoi_dung.vai_tro === VAI_TRO.UNG_VIEN) {
+			loaiTaiKhoan = "Ứng viên"	
+		}
 		return (
 			<>
 				<Container>
@@ -39,40 +36,65 @@ const UserDashboardPage = (props) => {
 								<Col>
 									<Card className="p-3" border="dark">
 										<Card.Title>
-											<h3 className="p-3 fw-bold">Thong tin chi tiet</h3>
+											<h3 className="p-3 fw-bold">Thông tin chi tiết</h3>
 										</Card.Title>
 										<Card.Body>
-											<div>Loai tai khoan: Nha tuyen dung</div>
+											<div>Loại tài khoản: {loaiTaiKhoan}</div>
 											<Form>
 												<SimpleInput
-													label="Ten cong ty"
+													label="Tên của bạn"
+													faIcon={faAddressCard}
 													type="text"
-													placeholder="Ten cong ty" 
-													required={true}
-													value=""
-													onChange=""
-													name="ten cong ty"
+													placeholder={user.nguoi_dung.first_name}
+													value={inputs.first_name}
+													onChange={handleInputChange}
+													name="first_name"
 												/>
+
+												<SimpleInput
+													label="Họ của bạn"
+													faIcon={faAddressCard}
+													type="text"
+													placeholder={user.nguoi_dung.last_name}
+													value={inputs.last_name}
+													onChange={handleInputChange}
+													name="last_name"
+												/>
+
+												<SimpleInput
+													label="Email"
+													faIcon={faEnvelope}
+													type="email"
+													placeholder={user.nguoi_dung.email}
+													value={inputs.email}
+													onChange={handleInputChange}
+													name="email"
+												/>
+
+												<SimpleInput
+													label="Mật khẩu"
+													faIcon={faKey}
+													type="password"
+													placeholder="********"
+													value={inputs.password}
+													onChange={handleInputChange}
+													name="password"
+												/>
+
+												<SimpleInput
+													label="Nhập lại mật khẩu"
+													faIcon={faKey}
+													type="password"
+													placeholder="********"
+													value={inputs.confirm_password}
+													onChange={handleInputChange}
+													name="confirm_password"
+												/>
+												<Button>Lưu thông tin cá nhân</Button>
 											</Form>
+											<hr />
 											<Form>
-												<SimpleInput
-													label="Ten cong ty"
-													type="text"
-													placeholder="Ten cong ty" 
-													required={true}
-													value=""
-													onChange=""
-													name="ten cong ty"
-												/>
-												<SimpleInput
-													label="Ten cong ty"
-													type="text"
-													placeholder="Ten cong ty" 
-													required={true}
-													value=""
-													onChange=""
-													name="ten cong ty"
-												/>
+												{extra}
 											</Form>
 										</Card.Body>
 									</Card>
@@ -116,12 +138,12 @@ const UserDashboardPage = (props) => {
 								<Col>
 									<Card className="p-4" border="dark">
 										<div className="mb-2">
-											<Image src={pic} rounded fluid />
+											<Image src={user.nguoi_dung.anh_dai_dien} rounded fluid />
 										</div>
-										<h4 className="mb-2 text-center">Tran Van Hoang</h4>
-										<p className="mb-2 text-center">hoangtrang@gmail.com</p>
-										<p className="mb-2 text-center">0908174589</p>
-										<p className="mb-2 text-center">Diem danh gia 4.25 sao</p>
+										<h4 className="mb-2 text-center">{user.nguoi_dung.last_name} {user.nguoi_dung.first_name}</h4>
+										<p className="mb-2 text-center">{user.nguoi_dung.email}</p>
+										<p className="mb-2 text-center">{user.nguoi_dung.so_dien_thoai}</p>
+										{danhGia}
 									</Card>
 								</Col>
 							</Row>

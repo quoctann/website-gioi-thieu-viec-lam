@@ -70,12 +70,12 @@ const PostDetailPage = (props) => {
     const user = props.userInfo.userReducer;
 
     // Gọi khi nút Nộp đơn ứng tuyển được nhấn
-    const applyOffer = (jobId = postId, userId = user.id) => {
+    const applyOffer = (jobId = postId, userId = user.nguoi_dung.id) => {
         // Kiểm tra trạng thái đăng nhập có hợp lệ hay không
-        if (!user.hasOwnProperty("username")) {
+        if (!user.hasOwnProperty("nguoi_dung")) {
             alert("Bạn cần đăng nhập tài khoản Ứng viên để thực hiện nộp đơn ứng tuyển!");
             return;
-        } else if (user.vai_tro==="TUYEN DUNG") {
+        } else if (user.nguoi_dung.vai_tro==="TUYEN DUNG") {
             alert("Nhà tuyển dụng không được thực hiện thao tác này!")
             return;
         }

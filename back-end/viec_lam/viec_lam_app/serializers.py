@@ -4,7 +4,7 @@ chuyển các dữ liệu json thành object và ngược lại để tương t�
 internet. Mỗi lớp model khi được sử dụng trong api sẽ có một lớp serializer
 tương ứng
 """
-from rest_framework.serializers import ModelSerializer
+from rest_framework.serializers import ModelSerializer, SerializerMethodField
 from .models import *
 
 
@@ -13,7 +13,7 @@ class NguoiDungSerializer(ModelSerializer):
     class Meta:
         model = NguoiDung
         fields = ['id', 'username', 'password', 'email', 'first_name', 'last_name',
-                  'vai_tro', 'anh_dai_dien']
+                  'vai_tro', 'anh_dai_dien', 'so_dien_thoai']
         extra_kwargs = {
             'password': {'write_only': 'true'},
         }
@@ -23,14 +23,6 @@ class NguoiDungSerializer(ModelSerializer):
         nguoidung.set_password(validated_data['password'])
         nguoidung.save()
         return nguoidung
-
-
-class UngVienSerializer(ModelSerializer):
-    nguoi_dung = NguoiDungSerializer()
-
-    class Meta:
-        model = UngVien
-        fields = '__all__'
 
 
 class NhaTuyenDungSerializer(ModelSerializer):
@@ -68,6 +60,18 @@ class KyNangSerializer(ModelSerializer):
 class BangCapSerializer(ModelSerializer):
     class Meta:
         model = BangCap
+        fields = '__all__'
+
+
+class UngVienSerializer(ModelSerializer):
+    nguoi_dung = NguoiDungSerializer()
+    kinh_nghiem = KinhNghiemSerializer(many=True)
+    nganh_nghe = NganhNgheSerializer(many=True)
+    ky_nang = KyNangSerializer(many=True)
+    bang_cap = BangCapSerializer(many=True)
+
+    class Meta:
+        model = UngVien
         fields = '__all__'
 
 
