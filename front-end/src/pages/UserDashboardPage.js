@@ -6,6 +6,7 @@ import { Redirect } from "react-router-dom";
 import SimpleInput from "../components/SimpleInput"
 import { useSubmitForm } from "../utils/CustomHooks"
 import pic from "../assets/images/python.jpg"
+import API, { endpoints } from "../utils/API"
 
 const UserDashboardPage = (props) => {
 	/*
@@ -20,7 +21,15 @@ const UserDashboardPage = (props) => {
 	*/
 
 	// Nếu user đã đăng nhập mới render, không thì redirect đến trang đăng nhập
-	if (cookies.load("user") || props.userInfo.userReducer.hasOwnProperty("username")) {
+	if (props.userInfo.userReducer.hasOwnProperty("username")) {
+		let user = props.userInfo.userReducer;
+		
+		// const getSpecificInfo = async () => {
+		// 	if (user.vai_tro === "UNG VIEN") {
+		// 		const info = await API.get("ung")
+		// 	}
+		// }
+
 		return (
 			<>
 				<Container>

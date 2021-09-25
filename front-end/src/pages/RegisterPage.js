@@ -25,6 +25,8 @@ const RegisterPage = (props) => {
 	let isValid = true;
 
 	const [isSuccess, setIsSuccess] = useState(false);
+	
+	const [errMsg, setErrMsg] = useState(<></>)
 
 	// Vai trò tương tụ dưới csdl
 	const HIRING = "TUYEN DUNG";
@@ -83,6 +85,17 @@ const RegisterPage = (props) => {
 				if(res)
 					setIsSuccess(true);
 			} catch (err) {
+				if (err.response.status === 400) {
+					// console.log(err.response)
+					let text = "";
+					if (err.response.data.email)
+						text += "EMAIL, ";
+					if (err.response.data.username)
+						text += "TÊN NGƯỜI DÙNG, ";
+					text += "đã tồn tại trong hệ thống!"
+					setErrMsg(<div className="alert alert-danger">{text}</div>)
+					alert(text)
+				}
 				console.log("ERROR:\n", err);
 			}
 		}
@@ -150,6 +163,8 @@ const RegisterPage = (props) => {
 							<h3 className="fw-bold text-center my-4">
 								Tạo tài khoản
 							</h3>
+							
+							{errMsg}
 
 							<div className="alert alert-secondary">
 								Loại tài khoản:{" "}

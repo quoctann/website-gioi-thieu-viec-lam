@@ -31,14 +31,33 @@ class NguoiDungViewSet(viewsets.ViewSet, generics.CreateAPIView):
     # Chỉ định quyền user đã đăng nhập
     def get_permissions(self):
         # Chỉ riêng đối với thao tác get data user hiện tại phải chứng thực
-        if self.action == 'get_current-user':
+        if self.action == 'hien_tai':
             return [permissions.IsAuthenticated()]
         # Thao tác như đăng ký ko cần chứng thực
         return [permissions.AllowAny()]
 
+    # Đăng ký người dùng, check một số điều kiện rồi gọi super của generics
+    def create(self, request, *args, **kwargs):
+        # Dùng lại code của generics create api. Parse req data thành dict
+        nguoi_dung = self.get_serializer(data=request.data)
+        # Dữ liệu được serialize ra hợp lệ
+        nguoi_dung.is_valid(raise_exception=True)
+        # Lưu xuống csdl
+        self.perform_create(nguoi_dung)
+
+        vai_tro = request.data.get('vai_tro')
+        if vai_tro is not None:
+            if vai_tro == NguoiDung.NHA_TUYEN_DUNG:
+                ntd = NhaTuyenDung.objects.create(nguoi_dung_id=nguoi_dung.data.get('id'))
+            if vai_tro == NguoiDung.UNG_VIEN:
+                uv = UngVien.objects.create(nguoi_dung_id=nguoi_dung.data.get('id'))
+
+        headers = self.get_success_headers(nguoi_dung.data)
+        return Response(nguoi_dung.data, status=status.HTTP_201_CREATED, headers=headers)
+
     # Tạo API get dữ liệu user sau khi đã chứng thực (đã đăng nhập)
     @action(methods=['get'], detail=False, url_path='hien-tai')
-    def get_current_user(self, request):
+    def hien_tai(self, request):
         # print(request)
         return Response(self.serializer_class(request.user).data,
                         status.HTTP_200_OK)

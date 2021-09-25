@@ -48,7 +48,7 @@ class NhaTuyenDung(models.Model):
     )
     ten_cong_ty = models.CharField(max_length=100)
     dia_chi = models.CharField(max_length=150)
-    quy_mo = models.IntegerField()
+    quy_mo = models.IntegerField(default=0)
     diem_danh_gia_tb = models.FloatField(default=0.0)
     doi_xet_duyet = models.BooleanField(default=True)
     gioi_thieu = RichTextField(null=True)
