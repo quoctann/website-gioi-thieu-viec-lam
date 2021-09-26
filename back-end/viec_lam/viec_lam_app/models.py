@@ -1,7 +1,7 @@
 # Tập tin này dùng để cấu hình các model ánh xạ xuống cơ sở dữ liệu
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-from ckeditor.fields import RichTextField
+# from ckeditor.fields import RichTextField
 
 # Ghi chú: Các trường của model default null=False
 
@@ -51,7 +51,7 @@ class NhaTuyenDung(models.Model):
     quy_mo = models.IntegerField(default=0)
     diem_danh_gia_tb = models.FloatField(default=0.0)
     doi_xet_duyet = models.BooleanField(default=True)
-    gioi_thieu = RichTextField(null=True)
+    gioi_thieu = models.TextField(null=True)
 
 
 # User với vai trò là Ứng viên
@@ -67,12 +67,12 @@ class UngVien(models.Model):
     ngay_sinh = models.DateField(null=True)
     dia_chi = models.CharField(max_length=150, null=True)
     cv = models.FileField(upload_to='upload/%Y/%m', null=True)
-    gioi_thieu = RichTextField(null=True)
+    gioi_thieu = models.TextField(null=True)
 
-    bang_cap = models.ManyToManyField('BangCap')
-    ky_nang = models.ManyToManyField('KyNang')
-    nganh_nghe = models.ManyToManyField('NganhNghe')
-    kinh_nghiem = models.ManyToManyField('KinhNghiem')
+    bang_cap = models.ManyToManyField('BangCap', null=True)
+    ky_nang = models.ManyToManyField('KyNang', null=True)
+    nganh_nghe = models.ManyToManyField('NganhNghe', null=True)
+    kinh_nghiem = models.ManyToManyField('KinhNghiem', null=True)
 
 
 # User với vai trò là Quản lý
@@ -131,7 +131,7 @@ class ViecLam(models.Model):
     )
     ngay_tao = models.DateField(auto_now_add=True)
     ngay_het_han = models.DateField()
-    noi_dung = RichTextField()
+    noi_dung = models.TextField()
     tieu_de = models.CharField(max_length=80)
     luong = models.IntegerField(default=0)
     trang_thai_viec_lam = models.CharField(
@@ -140,11 +140,11 @@ class ViecLam(models.Model):
         default=DANG_MO
     )
     # Các trường n-n chỉ lưu khóa không lưu thông tin gì thêm
-    bang_cap = models.ManyToManyField('BangCap')
-    ky_nang = models.ManyToManyField('KyNang')
-    nganh_nghe = models.ManyToManyField('NganhNghe')
-    kinh_nghiem = models.ManyToManyField('KinhNghiem')
-    phuc_loi = models.ManyToManyField('PhucLoi')
+    bang_cap = models.ManyToManyField('BangCap', null=True)
+    ky_nang = models.ManyToManyField('KyNang', null=True)
+    nganh_nghe = models.ManyToManyField('NganhNghe', null=True)
+    kinh_nghiem = models.ManyToManyField('KinhNghiem', null=True)
+    phuc_loi = models.ManyToManyField('PhucLoi', null=True)
 
 
 # Lưu thông tin Ứng viên ứng tuyển vào một Việc làm (dùng báo cáo thống kê được)

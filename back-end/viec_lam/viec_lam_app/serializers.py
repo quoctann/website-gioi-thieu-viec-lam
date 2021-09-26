@@ -99,6 +99,9 @@ class DanhGiaNhaTuyenDungSerializer(ModelSerializer):
 
 
 class UngTuyenSerializer(ModelSerializer):
+    viec_lam = ViecLamSerializer()
+    ung_vien = UngVienSerializer()
+
     class Meta:
         model = UngTuyen
-        fields = '__all__'
+        fields = ['ngay_ung_tuyen', 'viec_lam', 'ung_vien', 'id']

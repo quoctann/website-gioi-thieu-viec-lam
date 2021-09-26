@@ -11,6 +11,12 @@ import "./scss/index.scss";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "animate.css";
 
+// "Kho chứa" trung tâm, lưu trữ các biến cục bộ
+import { store, persistor } from "./redux/store"
+
+// Lưu chuỗi đường dẫn tự cấu hình
+import Routes from "./routes"
+
 import LandingPage from "./pages/LandingPage";
 // import Footer from "./components/Footer";
 import NavigationBar from "./components/NavigationBar";
@@ -20,15 +26,13 @@ import UserDashboardPage from "./pages/UserDashboardPage";
 import ViewPostPage from "./pages/ViewPostPage";
 import PostDetailPage from "./pages/PostDetailPage";
 import HiringDetailPage from "./pages/HiringDetailPage";
-
-// Lưu chuỗi đường dẫn tự cấu hình
-import Routes from "./routes"
-
-// "Kho chứa" trung tâm, lưu trữ các biến cục bộ
-import { store, persistor } from "./redux/store"
 import NotFoundPage from "./pages/NotFoundPage";
 import ServerErrorPage from "./pages/ServerErrorPage";
 import AboutPage from "./pages/AboutPage";
+import HiringDashboardPage from "./pages/HiringDashboardPage";
+import ApplicantDashboardPage from "./pages/ApplicantDashboardPage";
+import QuanTriVienPage from "./pages/QuanTriVienPage";
+
 
 
 ReactDOM.render(
@@ -47,6 +51,9 @@ ReactDOM.render(
 					<Route exact path={Routes.NotFoundPage.path} component={NotFoundPage} />
 					<Route exact path={Routes.ServerError.path} component={ServerErrorPage} />
 					<Route exact path={Routes.AboutPage.path} component={AboutPage} />
+					<Route exact path={Routes.HiringDashboardPage.path} component={HiringDashboardPage} />
+					<Route exact path={Routes.ApplicantDashboardPage.path} component={ApplicantDashboardPage} />
+					<Route exact path={Routes.QuanTriVienPage.path} component={QuanTriVienPage} />
 				</Switch>
 				{/* <Footer /> */}
 			</BrowserRouter>

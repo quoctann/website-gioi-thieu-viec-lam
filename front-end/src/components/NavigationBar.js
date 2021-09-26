@@ -7,6 +7,7 @@ import { faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
 import { logout, login } from "../redux/actions";
 import Routes from "../routes"
 import cookies from "react-cookies";
+import { VAI_TRO } from "../utils/GlobalConstants"
 
 const NavigationBar = (props) => {
 	let history = useHistory()
@@ -44,7 +45,13 @@ const NavigationBar = (props) => {
 				<Nav.Item>
 					<Button
 						as={Link}
-						to={Routes.UserDashboardPage.path}
+						to={() => {
+							if (user.nguoi_dung.vai_tro === VAI_TRO.TUYEN_DUNG)
+								return Routes.HiringDashboardPage.path;
+							if (user.nguoi_dung.vai_tro === VAI_TRO.UNG_VIEN)
+								return Routes.ApplicantDashboardPage.path;
+							return Routes.NotFoundPage.path;
+						}}
 						className="ms-1"
 						variant="outline-dark"
 					>

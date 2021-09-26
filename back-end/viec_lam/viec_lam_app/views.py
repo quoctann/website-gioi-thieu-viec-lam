@@ -2,6 +2,7 @@
 # MVC, là thành phần Views trong MVT)
 import math
 
+from django.db.models import Q
 from django.http import JsonResponse
 from rest_framework import viewsets, generics, permissions, status
 from rest_framework.decorators import action
@@ -148,6 +149,15 @@ class ViecLamViewSet(viewsets.ViewSet, generics.ListAPIView):
         serializer = ViecLamSerializer(vieclam)
         return Response(serializer.data)
 
+    # Lấy dữ liệu công việc gợi ý dựa trên ngành nghề của ứng viên (id gửi lên)
+    @action(methods=['get'], detail=True, url_path='goi-y')
+    def goi_y(self, request, pk):
+        viec_lam = ViecLam.objects.filter(trang_thai_viec_lam=ViecLam.DANG_MO)
+        ung_vien = UngVien.objects.get(pk=pk)
+        nganh_nghe = ung_vien.nganh_nghe.first()
+        viec_lam = viec_lam.filter(nganh_nghe__id=nganh_nghe.id)
+        return Response(self.serializer_class(viec_lam, many=True).data, status=status.HTTP_200_OK)
+
 
 class NhaTuyenDungViewSet(viewsets.ViewSet, generics.ListAPIView, generics.RetrieveAPIView):
     serializer_class = NhaTuyenDungSerializer
@@ -205,6 +215,27 @@ class UngTuyenViewSet(viewsets.ViewSet, generics.ListAPIView):
             res = UngTuyen.objects.create(ung_vien_id=uv_id, viec_lam_id=vl_id)
 
         return Response(UngTuyenSerializer(res).data, status=status.HTTP_201_CREATED)
+
+    # Lấy danh sách việc làm ứng viên nộp đơn cho nhà tuyển dụng và đợi duyệt
+    @action(methods=['get'], detail=True, url_path='ung-vien-doi-duyet')
+    def ung_vien_doi_duyet(self, request, pk):
+        danh_sach = UngTuyen.objects.filter(trang_thai_ho_so=UngTuyen.CHO_XU_LY,
+                                            ung_vien_nop_don=True,
+                                            viec_lam__nha_tuyen_dung_id=pk)
+        # print(danh_sach.values())
+        data = self.serializer_class(danh_sach, many=True).data
+
+        return Response(data=data, status=status.HTTP_200_OK)
+
+    # Lấy danh sách các việc làm nhà tuyển dụng gửi cho ứng viên và đợi chấp nhận
+    @action(methods=['get'], detail=True, url_path='de-xuat-viec-lam')
+    def de_xuat_viec_lam(self, request, pk):
+        danh_sach = UngTuyen.objects.filter(trang_thai_ho_so=UngTuyen.CHO_XU_LY,
+                                            ung_vien_nop_don=False,
+                                            ung_vien_id=pk)
+        data = self.serializer_class(danh_sach, many=True).data
+
+        return Response(data=data, status=status.HTTP_200_OK)
 
 
 # API để lấy thông tin client_id, client_secret xin token chứng thực (đăng nhập)

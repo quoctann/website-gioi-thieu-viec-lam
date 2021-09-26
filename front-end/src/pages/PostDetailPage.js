@@ -93,7 +93,7 @@ const PostDetailPage = (props) => {
             } catch (ex) {
                 // console.log(ex.response.status)
                 if (ex.response.status === 409)
-                    alert("Bạn đã nộp đơn ứng tuyển công việc này trước đó rồi, không thể nộp đơn nữa!")
+                    alert("Bạn đã nộp đơn ứng tuyển công việc này trước đó rồi, hoặc công việc đã được gửi đến bạn!")
             } 
 		};
         
