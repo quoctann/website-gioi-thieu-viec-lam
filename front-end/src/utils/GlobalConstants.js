@@ -1,1 +1,1 @@
-export const VAI_TRO = {"UNG_VIEN": "UNG VIEN", "TUYEN_DUNG": "TUYEN DUNG"}
+export const VAI_TRO = {"UNG_VIEN": "UNG VIEN", "TUYEN_DUNG": "TUYEN DUNG", "QUAN_LY": "QUAN LY"}

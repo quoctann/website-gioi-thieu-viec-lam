@@ -28,14 +28,14 @@ const HomeFakeParagraph = (props) => {
 	);
 };
 
-const FakeText = (props) => {
+const fakeTextGenerator = (number) => {
     let template = "Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo, laborum? Provident eius quo dignissimos quaerat architecto tenetur alias dolores, suscipit veniam quod rem, sunt fuga fugit quia eveniet eos deleniti.";
-    for (let i = 0; i < props.long; i++)
+    for (let i = 0; i < number; i++)
         template += template;
     return template;
 }
 
 export {
     HomeFakeParagraph,
-    FakeText,
+    fakeTextGenerator,
 };

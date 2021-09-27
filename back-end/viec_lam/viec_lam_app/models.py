@@ -66,13 +66,13 @@ class UngVien(models.Model):
     )
     ngay_sinh = models.DateField(null=True)
     dia_chi = models.CharField(max_length=150, null=True)
-    cv = models.FileField(upload_to='upload/%Y/%m', null=True)
+    cv = models.FileField(upload_to='static/upload/%Y/%m', null=True)
     gioi_thieu = models.TextField(null=True)
 
-    bang_cap = models.ManyToManyField('BangCap', null=True)
-    ky_nang = models.ManyToManyField('KyNang', null=True)
-    nganh_nghe = models.ManyToManyField('NganhNghe', null=True)
-    kinh_nghiem = models.ManyToManyField('KinhNghiem', null=True)
+    bang_cap = models.ManyToManyField('BangCap')
+    ky_nang = models.ManyToManyField('KyNang')
+    nganh_nghe = models.ManyToManyField('NganhNghe')
+    kinh_nghiem = models.ManyToManyField('KinhNghiem')
 
 
 # User với vai trò là Quản lý
@@ -140,11 +140,11 @@ class ViecLam(models.Model):
         default=DANG_MO
     )
     # Các trường n-n chỉ lưu khóa không lưu thông tin gì thêm
-    bang_cap = models.ManyToManyField('BangCap', null=True)
-    ky_nang = models.ManyToManyField('KyNang', null=True)
-    nganh_nghe = models.ManyToManyField('NganhNghe', null=True)
-    kinh_nghiem = models.ManyToManyField('KinhNghiem', null=True)
-    phuc_loi = models.ManyToManyField('PhucLoi', null=True)
+    bang_cap = models.ManyToManyField('BangCap')
+    ky_nang = models.ManyToManyField('KyNang')
+    nganh_nghe = models.ManyToManyField('NganhNghe')
+    kinh_nghiem = models.ManyToManyField('KinhNghiem')
+    phuc_loi = models.ManyToManyField('PhucLoi')
 
 
 # Lưu thông tin Ứng viên ứng tuyển vào một Việc làm (dùng báo cáo thống kê được)

@@ -50,6 +50,8 @@ const NavigationBar = (props) => {
 								return Routes.HiringDashboardPage.path;
 							if (user.nguoi_dung.vai_tro === VAI_TRO.UNG_VIEN)
 								return Routes.ApplicantDashboardPage.path;
+							if (user.nguoi_dung.vai_tro === VAI_TRO.QUAN_LY)
+								return Routes.QuanTriVienPage.path;
 							return Routes.NotFoundPage.path;
 						}}
 						className="ms-1"

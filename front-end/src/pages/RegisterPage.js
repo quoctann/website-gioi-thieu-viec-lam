@@ -18,6 +18,7 @@ import useSubmitForm from "../utils/CustomHooks";
 import Routes from "../routes";
 import cookies from "react-cookies";
 import { connect } from "react-redux";
+import { VAI_TRO } from "../utils/GlobalConstants";
 
 const RegisterPage = (props) => {
 
@@ -27,11 +28,6 @@ const RegisterPage = (props) => {
 	const [isSuccess, setIsSuccess] = useState(false);
 	
 	const [errMsg, setErrMsg] = useState(<></>)
-
-	// Vai trò tương tụ dưới csdl
-	const HIRING = "TUYEN DUNG";
-
-	const APPLICANT = "UNG VIEN";
 
 	// State loại tài khoản muốn đăng ký
 	const [registerType, setRegisterType] = useState("");
@@ -59,11 +55,11 @@ const RegisterPage = (props) => {
 		formData.append("anh_dai_dien", avatar.current.files[0]);
 
 		switch (registerType) {
-			case HIRING:
-				formData.append("vai_tro", HIRING);
+			case VAI_TRO.TUYEN_DUNG:
+				formData.append("vai_tro", VAI_TRO.TUYEN_DUNG);
 				break;
-			case APPLICANT:
-				formData.append("vai_tro", APPLICANT);
+			case VAI_TRO.UNG_VIEN:
+				formData.append("vai_tro", VAI_TRO.UNG_VIEN);
 				break;
 			default:
 				isValid = false;
@@ -82,8 +78,10 @@ const RegisterPage = (props) => {
 						"Content-Type": "multipart/form-data",
 					},
 				});
-				if(res)
+				if(res) {
 					setIsSuccess(true);
+					setTimeout(() => { props.history.push(Routes.LoginPage.path) }, 2000 )	
+				}					
 			} catch (err) {
 				if (err.response.status === 400) {
 					// console.log(err.response)
@@ -106,8 +104,8 @@ const RegisterPage = (props) => {
 
 	// Handle nút bấm chọn loại tài khoản cần đăng ký
 	const toggleSelection = () => {
-		if (registerType === APPLICANT) setRegisterType(HIRING);
-		else setRegisterType(APPLICANT);
+		if (registerType === VAI_TRO.UNG_VIEN) setRegisterType(VAI_TRO.TUYEN_DUNG);
+		else setRegisterType(VAI_TRO.UNG_VIEN);
 	};
 
 	// Hộp thoại lựa chọn loại tài khoản (khi trang nạp lần đầu)
@@ -120,13 +118,13 @@ const RegisterPage = (props) => {
 			<Modal.Footer>
 				<Button
 					variant="outline-primary"
-					onClick={() => setRegisterType(APPLICANT)}
+					onClick={() => setRegisterType(VAI_TRO.UNG_VIEN)}
 				>
 					Ứng viên
 				</Button>
 				<Button
 					variant="outline-success"
-					onClick={() => setRegisterType(HIRING)}
+					onClick={() => setRegisterType(VAI_TRO.TUYEN_DUNG)}
 				>
 					Nhà tuyển dụng
 				</Button>
@@ -142,7 +140,7 @@ const RegisterPage = (props) => {
 	if (registerType === "") return question;
 
 	// Form đăng ký có các trường input tùy loại tài khoản
-	if (registerType === APPLICANT || registerType === HIRING)
+	if (registerType === VAI_TRO.TUYEN_DUNG || registerType === VAI_TRO.UNG_VIEN)
 		return (
 			<>
 				<Container className="animate__animated animate__fadeIn">
@@ -168,7 +166,7 @@ const RegisterPage = (props) => {
 
 							<div className="alert alert-secondary">
 								Loại tài khoản:{" "}
-								{registerType === HIRING
+								{registerType === VAI_TRO.TUYEN_DUNG
 									? "Nhà tuyển dụng"
 									: "Ứng viên"}{" "}
 								<strong
@@ -320,11 +318,11 @@ const RegisterPage = (props) => {
 				{/* Modal dùng để show đăng nhập thành công */}
 				<Modal show={isSuccess} onHide={handleCloseTerm}>
 					<Modal.Body>
-						Đăng ký thành công, bạn có thể đăng nhập để bổ sung thông tin và sử dụng ngay bây giờ!
+						Đăng ký thành công, bạn sẽ được điều hướng về trang đăng nhập ngay bây giờ!
 					</Modal.Body>
 					<Modal.Footer>
 						<Button variant="primary" as={Link} to={Routes.LoginPage.path}>
-							Đến trang đăng nhập
+							Đăng nhập ngay
 						</Button>
 						<Button variant="secondary" onClick={() => setIsSuccess(false)}>
 							Đóng

@@ -19,6 +19,7 @@ import { connect } from "react-redux";
 import { useLocation } from "react-router-dom";
 import LoadingOverlay from "../components/LoadingOverlay";
 import API, { endpoints } from "../utils/API";
+import { VAI_TRO } from "../utils/GlobalConstants";
 
 const PostDetailPage = (props) => {
 	// Đối tượng của react router lưu thông tin param
@@ -75,8 +76,11 @@ const PostDetailPage = (props) => {
         if (!user.hasOwnProperty("nguoi_dung")) {
             alert("Bạn cần đăng nhập tài khoản Ứng viên để thực hiện nộp đơn ứng tuyển!");
             return;
-        } else if (user.nguoi_dung.vai_tro==="TUYEN DUNG") {
+        } else if (user.nguoi_dung.vai_tro === VAI_TRO.TUYEN_DUNG) {
             alert("Nhà tuyển dụng không được thực hiện thao tác này!")
+            return;
+        } else if (user.nguoi_dung.vai_tro === VAI_TRO.QUAN_LY) {
+            alert("Quản lý không được thực hiện thao tác này!")
             return;
         }
 

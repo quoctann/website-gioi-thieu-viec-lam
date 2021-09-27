@@ -247,8 +247,11 @@ const HiringDashboardPage = (props) => {
 													<Button variant="primary me-2">
 														Xem hồ sơ chi tiết
 													</Button>
-													<Button variant="success">
-														Xác nhận đã duyệt hồ sơ này
+													<Button variant="success me-2">
+														Đã duyệt hồ sơ này
+													</Button>
+													<Button variant="danger">
+														Từ chối hồ sơ
 													</Button>
 												</div>
 											</Card>

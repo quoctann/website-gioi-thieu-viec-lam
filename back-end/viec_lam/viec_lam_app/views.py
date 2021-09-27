@@ -1,9 +1,8 @@
 # Tập tin này để xử lý request và trả về các response (tương tự controller trong
 # MVC, là thành phần Views trong MVT)
-import math
+import datetime
 
-from django.db.models import Q
-from django.http import JsonResponse
+from django.db.models import Count, Q
 from rest_framework import viewsets, generics, permissions, status
 from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404
@@ -12,6 +11,7 @@ from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.views import APIView
 from django.conf import settings
+from django.core.exceptions import ObjectDoesNotExist
 
 from .serializers import *
 
@@ -68,6 +68,9 @@ class NguoiDungViewSet(viewsets.ViewSet, generics.CreateAPIView):
         elif vai_tro == NguoiDung.NHA_TUYEN_DUNG:
             query = NhaTuyenDung.objects.get(pk=request.user.id)
             data = NhaTuyenDungSerializer(query, context={'request': request}).data
+        elif vai_tro == NguoiDung.QUAN_LY:
+            query = QuanLy.objects.get(pk=request.user.id)
+            data = QuanLySerializer(query, context={'request': request}).data
         else:
             data = None
 
@@ -119,7 +122,7 @@ class ViecLamViewSet(viewsets.ViewSet, generics.ListAPIView):
 
     # Nếu có query param gửi lên để lọc thì lọc trả ra kết quả
     def get_queryset(self):
-        viec_lam = ViecLam.objects.filter(trang_thai_viec_lam=ViecLam.DANG_MO)
+        viec_lam = ViecLam.objects.filter(trang_thai_viec_lam=ViecLam.DANG_MO).order_by("-ngay_tao")
 
         # Có param nào thì filter theo param đó, lưu ý giá trị gửi lên là id
         nganh_nghe = self.request.query_params.get('nganh-nghe')
@@ -186,6 +189,28 @@ class NhaTuyenDungViewSet(viewsets.ViewSet, generics.ListAPIView, generics.Retri
         return Response(ViecLamSerializer(bai_viet, many=True).data,
                         status=status.HTTP_200_OK)
 
+    # Lấy danh sách nhà tuyển dụng đang đợi xét duyệt cho admin xử lý
+    @action(methods=['get'], detail=False, url_path='doi-xet-duyet')
+    def doi_xet_duyet(self, request):
+        query = NhaTuyenDung.objects.filter(doi_xet_duyet=True)
+        data = NhaTuyenDungSerializer(query, many=True).data
+
+        return Response(data, status.HTTP_200_OK)
+
+    # Duyệt nhà tuyển dụng, tài khoản sẵn sàng hoạt động
+    @action(methods=['patch'], detail=True, url_path='duyet-nha-tuyen-dung')
+    def duyet_nha_tuyen_dung(self, request, pk):
+        try:
+            nha_tuyen_dung = NhaTuyenDung.objects.get(pk=pk)
+        except ObjectDoesNotExist:
+            return Response({'request khong hop le': 'id nha tuyen dung khong ton tai'},
+                            status.HTTP_400_BAD_REQUEST)
+        else:
+            nha_tuyen_dung.doi_xet_duyet = False
+            nha_tuyen_dung.save()
+
+            return Response({"da cap nhat": "tai khoan nha tuyen dung da duoc xet duyet"}, status=status.HTTP_200_OK)
+
     # Lấy các bài đánh giá của một nhà tuyển dụng
     @action(methods=['get'], detail=True, url_path='danh-gia')
     def danh_gia(self, request, pk):
@@ -206,7 +231,7 @@ class UngTuyenViewSet(viewsets.ViewSet, generics.ListAPIView):
         uv2ntd = request.data.get('ung_vien_nop_don')
         check = UngTuyen.objects.filter(ung_vien_id=uv_id, viec_lam_id=vl_id)
         if len(check) > 0:
-            return Response(data={'error': 'resource already exists, cannot overwrite it'},
+            return Response(data={'loi': 'tai nguyen da ton tai, khong the ghi de'},
                             status=status.HTTP_409_CONFLICT)
 
         if uv2ntd is not None:
@@ -236,6 +261,52 @@ class UngTuyenViewSet(viewsets.ViewSet, generics.ListAPIView):
         data = self.serializer_class(danh_sach, many=True).data
 
         return Response(data=data, status=status.HTTP_200_OK)
+
+    # Thống kê theo quý ứng viên nộp đơn vào những ngành nghề nào
+    @action(methods=['get'], detail=False, url_path='thong-ke-theo-quy')
+    def thong_ke_theo_quy(self, request):
+        # Lọc những ứng viên nộp đơn
+        truy_van = UngTuyen.objects.filter(ung_vien_nop_don=True)
+        # Lấy request params
+        quy = int(request.query_params.get('quy'))
+        nam = int(request.query_params.get('nam'))
+        if quy == 1:
+            ngay_bat_dau = datetime.date(nam, 1, 1)
+            ngay_ket_thuc = datetime.date(nam, 3, 31)
+        elif quy == 2:
+            ngay_bat_dau = datetime.date(nam, 4, 1)
+            ngay_ket_thuc = datetime.date(nam, 6, 30)
+        elif quy == 3:
+            ngay_bat_dau = datetime.date(nam, 7, 1)
+            ngay_ket_thuc = datetime.date(nam, 9, 30)
+        elif quy == 4:
+            ngay_bat_dau = datetime.date(nam, 10, 1)
+            ngay_ket_thuc = datetime.date(nam, 12, 31)
+        else:
+            return Response({"thieu query param": "can query param 'quy' va 'nam' de truy van"},
+                            status.HTTP_400_BAD_REQUEST)
+
+        # Lọc ra danh sách ngành nghề
+        nganh_nghe = NganhNghe.objects.all()
+        # Lọc các đơn ứng tuyển được nộp trong quý được truyền vào ở trên
+        truy_van = truy_van.filter(ngay_ung_tuyen__range=(ngay_bat_dau, ngay_ket_thuc))
+        data = {}
+        # Lọc ra số đơn ứng tuyển ứng với ngành nghề, đếm số lượng
+        for nghe in nganh_nghe:
+            data[nghe.ten] = truy_van.filter(viec_lam__nganh_nghe__id=nghe.id).count()
+        return Response(data, status.HTTP_200_OK)
+
+    # Thống kê theo năm ứng viên ứng tuyển vào những ngành nghề nào
+    @action(methods=['get'], detail=False, url_path='thong-ke-theo-nam')
+    def thong_ke_theo_nam(self, request):
+        nam = int(request.query_params.get('nam'))
+        truy_van = UngTuyen.objects.filter(ung_vien_nop_don=True, ngay_ung_tuyen__year=nam)
+        data = {}
+        nganh_nghe = NganhNghe.objects.all()
+        for nghe in nganh_nghe:
+            data[nghe.ten] = truy_van.filter(viec_lam__nganh_nghe__id=nghe.id).count()
+
+        return Response(data, status.HTTP_200_OK)
 
 
 # API để lấy thông tin client_id, client_secret xin token chứng thực (đăng nhập)

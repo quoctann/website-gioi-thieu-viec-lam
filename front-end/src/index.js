@@ -22,7 +22,6 @@ import LandingPage from "./pages/LandingPage";
 import NavigationBar from "./components/NavigationBar";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
-import UserDashboardPage from "./pages/UserDashboardPage";
 import ViewPostPage from "./pages/ViewPostPage";
 import PostDetailPage from "./pages/PostDetailPage";
 import HiringDetailPage from "./pages/HiringDetailPage";
@@ -32,7 +31,7 @@ import AboutPage from "./pages/AboutPage";
 import HiringDashboardPage from "./pages/HiringDashboardPage";
 import ApplicantDashboardPage from "./pages/ApplicantDashboardPage";
 import QuanTriVienPage from "./pages/QuanTriVienPage";
-
+import ForbiddenPage from "./pages/ForbiddenPage";
 
 
 ReactDOM.render(
@@ -44,7 +43,6 @@ ReactDOM.render(
 					<Route exact path={Routes.LandingPage.path} component={LandingPage} />
 					<Route exact path={Routes.LoginPage.path} component={LoginPage} />
 					<Route exact path={Routes.RegisterPage.path} component={RegisterPage} />
-					<Route exact path={Routes.UserDashboardPage.path} component={UserDashboardPage} />
 					<Route exact path={Routes.ViewPostPage.path} component={ViewPostPage} />
 					<Route exact path={Routes.PostDetailPage.path} component={PostDetailPage} />
 					<Route exact path={Routes.HiringDetailPage.path} component={HiringDetailPage} />
@@ -54,6 +52,7 @@ ReactDOM.render(
 					<Route exact path={Routes.HiringDashboardPage.path} component={HiringDashboardPage} />
 					<Route exact path={Routes.ApplicantDashboardPage.path} component={ApplicantDashboardPage} />
 					<Route exact path={Routes.QuanTriVienPage.path} component={QuanTriVienPage} />
+					<Route exact path={Routes.ForbiddenPage.path} component={ForbiddenPage} />
 				</Switch>
 				{/* <Footer /> */}
 			</BrowserRouter>

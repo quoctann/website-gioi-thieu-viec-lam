@@ -7,7 +7,7 @@ const ServerErrorPage = () => {
 			<div id="notfound">
 				<div class="notfound">
 					<div class="notfound-404">
-						<h3>Oops! Internal Server Error</h3>
+						<h3>Oops! Lỗi server</h3>
 						<h1>
 							<span>5</span>
 							<span>0</span>
@@ -15,9 +15,9 @@ const ServerErrorPage = () => {
 						</h1>
 					</div>
 					<h2>
-						we are sorry, but something went wrong. We're looking for what happened
+						Rất tiếc server đang có lỗi kỹ thuật, chúng tôi đang cố gắng khắc phục sớm nhất có thể
 					</h2>
-                    <Link to={Routes.LandingPage.path}>Back to home</Link>
+                    <Link to={Routes.LandingPage.path}>Trở về trang chủ</Link>
 				</div>
 			</div>
 		</>

@@ -33,6 +33,14 @@ class NhaTuyenDungSerializer(ModelSerializer):
         fields = '__all__'
 
 
+class QuanLySerializer(ModelSerializer):
+    nguoi_dung = NguoiDungSerializer()
+
+    class Meta:
+        model = QuanLy
+        fields = '__all__'
+
+
 class PhucLoiSerializer(ModelSerializer):
     class Meta:
         model = PhucLoi

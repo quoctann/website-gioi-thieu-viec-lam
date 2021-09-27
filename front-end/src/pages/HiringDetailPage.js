@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faMapMarkerAlt, faStar, faUsers} from "@fortawesome/free-solid-svg-icons"
 import API, { endpoints } from "../utils/API"
 import LoadingOverlay from "../components/LoadingOverlay"
-import PaginationBar from "../components/PaginationBar"
+// import PaginationBar from "../components/PaginationBar"
 
 const HiringDetailPage = (props) => {
 
