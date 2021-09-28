@@ -1,1 +1,10 @@
-export const VAI_TRO = {"UNG_VIEN": "UNG VIEN", "TUYEN_DUNG": "TUYEN DUNG", "QUAN_LY": "QUAN LY"}
+export const VAI_TRO = {
+	UNG_VIEN: "UNG VIEN",
+	TUYEN_DUNG: "TUYEN DUNG",
+	QUAN_LY: "QUAN LY",
+};
+export const TRANG_THAI_UNG_TUYEN = {
+	DUOC_CHAP_NHAN: "CHAP NHAN",
+	BI_TU_CHOI: "TU CHOI",
+	CHO_XU_LY: "CHO XU LY",
+};

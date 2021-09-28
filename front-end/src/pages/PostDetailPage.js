@@ -20,6 +20,7 @@ import { useLocation } from "react-router-dom";
 import LoadingOverlay from "../components/LoadingOverlay";
 import API, { endpoints } from "../utils/API";
 import { VAI_TRO } from "../utils/GlobalConstants";
+import Routes from "../routes";
 
 const PostDetailPage = (props) => {
 	// Đối tượng của react router lưu thông tin param
@@ -90,10 +91,16 @@ const PostDetailPage = (props) => {
                 const create = await API.post(endpoints["ung-tuyen"], {
                     "viec_lam": jobId,
                     "ung_vien": userId,
+                    "tu_choi": false,
                 })
                 // Nếu tạo bản ghi dưới csdl thành công
                 if (create.status === 201)
                     alert("Nộp đơn ứng tuyển thành công!");
+                else if (create.status === 200) {
+                    alert("Xác nhận đã nhận công việc thành công!");
+                    props.history.push(Routes.ApplicantDashboardPage.path);
+                }
+                    
             } catch (ex) {
                 // console.log(ex.response.status)
                 if (ex.response.status === 409)

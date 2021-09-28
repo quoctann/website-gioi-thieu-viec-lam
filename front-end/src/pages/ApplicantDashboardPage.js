@@ -87,6 +87,11 @@ const ApplicantDashboardPage = (props) => {
         return style;
     }
 
+	// Bấm nút xem chi tiết công việc để đến trang chi tiết việc làm
+	const denTrangChiTietViecLam = (postId) => {
+		props.history.push(Routes.PostDetailPage.path + "?id=" + postId);
+	};
+
 	// Format tiền lương ra định dạng VNĐ đẹp hơn
 	const currency = (number) => {
 		return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(number)
@@ -311,14 +316,10 @@ const ApplicantDashboardPage = (props) => {
 														{item.viec_lam.luong === 0 ? "Thương lượng" : currency(item.viec_lam.luong)}
 													</span>
 												</p>
-												<div className="d-flex flex-row align-items-center">
-													<Button variant="primary me-2">
-														Xem việc làm
-													</Button>
-													<Button variant="success">
-														Đã nhận việc
-													</Button>
-												</div>
+												<Button 
+													variant="primary me-2"
+													onClick={() => denTrangChiTietViecLam(item.viec_lam.id)}
+												>Xem việc làm</Button>
 											</Card>
 										)) : (
 											<Alert variant="secondary">Chưa có yêu cầu việc làm gửi cho bạn</Alert>
@@ -359,10 +360,10 @@ const ApplicantDashboardPage = (props) => {
 											</p>
 											<hr />
 											<p>{(suggestion[index].noi_dung).substr(0, 100)}...</p>
-											<div className="d-flex flex-row">
-												<Button className="me-1">Chi tiết</Button>
-												<Button variant="success">Nộp đơn ngay</Button>
-											</div>
+											<Button 
+												className="me-1"
+												onClick={() => denTrangChiTietViecLam(suggestion[index].id)}
+											>Xem chi tiết</Button>
 										</Card>
 									)) : (
 										<Alert variant="secondary">Không có gợi ý phù hợp</Alert>

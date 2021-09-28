@@ -158,7 +158,10 @@ class ViecLamViewSet(viewsets.ViewSet, generics.ListAPIView):
         viec_lam = ViecLam.objects.filter(trang_thai_viec_lam=ViecLam.DANG_MO)
         ung_vien = UngVien.objects.get(pk=pk)
         nganh_nghe = ung_vien.nganh_nghe.first()
-        viec_lam = viec_lam.filter(nganh_nghe__id=nganh_nghe.id)
+        if nganh_nghe is not None:
+            viec_lam = viec_lam.filter(nganh_nghe__id=nganh_nghe.id)
+        else:
+            viec_lam = viec_lam.filter(trang_thai_viec_lam=ViecLam.DANG_MO)[:5]
         return Response(self.serializer_class(viec_lam, many=True).data, status=status.HTTP_200_OK)
 
 
@@ -200,6 +203,7 @@ class NhaTuyenDungViewSet(viewsets.ViewSet, generics.ListAPIView, generics.Retri
     # Duyệt nhà tuyển dụng, tài khoản sẵn sàng hoạt động
     @action(methods=['patch'], detail=True, url_path='duyet-nha-tuyen-dung')
     def duyet_nha_tuyen_dung(self, request, pk):
+        quan_ly_id = request.data.get('quanLyId')
         try:
             nha_tuyen_dung = NhaTuyenDung.objects.get(pk=pk)
         except ObjectDoesNotExist:
@@ -208,7 +212,12 @@ class NhaTuyenDungViewSet(viewsets.ViewSet, generics.ListAPIView, generics.Retri
         else:
             nha_tuyen_dung.doi_xet_duyet = False
             nha_tuyen_dung.save()
+            # Cập nhật log của quản lý
+            quan_ly = QuanLy.objects.get(pk=quan_ly_id)
+            quan_ly.log = quan_ly.log + "%s: Duyet tai khoan nha tuyen dung ID: %s\n" % (datetime.datetime.now(), pk)
+            quan_ly.save()
 
+            # Trả về response hoàn chỉnh
             return Response({"da cap nhat": "tai khoan nha tuyen dung da duoc xet duyet"}, status=status.HTTP_200_OK)
 
     # Lấy các bài đánh giá của một nhà tuyển dụng
@@ -228,14 +237,33 @@ class UngTuyenViewSet(viewsets.ViewSet, generics.ListAPIView):
     def create(self, request):
         uv_id = request.data.get('ung_vien')
         vl_id = request.data.get('viec_lam')
-        uv2ntd = request.data.get('ung_vien_nop_don')
+        trang_thai_ho_so = request.data.get('trang_thai_ho_so')
+
         check = UngTuyen.objects.filter(ung_vien_id=uv_id, viec_lam_id=vl_id)
-        if len(check) > 0:
+        # Nếu như ứng viên ứng tuyển một công việc mà nhà tuyển dụng gửi cho thì chỉ cập nhật trạng thái thôi
+        cap_nhat = check.first()
+        if cap_nhat.ung_vien_nop_don is False:
+            cap_nhat.trang_thai_ho_so = UngTuyen.DUOC_CHAP_NHAN
+            cap_nhat.save()
+            return Response({"cap nhat thanh cong": "chap nhan de nghi viec lam cua nha tuyen dung thanh cong"},
+                            status.HTTP_200_OK)
+
+        # Nếu như ứng viên ứng tuyển công việc đã ứng tuyển rồi thì res 409
+        if len(check) > 0 and trang_thai_ho_so is None:
             return Response(data={'loi': 'tai nguyen da ton tai, khong the ghi de'},
                             status=status.HTTP_409_CONFLICT)
+        elif len(check) > 0 and trang_thai_ho_so is not None:
+            cap_nhat = UngTuyen.objects.get(ung_vien_id=uv_id, viec_lam_id=vl_id)
+            cap_nhat.trang_thai_ho_so = trang_thai_ho_so
+            cap_nhat.save()
+            return Response({"cap nhat": "nha tuyen dung cap nhat trang thai thanh cong"},
+                            status.HTTP_200_OK)
 
-        if uv2ntd is not None:
-            res = UngTuyen.objects.create(ung_vien_id=uv_id, viec_lam_id=vl_id, ung_vien_nop_don=uv2ntd)
+        if trang_thai_ho_so is not None:
+            res = UngTuyen.objects.create(ung_vien_id=uv_id,
+                                          viec_lam_id=vl_id,
+                                          ung_vien_nop_don=False,
+                                          trang_thai_ho_so=trang_thai_ho_so)
         else:
             res = UngTuyen.objects.create(ung_vien_id=uv_id, viec_lam_id=vl_id)
 
@@ -262,14 +290,23 @@ class UngTuyenViewSet(viewsets.ViewSet, generics.ListAPIView):
 
         return Response(data=data, status=status.HTTP_200_OK)
 
-    # Thống kê theo quý ứng viên nộp đơn vào những ngành nghề nào
-    @action(methods=['get'], detail=False, url_path='thong-ke-theo-quy')
-    def thong_ke_theo_quy(self, request):
+    # Thống kê theo quý (nếu có truyền vào) ứng viên nộp đơn vào những ngành nghề nào
+    @action(methods=['get'], detail=False, url_path='thong-ke')
+    def thong_ke(self, request):
         # Lọc những ứng viên nộp đơn
         truy_van = UngTuyen.objects.filter(ung_vien_nop_don=True)
         # Lấy request params
         quy = int(request.query_params.get('quy'))
         nam = int(request.query_params.get('nam'))
+        # Lọc ra danh sách ngành nghề
+        data = {}
+        nganh_nghe = NganhNghe.objects.all()
+        # Quý 0 thì thống kê theo năm gửi vào
+        if quy == 0:
+            truy_van = UngTuyen.objects.filter(ung_vien_nop_don=True, ngay_ung_tuyen__year=nam)
+            for nghe in nganh_nghe:
+                data[nghe.ten] = truy_van.filter(viec_lam__nganh_nghe__id=nghe.id).count()
+            return Response(data, status.HTTP_200_OK)
         if quy == 1:
             ngay_bat_dau = datetime.date(nam, 1, 1)
             ngay_ket_thuc = datetime.date(nam, 3, 31)
@@ -286,27 +323,18 @@ class UngTuyenViewSet(viewsets.ViewSet, generics.ListAPIView):
             return Response({"thieu query param": "can query param 'quy' va 'nam' de truy van"},
                             status.HTTP_400_BAD_REQUEST)
 
-        # Lọc ra danh sách ngành nghề
-        nganh_nghe = NganhNghe.objects.all()
         # Lọc các đơn ứng tuyển được nộp trong quý được truyền vào ở trên
         truy_van = truy_van.filter(ngay_ung_tuyen__range=(ngay_bat_dau, ngay_ket_thuc))
-        data = {}
+
         # Lọc ra số đơn ứng tuyển ứng với ngành nghề, đếm số lượng
         for nghe in nganh_nghe:
             data[nghe.ten] = truy_van.filter(viec_lam__nganh_nghe__id=nghe.id).count()
         return Response(data, status.HTTP_200_OK)
 
-    # Thống kê theo năm ứng viên ứng tuyển vào những ngành nghề nào
-    @action(methods=['get'], detail=False, url_path='thong-ke-theo-nam')
-    def thong_ke_theo_nam(self, request):
-        nam = int(request.query_params.get('nam'))
-        truy_van = UngTuyen.objects.filter(ung_vien_nop_don=True, ngay_ung_tuyen__year=nam)
-        data = {}
-        nganh_nghe = NganhNghe.objects.all()
-        for nghe in nganh_nghe:
-            data[nghe.ten] = truy_van.filter(viec_lam__nganh_nghe__id=nghe.id).count()
 
-        return Response(data, status.HTTP_200_OK)
+class UngVienViewSet(viewsets.ViewSet, generics.RetrieveAPIView):
+    queryset = UngVien.objects.all()
+    serializer_class = UngVienSerializer
 
 
 # API để lấy thông tin client_id, client_secret xin token chứng thực (đăng nhập)

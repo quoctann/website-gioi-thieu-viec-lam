@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Container, Row, Col, Card, Form, Image, Button, FloatingLabel } from "react-bootstrap";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+import { Container, Row, Col, Card, Form, Button, FloatingLabel } from "react-bootstrap";
 import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
 import SimpleInput from "../components/SimpleInput"
@@ -10,7 +8,8 @@ import API, { endpoints } from "../utils/API"
 import { VAI_TRO } from "../utils/GlobalConstants"
 import { faAddressCard, faBriefcase, faBuilding, faClock, faCogs, faEnvelope, faGraduationCap, faKey, faMapMarkerAlt, faMedal, faPhone, faUsers } from "@fortawesome/free-solid-svg-icons";
 import cookies from "react-cookies";
-import Routes from "../routes"
+import Routes from "../routes";
+import { xemChiTietUngVien } from "../redux/actions";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Moment from 'react-moment';
 import 'moment-timezone';
@@ -44,9 +43,9 @@ const HiringDashboardPage = (props) => {
 	// Lấy danh sách các ứng viên đợi được chấp nhận đơn ứng tuyển
 	const getPendingApply = async (hiringId = user.nguoi_dung.id) => {
 		const res = await API.get(endpoints["ung-vien-doi-duyet"](hiringId));
-		console.log(res.data)
+		// console.log(res.data)
 		setApplyInfo(res.data);
-		console.log(applyInfo)
+		// console.log(applyInfo)
 	}
 
 	// Dữ liệu lọc sẽ được gửi lên server
@@ -66,8 +65,10 @@ const HiringDashboardPage = (props) => {
 	}
 
 	useEffect(() => {
+		const ac = new AbortController();
         getFilterCategory();
 		getPendingApply();
+		return () => ac.abort();
     }, []);
 
     if (!cookies.load("user"))
@@ -243,17 +244,17 @@ const HiringDashboardPage = (props) => {
 												<p className="text-secondary">
 													<FontAwesomeIcon icon={faClock} /> {" "}
 													<Moment fromNow>{applyInfo[index].ngay_ung_tuyen}</Moment></p>
-												<div className="d-flex flex-row align-items-center">
-													<Button variant="primary me-2">
+												
+													<Button 
+														variant="primary me-2"
+														onClick={() => {
+															props.emit(applyInfo[index].ung_vien.nguoi_dung.id, applyInfo[index].viec_lam.id);
+															props.history.push(Routes.UngVienChiTietPage.path);
+														}}
+													>
 														Xem hồ sơ chi tiết
 													</Button>
-													<Button variant="success me-2">
-														Đã duyệt hồ sơ này
-													</Button>
-													<Button variant="danger">
-														Từ chối hồ sơ
-													</Button>
-												</div>
+												
 											</Card>
 										)) : (
 											<div className="alert alert-secondary">Không có hồ sơ chờ duyệt</div>
@@ -373,5 +374,10 @@ export default connect(
         return {
             store: state
         }
-    }
+    },
+	(dispatch) => {
+		return {
+			emit: (ungvienId, vieclamId) => dispatch(xemChiTietUngVien(ungvienId, vieclamId))
+		}
+	}
 )(HiringDashboardPage);

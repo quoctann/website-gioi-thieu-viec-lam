@@ -199,7 +199,7 @@ CREATE TABLE `django_admin_log` (
   CONSTRAINT `django_admin_log_content_type_id_c4bce8eb_fk_django_co` FOREIGN KEY (`content_type_id`) REFERENCES `django_content_type` (`id`),
   CONSTRAINT `django_admin_log_user_id_c564eba6_fk_nguoi_dung_id` FOREIGN KEY (`user_id`) REFERENCES `nguoi_dung` (`id`),
   CONSTRAINT `django_admin_log_chk_1` CHECK ((`action_flag` >= 0))
-) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -208,7 +208,7 @@ CREATE TABLE `django_admin_log` (
 
 LOCK TABLES `django_admin_log` WRITE;
 /*!40000 ALTER TABLE `django_admin_log` DISABLE KEYS */;
-INSERT INTO `django_admin_log` VALUES (1,'2021-09-25 13:37:14.687569','1','BangCap object (1)',1,'[{\"added\": {}}]',7,1),(2,'2021-09-25 13:37:25.242595','1','BangCap object (1)',2,'[]',7,1),(3,'2021-09-25 13:37:36.106784','2','BangCap object (2)',1,'[{\"added\": {}}]',7,1),(4,'2021-09-25 13:37:46.184532','3','BangCap object (3)',1,'[{\"added\": {}}]',7,1),(5,'2021-09-25 13:37:52.723007','4','BangCap object (4)',1,'[{\"added\": {}}]',7,1),(6,'2021-09-25 13:37:56.890563','5','BangCap object (5)',1,'[{\"added\": {}}]',7,1),(7,'2021-09-25 13:40:32.365251','1','KinhNghiem object (1)',1,'[{\"added\": {}}]',9,1),(8,'2021-09-25 13:40:55.427421','2','KinhNghiem object (2)',1,'[{\"added\": {}}]',9,1),(9,'2021-09-25 13:41:11.822071','3','KinhNghiem object (3)',1,'[{\"added\": {}}]',9,1),(10,'2021-09-25 13:41:39.145865','4','KinhNghiem object (4)',1,'[{\"added\": {}}]',9,1),(11,'2021-09-25 13:42:59.151274','1','KyNang object (1)',1,'[{\"added\": {}}]',10,1),(12,'2021-09-25 13:43:06.331362','2','KyNang object (2)',1,'[{\"added\": {}}]',10,1),(13,'2021-09-25 13:43:20.276070','3','KyNang object (3)',1,'[{\"added\": {}}]',10,1),(14,'2021-09-25 13:43:26.261474','4','KyNang object (4)',1,'[{\"added\": {}}]',10,1),(15,'2021-09-25 13:43:39.557891','1','NganhNghe object (1)',1,'[{\"added\": {}}]',11,1),(16,'2021-09-25 13:43:56.583542','2','NganhNghe object (2)',1,'[{\"added\": {}}]',11,1),(17,'2021-09-25 13:44:04.763581','3','NganhNghe object (3)',1,'[{\"added\": {}}]',11,1),(18,'2021-09-25 13:44:08.639286','4','NganhNghe object (4)',1,'[{\"added\": {}}]',11,1),(19,'2021-09-25 13:44:25.190374','1','PhucLoi object (1)',1,'[{\"added\": {}}]',12,1),(20,'2021-09-25 13:44:31.130834','2','PhucLoi object (2)',1,'[{\"added\": {}}]',12,1),(21,'2021-09-25 13:44:59.219635','3','PhucLoi object (3)',1,'[{\"added\": {}}]',12,1),(22,'2021-09-25 13:45:07.295292','4','PhucLoi object (4)',1,'[{\"added\": {}}]',12,1),(23,'2021-09-25 13:46:37.847257','4','KinhNghiem object (4)',2,'[{\"changed\": {\"fields\": [\"Ten\"]}}]',9,1),(24,'2021-09-25 13:47:12.624112','5','KinhNghiem object (5)',1,'[{\"added\": {}}]',9,1),(25,'2021-09-25 13:50:55.009544','5','NhaTuyenDung object (5)',2,'[{\"changed\": {\"fields\": [\"Ten cong ty\", \"Dia chi\", \"Quy mo\", \"Doi xet duyet\", \"Gioi thieu\"]}}]',13,1),(26,'2021-09-25 13:53:39.647081','4','NhaTuyenDung object (4)',2,'[{\"changed\": {\"fields\": [\"Ten cong ty\", \"Dia chi\", \"Quy mo\", \"Doi xet duyet\", \"Gioi thieu\"]}}]',13,1),(27,'2021-09-25 13:54:43.058294','5','NhaTuyenDung object (5)',2,'[{\"changed\": {\"fields\": [\"Gioi thieu\"]}}]',13,1),(28,'2021-09-25 13:54:51.617693','5','NhaTuyenDung object (5)',2,'[]',13,1),(29,'2021-09-25 13:55:11.423868','4','NhaTuyenDung object (4)',2,'[{\"changed\": {\"fields\": [\"Gioi thieu\"]}}]',13,1),(30,'2021-09-25 13:56:58.909724','1','ViecLam object (1)',1,'[{\"added\": {}}]',15,1),(31,'2021-09-25 14:01:57.992404','1','DanhGiaNhaTuyenDung object (1)',1,'[{\"added\": {}}]',18,1),(32,'2021-09-25 14:02:17.527905','2','DanhGiaNhaTuyenDung object (2)',1,'[{\"added\": {}}]',18,1),(33,'2021-09-25 14:03:39.779541','3','DanhGiaNhaTuyenDung object (3)',1,'[{\"added\": {}}]',18,1),(34,'2021-09-25 14:04:00.814488','4','DanhGiaNhaTuyenDung object (4)',1,'[{\"added\": {}}]',18,1);
+INSERT INTO `django_admin_log` VALUES (1,'2021-09-25 13:37:14.687569','1','BangCap object (1)',1,'[{\"added\": {}}]',7,1),(2,'2021-09-25 13:37:25.242595','1','BangCap object (1)',2,'[]',7,1),(3,'2021-09-25 13:37:36.106784','2','BangCap object (2)',1,'[{\"added\": {}}]',7,1),(4,'2021-09-25 13:37:46.184532','3','BangCap object (3)',1,'[{\"added\": {}}]',7,1),(5,'2021-09-25 13:37:52.723007','4','BangCap object (4)',1,'[{\"added\": {}}]',7,1),(6,'2021-09-25 13:37:56.890563','5','BangCap object (5)',1,'[{\"added\": {}}]',7,1),(7,'2021-09-25 13:40:32.365251','1','KinhNghiem object (1)',1,'[{\"added\": {}}]',9,1),(8,'2021-09-25 13:40:55.427421','2','KinhNghiem object (2)',1,'[{\"added\": {}}]',9,1),(9,'2021-09-25 13:41:11.822071','3','KinhNghiem object (3)',1,'[{\"added\": {}}]',9,1),(10,'2021-09-25 13:41:39.145865','4','KinhNghiem object (4)',1,'[{\"added\": {}}]',9,1),(11,'2021-09-25 13:42:59.151274','1','KyNang object (1)',1,'[{\"added\": {}}]',10,1),(12,'2021-09-25 13:43:06.331362','2','KyNang object (2)',1,'[{\"added\": {}}]',10,1),(13,'2021-09-25 13:43:20.276070','3','KyNang object (3)',1,'[{\"added\": {}}]',10,1),(14,'2021-09-25 13:43:26.261474','4','KyNang object (4)',1,'[{\"added\": {}}]',10,1),(15,'2021-09-25 13:43:39.557891','1','NganhNghe object (1)',1,'[{\"added\": {}}]',11,1),(16,'2021-09-25 13:43:56.583542','2','NganhNghe object (2)',1,'[{\"added\": {}}]',11,1),(17,'2021-09-25 13:44:04.763581','3','NganhNghe object (3)',1,'[{\"added\": {}}]',11,1),(18,'2021-09-25 13:44:08.639286','4','NganhNghe object (4)',1,'[{\"added\": {}}]',11,1),(19,'2021-09-25 13:44:25.190374','1','PhucLoi object (1)',1,'[{\"added\": {}}]',12,1),(20,'2021-09-25 13:44:31.130834','2','PhucLoi object (2)',1,'[{\"added\": {}}]',12,1),(21,'2021-09-25 13:44:59.219635','3','PhucLoi object (3)',1,'[{\"added\": {}}]',12,1),(22,'2021-09-25 13:45:07.295292','4','PhucLoi object (4)',1,'[{\"added\": {}}]',12,1),(23,'2021-09-25 13:46:37.847257','4','KinhNghiem object (4)',2,'[{\"changed\": {\"fields\": [\"Ten\"]}}]',9,1),(24,'2021-09-25 13:47:12.624112','5','KinhNghiem object (5)',1,'[{\"added\": {}}]',9,1),(25,'2021-09-25 13:50:55.009544','5','NhaTuyenDung object (5)',2,'[{\"changed\": {\"fields\": [\"Ten cong ty\", \"Dia chi\", \"Quy mo\", \"Doi xet duyet\", \"Gioi thieu\"]}}]',13,1),(26,'2021-09-25 13:53:39.647081','4','NhaTuyenDung object (4)',2,'[{\"changed\": {\"fields\": [\"Ten cong ty\", \"Dia chi\", \"Quy mo\", \"Doi xet duyet\", \"Gioi thieu\"]}}]',13,1),(27,'2021-09-25 13:54:43.058294','5','NhaTuyenDung object (5)',2,'[{\"changed\": {\"fields\": [\"Gioi thieu\"]}}]',13,1),(28,'2021-09-25 13:54:51.617693','5','NhaTuyenDung object (5)',2,'[]',13,1),(29,'2021-09-25 13:55:11.423868','4','NhaTuyenDung object (4)',2,'[{\"changed\": {\"fields\": [\"Gioi thieu\"]}}]',13,1),(30,'2021-09-25 13:56:58.909724','1','ViecLam object (1)',1,'[{\"added\": {}}]',15,1),(31,'2021-09-25 14:01:57.992404','1','DanhGiaNhaTuyenDung object (1)',1,'[{\"added\": {}}]',18,1),(32,'2021-09-25 14:02:17.527905','2','DanhGiaNhaTuyenDung object (2)',1,'[{\"added\": {}}]',18,1),(33,'2021-09-25 14:03:39.779541','3','DanhGiaNhaTuyenDung object (3)',1,'[{\"added\": {}}]',18,1),(34,'2021-09-25 14:04:00.814488','4','DanhGiaNhaTuyenDung object (4)',1,'[{\"added\": {}}]',18,1),(35,'2021-09-26 03:40:52.756839','2','UngVien object (2)',2,'[{\"changed\": {\"fields\": [\"Ngay sinh\", \"Cv\", \"Gioi thieu\", \"Bang cap\", \"Ky nang\", \"Nganh nghe\", \"Kinh nghiem\"]}}]',16,1),(36,'2021-09-26 10:39:16.820508','1','ViecLam object (1)',2,'[{\"changed\": {\"fields\": [\"Nganh nghe\"]}}]',15,1),(37,'2021-09-26 10:39:35.467263','10','ViecLam object (10)',2,'[{\"changed\": {\"fields\": [\"Bang cap\", \"Ky nang\", \"Nganh nghe\", \"Kinh nghiem\", \"Phuc loi\"]}}]',15,1),(38,'2021-09-26 10:39:47.145669','4','ViecLam object (4)',2,'[{\"changed\": {\"fields\": [\"Bang cap\", \"Ky nang\", \"Nganh nghe\", \"Kinh nghiem\", \"Phuc loi\"]}}]',15,1),(39,'2021-09-27 02:54:48.149454','6','quanly',1,'[{\"added\": {}}]',6,1),(40,'2021-09-27 03:02:59.033580','6','QuanLy object (6)',1,'[{\"added\": {}}]',14,1);
 /*!40000 ALTER TABLE `django_admin_log` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -251,7 +251,7 @@ CREATE TABLE `django_migrations` (
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `applied` datetime(6) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -260,7 +260,7 @@ CREATE TABLE `django_migrations` (
 
 LOCK TABLES `django_migrations` WRITE;
 /*!40000 ALTER TABLE `django_migrations` DISABLE KEYS */;
-INSERT INTO `django_migrations` VALUES (1,'contenttypes','0001_initial','2021-09-25 13:22:12.252456'),(2,'contenttypes','0002_remove_content_type_name','2021-09-25 13:22:12.472058'),(3,'auth','0001_initial','2021-09-25 13:22:13.344369'),(4,'auth','0002_alter_permission_name_max_length','2021-09-25 13:22:13.533667'),(5,'auth','0003_alter_user_email_max_length','2021-09-25 13:22:13.550057'),(6,'auth','0004_alter_user_username_opts','2021-09-25 13:22:13.595093'),(7,'auth','0005_alter_user_last_login_null','2021-09-25 13:22:13.608602'),(8,'auth','0006_require_contenttypes_0002','2021-09-25 13:22:13.617076'),(9,'auth','0007_alter_validators_add_error_messages','2021-09-25 13:22:13.634251'),(10,'auth','0008_alter_user_username_max_length','2021-09-25 13:22:13.649086'),(11,'auth','0009_alter_user_last_name_max_length','2021-09-25 13:22:13.661798'),(12,'auth','0010_alter_group_name_max_length','2021-09-25 13:22:13.697987'),(13,'auth','0011_update_proxy_permissions','2021-09-25 13:22:13.712523'),(14,'auth','0012_alter_user_first_name_max_length','2021-09-25 13:22:13.728327'),(15,'viec_lam_app','0001_initial','2021-09-25 13:22:20.065587'),(16,'admin','0001_initial','2021-09-25 13:22:20.472339'),(17,'admin','0002_logentry_remove_auto_add','2021-09-25 13:22:20.496005'),(18,'admin','0003_logentry_add_action_flag_choices','2021-09-25 13:22:20.530532'),(19,'oauth2_provider','0001_initial','2021-09-25 13:22:22.703678'),(20,'oauth2_provider','0002_auto_20190406_1805','2021-09-25 13:22:22.860728'),(21,'oauth2_provider','0003_auto_20201211_1314','2021-09-25 13:22:23.124716'),(22,'oauth2_provider','0004_auto_20200902_2022','2021-09-25 13:22:24.292746'),(23,'sessions','0001_initial','2021-09-25 13:22:24.403680'),(24,'viec_lam_app','0002_alter_kinhnghiem_ten','2021-09-25 13:40:01.611478'),(25,'viec_lam_app','0003_auto_20210925_1342','2021-09-25 13:42:45.053206');
+INSERT INTO `django_migrations` VALUES (1,'contenttypes','0001_initial','2021-09-25 13:22:12.252456'),(2,'contenttypes','0002_remove_content_type_name','2021-09-25 13:22:12.472058'),(3,'auth','0001_initial','2021-09-25 13:22:13.344369'),(4,'auth','0002_alter_permission_name_max_length','2021-09-25 13:22:13.533667'),(5,'auth','0003_alter_user_email_max_length','2021-09-25 13:22:13.550057'),(6,'auth','0004_alter_user_username_opts','2021-09-25 13:22:13.595093'),(7,'auth','0005_alter_user_last_login_null','2021-09-25 13:22:13.608602'),(8,'auth','0006_require_contenttypes_0002','2021-09-25 13:22:13.617076'),(9,'auth','0007_alter_validators_add_error_messages','2021-09-25 13:22:13.634251'),(10,'auth','0008_alter_user_username_max_length','2021-09-25 13:22:13.649086'),(11,'auth','0009_alter_user_last_name_max_length','2021-09-25 13:22:13.661798'),(12,'auth','0010_alter_group_name_max_length','2021-09-25 13:22:13.697987'),(13,'auth','0011_update_proxy_permissions','2021-09-25 13:22:13.712523'),(14,'auth','0012_alter_user_first_name_max_length','2021-09-25 13:22:13.728327'),(15,'viec_lam_app','0001_initial','2021-09-25 13:22:20.065587'),(16,'admin','0001_initial','2021-09-25 13:22:20.472339'),(17,'admin','0002_logentry_remove_auto_add','2021-09-25 13:22:20.496005'),(18,'admin','0003_logentry_add_action_flag_choices','2021-09-25 13:22:20.530532'),(19,'oauth2_provider','0001_initial','2021-09-25 13:22:22.703678'),(20,'oauth2_provider','0002_auto_20190406_1805','2021-09-25 13:22:22.860728'),(21,'oauth2_provider','0003_auto_20201211_1314','2021-09-25 13:22:23.124716'),(22,'oauth2_provider','0004_auto_20200902_2022','2021-09-25 13:22:24.292746'),(23,'sessions','0001_initial','2021-09-25 13:22:24.403680'),(24,'viec_lam_app','0002_alter_kinhnghiem_ten','2021-09-25 13:40:01.611478'),(25,'viec_lam_app','0003_auto_20210925_1342','2021-09-25 13:42:45.053206'),(26,'viec_lam_app','0004_auto_20210926_0339','2021-09-26 03:39:31.426815'),(27,'viec_lam_app','0005_auto_20210926_1038','2021-09-26 10:38:59.690188'),(28,'viec_lam_app','0006_auto_20210927_0232','2021-09-27 02:32:44.910593'),(29,'viec_lam_app','0007_auto_20210928_1009','2021-09-28 10:10:05.547134');
 /*!40000 ALTER TABLE `django_migrations` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -387,7 +387,7 @@ CREATE TABLE `nguoi_dung` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -396,7 +396,7 @@ CREATE TABLE `nguoi_dung` (
 
 LOCK TABLES `nguoi_dung` WRITE;
 /*!40000 ALTER TABLE `nguoi_dung` DISABLE KEYS */;
-INSERT INTO `nguoi_dung` VALUES (1,'pbkdf2_sha256$260000$M51UYygTQeqmI6c9Tpp42h$eD2VgFWY0gB1epY3bBIbD8cbgBYsBM0jVIrIjK/fUdw=','2021-09-25 13:23:39.848291',1,'admin','','',1,1,'2021-09-25 13:23:25.003607','1851050127tan@ou.edu.vn','','',''),(2,'pbkdf2_sha256$260000$PPZZv3ed0E5jbx50V1rkJO$wdmNQgpTyAQrIdf2N6cU0TArziD3Vl7Yoh4GVAs/MgA=',NULL,0,'uv','Tấn','Trần',0,1,'2021-09-25 13:48:08.008860','uv@mail.com','','static/upload/2021/09/usecase.jpg','UNG VIEN'),(3,'pbkdf2_sha256$260000$mcnKMYELvjlWIJ7e85sWYF$lJkmbpOc5Mjpgyzru2Wldx3We2/tmcAUcUnbkRWnKe8=',NULL,0,'uv2','Tú','Lê',0,1,'2021-09-25 13:48:47.514451','uv2@mail.com','','static/upload/2021/09/usecase_a6Krqh3.jpg','UNG VIEN'),(4,'pbkdf2_sha256$260000$hMvJlIhHd22gWUHXph2At8$IX5IF52ohwKxI6D1whRovYSlx/M5oDtHkKDGNhJIZFA=',NULL,0,'ntd','Thúy','Nguyễn',0,1,'2021-09-25 13:49:24.266116','ntd@mail.com','','static/upload/2021/09/usecase_xfabNoZ.jpg','TUYEN DUNG'),(5,'pbkdf2_sha256$260000$H4LaHpuHnlZdjOlk7ix5SV$vkCn4TIIDwUEAPt6l14YN5H0cuU/RSPOmB6xzoQvPhA=',NULL,0,'ntd2','Hải','Lý',0,1,'2021-09-25 13:49:54.571114','ntd2@mail.com','','static/upload/2021/09/usecase_TOcbkTT.jpg','TUYEN DUNG');
+INSERT INTO `nguoi_dung` VALUES (1,'pbkdf2_sha256$260000$M51UYygTQeqmI6c9Tpp42h$eD2VgFWY0gB1epY3bBIbD8cbgBYsBM0jVIrIjK/fUdw=','2021-09-25 13:23:39.848291',1,'admin','','',1,1,'2021-09-25 13:23:25.003607','1851050127tan@ou.edu.vn','','',''),(2,'pbkdf2_sha256$260000$PPZZv3ed0E5jbx50V1rkJO$wdmNQgpTyAQrIdf2N6cU0TArziD3Vl7Yoh4GVAs/MgA=',NULL,0,'uv','Tấn','Trần',0,1,'2021-09-25 13:48:08.008860','uv@mail.com','','static/upload/2021/09/default.jpg','UNG VIEN'),(3,'pbkdf2_sha256$260000$mcnKMYELvjlWIJ7e85sWYF$lJkmbpOc5Mjpgyzru2Wldx3We2/tmcAUcUnbkRWnKe8=',NULL,0,'uv2','Tú','Lê',0,1,'2021-09-25 13:48:47.514451','uv2@mail.com','','static/upload/2021/09/default.jpg','UNG VIEN'),(4,'pbkdf2_sha256$260000$hMvJlIhHd22gWUHXph2At8$IX5IF52ohwKxI6D1whRovYSlx/M5oDtHkKDGNhJIZFA=',NULL,0,'ntd','Thúy','Nguyễn',0,1,'2021-09-25 13:49:24.266116','ntd@mail.com','','static/upload/2021/09/default.jpg','TUYEN DUNG'),(5,'pbkdf2_sha256$260000$H4LaHpuHnlZdjOlk7ix5SV$vkCn4TIIDwUEAPt6l14YN5H0cuU/RSPOmB6xzoQvPhA=',NULL,0,'ntd2','Hải','Lý',0,1,'2021-09-25 13:49:54.571114','ntd2@mail.com','','static/upload/2021/09/default.jpg','TUYEN DUNG'),(6,'pbkdf2_sha256$260000$H4LaHpuHnlZdjOlk7ix5SV$vkCn4TIIDwUEAPt6l14YN5H0cuU/RSPOmB6xzoQvPhA=','2021-09-27 02:51:17.000000',0,'quanly','Tấn','Trần Quốc',1,1,'2021-09-27 02:50:57.000000','tqtlife@gmail.com','0706638940','static/upload/2021/09/default.jpg','QUAN LY'),(7,'pbkdf2_sha256$260000$kLH7zGVyGq6nsqXyojE0MZ$EhLYksEvWOICUbNkuDhycz2wpnSGnx67k5nktl69604=',NULL,0,'refactor1','Tran','Tan',0,1,'2021-09-27 03:12:41.135103','refactor@mail.com','','static/upload/2021/09/default.jpg','UNG VIEN'),(8,'pbkdf2_sha256$260000$dXhJZ0V8mZy6nT1ALIi1m7$y4CIBWTp1nMaqfskgr46PHQ0AX+VA+mzy7EAMEs1OVk=',NULL,0,'refactor2','Tran','Tan',0,1,'2021-09-27 03:13:24.213118','refactor2@mail.com','','static/upload/2021/09/default.jpg','TUYEN DUNG'),(9,'pbkdf2_sha256$260000$R0DCQmDpAnNAlVi1Kef1vL$voiy0IgW8mwBNuoCUO9zPIdmuGPTLl3O/0akCZzJm5M=',NULL,0,'test1','Quốc','Tấn',0,1,'2021-09-27 03:19:08.566092','test@mail.com','','static/upload/2021/09/default.jpg','UNG VIEN'),(10,'pbkdf2_sha256$260000$XejPjTuxuRDcnuildevMnD$r+BFOyTaJONb4b3L/BqRs7MyAjwceDN+vMChe/F7fBg=',NULL,0,'test2','Vin','Lê',0,1,'2021-09-27 03:21:09.554835','vin@mail.com','','static/upload/2021/09/default.jpg','UNG VIEN'),(11,'pbkdf2_sha256$260000$uiytsxLgjvbGOheS1vC6mY$3dfZWKUfnDf7luAjvCBZ8lKmegay7l6xo8sP2lUbuGs=',NULL,0,'ntd9','Tran','Tan',0,1,'2021-09-27 06:02:57.337812','tqtmail@yahoo.com','','static/upload/2021/09/default.jpg','TUYEN DUNG'),(12,'pbkdf2_sha256$260000$h11iwkfVWK0iNdFL2573fg$tB/YBBX9KQ/RBdit5bSwJUPfmcqNk64yHykfoX0Nwms=',NULL,0,'ntd8','Quốc','Tấn',0,1,'2021-09-27 06:04:04.151114','tan@mail.com','','static/upload/2021/09/default.jpg','TUYEN DUNG'),(13,'pbkdf2_sha256$260000$liUnJjBFQKxu8kuQkIcecD$9HiD0Gm3V/tl0/yIhseCSNcu/JEBu0hi1RjayBIFqVw=',NULL,0,'ntd7','Quốc','Tấn',0,1,'2021-09-27 06:04:29.833745','tqthost@gmail.com','','static/upload/2021/09/default.jpg','TUYEN DUNG');
 /*!40000 ALTER TABLE `nguoi_dung` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -444,7 +444,7 @@ CREATE TABLE `nguoi_dung_user_permissions` (
   KEY `nguoi_dung_user_perm_permission_id_9e3563ee_fk_auth_perm` (`permission_id`),
   CONSTRAINT `nguoi_dung_user_perm_nguoidung_id_624225ff_fk_nguoi_dun` FOREIGN KEY (`nguoidung_id`) REFERENCES `nguoi_dung` (`id`),
   CONSTRAINT `nguoi_dung_user_perm_permission_id_9e3563ee_fk_auth_perm` FOREIGN KEY (`permission_id`) REFERENCES `auth_permission` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=93 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -453,6 +453,7 @@ CREATE TABLE `nguoi_dung_user_permissions` (
 
 LOCK TABLES `nguoi_dung_user_permissions` WRITE;
 /*!40000 ALTER TABLE `nguoi_dung_user_permissions` DISABLE KEYS */;
+INSERT INTO `nguoi_dung_user_permissions` VALUES (1,6,1),(2,6,2),(3,6,3),(4,6,4),(5,6,5),(6,6,6),(7,6,7),(8,6,8),(9,6,9),(10,6,10),(11,6,11),(12,6,12),(13,6,13),(14,6,14),(15,6,15),(16,6,16),(17,6,17),(18,6,18),(19,6,19),(20,6,20),(21,6,21),(22,6,22),(23,6,23),(24,6,24),(25,6,25),(26,6,26),(27,6,27),(28,6,28),(29,6,29),(30,6,30),(31,6,31),(32,6,32),(33,6,33),(34,6,34),(35,6,35),(36,6,36),(37,6,37),(38,6,38),(39,6,39),(40,6,40),(41,6,41),(42,6,42),(43,6,43),(44,6,44),(45,6,45),(46,6,46),(47,6,47),(48,6,48),(49,6,49),(50,6,50),(51,6,51),(52,6,52),(53,6,53),(54,6,54),(55,6,55),(56,6,56),(57,6,57),(58,6,58),(59,6,59),(60,6,60),(61,6,61),(62,6,62),(63,6,63),(64,6,64),(65,6,65),(66,6,66),(67,6,67),(68,6,68),(69,6,69),(70,6,70),(71,6,71),(72,6,72),(73,6,73),(74,6,74),(75,6,75),(76,6,76),(77,6,77),(78,6,78),(79,6,79),(80,6,80),(81,6,81),(82,6,82),(83,6,83),(84,6,84),(85,6,85),(86,6,86),(87,6,87),(88,6,88),(89,6,89),(90,6,90),(91,6,91),(92,6,92);
 /*!40000 ALTER TABLE `nguoi_dung_user_permissions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -482,7 +483,7 @@ CREATE TABLE `nha_tuyen_dung` (
 
 LOCK TABLES `nha_tuyen_dung` WRITE;
 /*!40000 ALTER TABLE `nha_tuyen_dung` DISABLE KEYS */;
-INSERT INTO `nha_tuyen_dung` VALUES (4,'Tập đoàn Trường Hải','321 Cao Lỗ',1000,0,0,'Tại Navigos Group, mỗi ngày đi làm của hơn 500 DREAM MAKERS chúng tôi đều là một ngày vui. Vui vì tất cả đều cảm nhận được rằng mình đang làm một công việc có ý nghĩa, và vui vì hơn hết mỗi người đều được sống và làm việc trong một đại gia đình NAVIWORKS (cách gọi thân mật từ sự kết hợp của VietnamWorks và Navigos Search) giàu tính nhân văn và luôn được quan tâm chân thành từ các cấp lãnh đạo cao nhất, tới những người bạn đồng nghiệp ngồi cùng bàn. Các thành viên của đại gia đình NAVIWORKS còn được thường xuyên tham gia các chương trình đào tạo nhằm phát triển chuyên môn từ các chuyên gia và người quản lý trực tiếp, cùng chế độ đãi ngộ hấp dẫn, tương xứng với năng lực và kết quả công việc.'),(5,'Công ty TNHH VinPro','123 Lê Lai',200,0,0,'Tại Navigos Group, mỗi ngày đi làm của hơn 500 DREAM MAKERS chúng tôi đều là một ngày vui. Vui vì tất cả đều cảm nhận được rằng mình đang làm một công việc có ý nghĩa, và vui vì hơn hết mỗi người đều được sống và làm việc trong một đại gia đình NAVIWORKS (cách gọi thân mật từ sự kết hợp của VietnamWorks và Navigos Search) giàu tính nhân văn và luôn được quan tâm chân thành từ các cấp lãnh đạo cao nhất, tới những người bạn đồng nghiệp ngồi cùng bàn. Các thành viên của đại gia đình NAVIWORKS còn được thường xuyên tham gia các chương trình đào tạo nhằm phát triển chuyên môn từ các chuyên gia và người quản lý trực tiếp, cùng chế độ đãi ngộ hấp dẫn, tương xứng với năng lực và kết quả công việc.');
+INSERT INTO `nha_tuyen_dung` VALUES (4,'Tập đoàn Trường Hải','321 Cao Lỗ',1000,0,0,'Tại Navigos Group, mỗi ngày đi làm của hơn 500 DREAM MAKERS chúng tôi đều là một ngày vui. Vui vì tất cả đều cảm nhận được rằng mình đang làm một công việc có ý nghĩa, và vui vì hơn hết mỗi người đều được sống và làm việc trong một đại gia đình NAVIWORKS (cách gọi thân mật từ sự kết hợp của VietnamWorks và Navigos Search) giàu tính nhân văn và luôn được quan tâm chân thành từ các cấp lãnh đạo cao nhất, tới những người bạn đồng nghiệp ngồi cùng bàn. Các thành viên của đại gia đình NAVIWORKS còn được thường xuyên tham gia các chương trình đào tạo nhằm phát triển chuyên môn từ các chuyên gia và người quản lý trực tiếp, cùng chế độ đãi ngộ hấp dẫn, tương xứng với năng lực và kết quả công việc.'),(5,'Công ty TNHH VinPro','123 Lê Lai',200,0,0,'Tại Navigos Group, mỗi ngày đi làm của hơn 500 DREAM MAKERS chúng tôi đều là một ngày vui. Vui vì tất cả đều cảm nhận được rằng mình đang làm một công việc có ý nghĩa, và vui vì hơn hết mỗi người đều được sống và làm việc trong một đại gia đình NAVIWORKS (cách gọi thân mật từ sự kết hợp của VietnamWorks và Navigos Search) giàu tính nhân văn và luôn được quan tâm chân thành từ các cấp lãnh đạo cao nhất, tới những người bạn đồng nghiệp ngồi cùng bàn. Các thành viên của đại gia đình NAVIWORKS còn được thường xuyên tham gia các chương trình đào tạo nhằm phát triển chuyên môn từ các chuyên gia và người quản lý trực tiếp, cùng chế độ đãi ngộ hấp dẫn, tương xứng với năng lực và kết quả công việc.'),(8,'Công ty may Việt Tiến','1 Cao Lỗ',50,0,0,NULL),(11,'Công ty XNK Việt Hải','2 Lê Lợi',10,0,0,NULL),(12,'Kho xưởng Đông Triều','3 Hoa Hồng',20,0,0,NULL),(13,'Cửa hàng thú y Hồng Tâm','4 Vườn Lài',50,0,0,NULL);
 /*!40000 ALTER TABLE `nha_tuyen_dung` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -514,7 +515,7 @@ CREATE TABLE `oauth2_provider_accesstoken` (
   CONSTRAINT `oauth2_provider_acce_id_token_id_85db651b_fk_oauth2_pr` FOREIGN KEY (`id_token_id`) REFERENCES `oauth2_provider_idtoken` (`id`),
   CONSTRAINT `oauth2_provider_acce_source_refresh_token_e66fbc72_fk_oauth2_pr` FOREIGN KEY (`source_refresh_token_id`) REFERENCES `oauth2_provider_refreshtoken` (`id`),
   CONSTRAINT `oauth2_provider_accesstoken_user_id_6e4c9a65_fk_nguoi_dung_id` FOREIGN KEY (`user_id`) REFERENCES `nguoi_dung` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -523,7 +524,7 @@ CREATE TABLE `oauth2_provider_accesstoken` (
 
 LOCK TABLES `oauth2_provider_accesstoken` WRITE;
 /*!40000 ALTER TABLE `oauth2_provider_accesstoken` DISABLE KEYS */;
-INSERT INTO `oauth2_provider_accesstoken` VALUES (1,'51M9tYxG8FYceiS8gRoBs26Q50yju1','2021-09-26 00:05:15.271455','read write',1,2,'2021-09-25 14:05:15.271974','2021-09-25 14:05:15.271988',NULL,NULL);
+INSERT INTO `oauth2_provider_accesstoken` VALUES (1,'51M9tYxG8FYceiS8gRoBs26Q50yju1','2021-09-26 00:05:15.271455','read write',1,2,'2021-09-25 14:05:15.271974','2021-09-25 14:05:15.271988',NULL,NULL),(2,'HhyqUiWCN0gfukzt1EIFqsFFhOuDl9','2021-09-26 11:09:57.354777','read write',1,2,'2021-09-26 01:09:57.355226','2021-09-26 01:09:57.355238',NULL,NULL),(3,'4834WzUEgf4kqsTmsgnQc7WLFxafxS','2021-09-26 12:43:16.355378','read write',1,2,'2021-09-26 02:43:16.355811','2021-09-26 02:43:16.355826',NULL,NULL),(4,'SPZL5YsyifmYaPGdThtRQMj25vM3ut','2021-09-26 12:46:41.867661','read write',1,2,'2021-09-26 02:46:41.868089','2021-09-26 02:46:41.868104',NULL,NULL),(5,'dQ4DelsXoLHE20h2m19ZBD1CaNcNIW','2021-09-26 13:42:04.903558','read write',1,2,'2021-09-26 03:42:04.904032','2021-09-26 03:42:04.904045',NULL,NULL),(6,'nbxKT2RCOXoEZXq1HZMHmOIUb00351','2021-09-26 14:13:00.368344','read write',1,4,'2021-09-26 04:13:00.368732','2021-09-26 04:13:00.368776',NULL,NULL),(7,'7KJHyk2IeiwAiNfpDTF7QUEs6CCI6a','2021-09-26 14:20:02.518841','read write',1,2,'2021-09-26 04:20:02.519241','2021-09-26 04:20:02.519254',NULL,NULL),(8,'v3RGB8HfINivxE1jCRKJbGymuxfAA7','2021-09-26 14:33:06.283365','read write',1,2,'2021-09-26 04:33:06.283733','2021-09-26 04:33:06.283745',NULL,NULL),(9,'JzASKTHuhzPQz8Vh0qYhseTax5jbJY','2021-09-26 14:46:45.883665','read write',1,2,'2021-09-26 04:46:45.884059','2021-09-26 04:46:45.884071',NULL,NULL),(10,'QZPl7bho6tW2f4z4F28AzT273ndMy6','2021-09-26 15:02:09.521121','read write',1,4,'2021-09-26 05:02:09.521498','2021-09-26 05:02:09.521510',NULL,NULL),(11,'0DnKRaUm148Jf54RJNkkSWUf1c4T2g','2021-09-26 15:56:34.154310','read write',1,2,'2021-09-26 05:56:34.154853','2021-09-26 05:56:34.154868',NULL,NULL),(12,'CrHPMdi1NkmQdU4OiRFMeMrqwkIhJa','2021-09-26 16:24:56.876116','read write',1,4,'2021-09-26 06:24:56.876602','2021-09-26 06:24:56.876614',NULL,NULL),(13,'wNRIr0X4ESa42dvlUeeerKJ9eTKmu2','2021-09-26 16:47:55.257183','read write',1,2,'2021-09-26 06:47:55.257558','2021-09-26 06:47:55.257571',NULL,NULL),(14,'5Snj3wEan4JYLsXDRbcmtqDRFqhYoQ','2021-09-26 22:16:27.534344','read write',1,2,'2021-09-26 12:16:27.534934','2021-09-26 12:16:27.534947',NULL,NULL),(15,'Glq9EmG324QHN8uU8ydjeKcqti0Vd2','2021-09-26 22:17:34.593372','read write',1,4,'2021-09-26 12:17:34.594164','2021-09-26 12:17:34.594194',NULL,NULL),(16,'b4wtPbcB3BpetAfEy6ormB49zJNcyC','2021-09-27 12:55:30.007484','read write',1,6,'2021-09-27 02:55:30.007976','2021-09-27 02:55:30.007988',NULL,NULL),(17,'5qehofYuV7iud5rUjA9JH7Owa1cJlM','2021-09-27 13:01:43.526906','read write',1,6,'2021-09-27 03:01:43.527735','2021-09-27 03:01:43.527750',NULL,NULL),(18,'KUUJFQTjuT2xiwpapVSAxCBQ0eRikx','2021-09-27 13:03:10.937371','read write',1,6,'2021-09-27 03:03:10.937870','2021-09-27 03:03:10.937885',NULL,NULL),(19,'v7iR1wlePgybxtVKR00CK7PMe7UCdW','2021-09-27 13:03:46.978335','read write',1,6,'2021-09-27 03:03:46.978833','2021-09-27 03:03:46.978845',NULL,NULL),(20,'RMBOqvsu6u4YHY4LXGYFeb2oMnWBdw','2021-09-27 13:05:51.581197','read write',1,6,'2021-09-27 03:05:51.581556','2021-09-27 03:05:51.581569',NULL,NULL),(21,'ixAbJ4VbGae1G8sxvh7BeVoSj9b10P','2021-09-27 14:07:09.286046','read write',1,6,'2021-09-27 04:07:09.286557','2021-09-27 04:07:09.286570',NULL,NULL),(22,'fNlW0HUv7VCju4VJUaluhcB1DOqkfA','2021-09-27 16:04:48.996358','read write',1,6,'2021-09-27 06:04:48.996811','2021-09-27 06:04:48.996823',NULL,NULL),(23,'yvmfW6pRHXK26D2fr7aGBwVNc1Rj1P','2021-09-27 19:58:49.856870','read write',1,2,'2021-09-27 09:58:49.857409','2021-09-27 09:58:49.857424',NULL,NULL),(24,'GjIIACHdA5a47gJt8hzHbtmBaZvV8Y','2021-09-27 19:59:38.449240','read write',1,6,'2021-09-27 09:59:38.449689','2021-09-27 09:59:38.449703',NULL,NULL),(25,'eR4aOhEsN6DFLIduO7D3nP2Lko4lXf','2021-09-27 20:43:48.189398','read write',1,4,'2021-09-27 10:43:48.189862','2021-09-27 10:43:48.189875',NULL,NULL),(26,'zSQzh6yO1es41Ss7O2EYM6nhumts4e','2021-09-27 20:46:34.342020','read write',1,6,'2021-09-27 10:46:34.342478','2021-09-27 10:46:34.342492',NULL,NULL),(27,'80tZ5NatFVmlE3lfk844C0EO5tPCpc','2021-09-28 11:59:04.252272','read write',1,6,'2021-09-28 01:59:04.252734','2021-09-28 01:59:04.252746',NULL,NULL),(28,'7ITlm8ceGErWrDpFNGqKEzS4rpWriY','2021-09-28 20:39:39.736864','read write',1,4,'2021-09-28 10:39:39.738068','2021-09-28 10:39:39.738084',NULL,NULL),(29,'wWD6YRaV4Mg8SJ3HMV45wrRZwVmEEq','2021-09-28 21:05:38.003236','read write',1,4,'2021-09-28 11:05:38.003876','2021-09-28 11:05:38.003900',NULL,NULL),(30,'2dS2qcCf5oVkT47h4GQiKzGOe4J2Rb','2021-09-28 21:53:12.151396','read write',1,2,'2021-09-28 11:53:12.151847','2021-09-28 11:53:12.151861',NULL,NULL),(31,'pyKxyBZIOlY6JsWZhe9voXPeUHPB3j','2021-09-28 21:54:39.008391','read write',1,2,'2021-09-28 11:54:39.008830','2021-09-28 11:54:39.008846',NULL,NULL),(32,'Ye83H7RWjZev6awuBBdVYW5ARYJFCF','2021-09-28 21:55:52.468953','read write',1,4,'2021-09-28 11:55:52.469407','2021-09-28 11:55:52.469422',NULL,NULL),(33,'Kvx5pgNF8jMaNYMlF3pjLUNjAfCSPL','2021-09-28 22:00:52.798332','read write',1,2,'2021-09-28 12:00:52.799652','2021-09-28 12:00:52.799669',NULL,NULL),(34,'muQFRVPX8LRTTwAw8otK37lbuBkDYG','2021-09-28 22:01:29.118398','read write',1,3,'2021-09-28 12:01:29.118838','2021-09-28 12:01:29.118852',NULL,NULL),(35,'um22pgd7OcFdevfN67FdC4MExfNwN8','2021-09-29 00:10:49.807639','read write',1,2,'2021-09-28 14:10:49.808200','2021-09-28 14:10:49.808213',NULL,NULL),(36,'qX56hslb7MDKMUMze19hAl1N63DTPq','2021-09-29 00:11:29.422906','read write',1,10,'2021-09-28 14:11:29.423337','2021-09-28 14:11:29.423352',NULL,NULL),(37,'PB3xToRz7XUGHkBhzDB1DDlg1hB0Om','2021-09-29 00:12:21.379902','read write',1,4,'2021-09-28 14:12:21.380297','2021-09-28 14:12:21.380308',NULL,NULL),(38,'BjE5xxJrcZIx8bZyhTtPnQT5uL6Z8Z','2021-09-29 00:12:27.380331','read write',1,4,'2021-09-28 14:12:27.380703','2021-09-28 14:12:27.380715',NULL,NULL),(39,'jsZutx1vo9dbuaPlRBa4NCVQHobLMl','2021-09-29 00:19:52.122160','read write',1,4,'2021-09-28 14:19:52.122599','2021-09-28 14:19:52.122614',NULL,NULL),(40,'IB0i42h2htl79loLHBudfb13RRMwij','2021-09-29 00:31:05.689077','read write',1,2,'2021-09-28 14:31:05.689513','2021-09-28 14:31:05.689528',NULL,NULL),(41,'SLRdnbP99ruPMGTYglTRqzoVNXfNur','2021-09-29 00:34:12.424669','read write',1,3,'2021-09-28 14:34:12.425343','2021-09-28 14:34:12.425357',NULL,NULL),(42,'V43Ab28PJLF7O0Chpw2rrj6MgHItDJ','2021-09-29 00:39:09.161301','read write',1,10,'2021-09-28 14:39:09.161801','2021-09-28 14:39:09.161814',NULL,NULL),(43,'d34VzWfm5hTDVUhuSfrMAaPdGNrpWZ','2021-09-29 00:42:21.247869','read write',1,2,'2021-09-28 14:42:21.248245','2021-09-28 14:42:21.248257',NULL,NULL),(44,'DKxqU2i7efXlU64dliQxp5lI1R857y','2021-09-29 00:50:46.030924','read write',1,6,'2021-09-28 14:50:46.031294','2021-09-28 14:50:46.031307',NULL,NULL),(45,'npNpQBstGkUZzGuB4oabyncwv4OWIX','2021-09-29 01:00:50.020470','read write',1,2,'2021-09-28 15:00:50.021138','2021-09-28 15:00:50.021152',NULL,NULL);
 /*!40000 ALTER TABLE `oauth2_provider_accesstoken` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -662,7 +663,7 @@ CREATE TABLE `oauth2_provider_refreshtoken` (
   CONSTRAINT `oauth2_provider_refr_access_token_id_775e84e8_fk_oauth2_pr` FOREIGN KEY (`access_token_id`) REFERENCES `oauth2_provider_accesstoken` (`id`),
   CONSTRAINT `oauth2_provider_refr_application_id_2d1c311b_fk_oauth2_pr` FOREIGN KEY (`application_id`) REFERENCES `oauth2_provider_application` (`id`),
   CONSTRAINT `oauth2_provider_refreshtoken_user_id_da837fce_fk_nguoi_dung_id` FOREIGN KEY (`user_id`) REFERENCES `nguoi_dung` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -671,7 +672,7 @@ CREATE TABLE `oauth2_provider_refreshtoken` (
 
 LOCK TABLES `oauth2_provider_refreshtoken` WRITE;
 /*!40000 ALTER TABLE `oauth2_provider_refreshtoken` DISABLE KEYS */;
-INSERT INTO `oauth2_provider_refreshtoken` VALUES (1,'vnukoBnkLOrWyf6fKt4jjYICswuEwj',1,1,2,'2021-09-25 14:05:15.279382','2021-09-25 14:05:15.279412',NULL);
+INSERT INTO `oauth2_provider_refreshtoken` VALUES (1,'vnukoBnkLOrWyf6fKt4jjYICswuEwj',1,1,2,'2021-09-25 14:05:15.279382','2021-09-25 14:05:15.279412',NULL),(2,'THdXwO9HQ7t3nPfN3G3hprjNK1C6Sw',2,1,2,'2021-09-26 01:09:57.397592','2021-09-26 01:09:57.397623',NULL),(3,'ZoZwTN83VsbnbLhHuhGS23AdoP2lbF',3,1,2,'2021-09-26 02:43:16.362330','2021-09-26 02:43:16.362359',NULL),(4,'8C617zxhjrV3vREL3Rs7fys5tLhgdl',4,1,2,'2021-09-26 02:46:41.874254','2021-09-26 02:46:41.874282',NULL),(5,'kFEbHi494qUGvY3Jrd0z9sEQrt5f42',5,1,2,'2021-09-26 03:42:04.917521','2021-09-26 03:42:04.917562',NULL),(6,'odwjnXlU0gxPD0jK1Ubf8M9gscOukV',6,1,4,'2021-09-26 04:13:00.378679','2021-09-26 04:13:00.378720',NULL),(7,'fAGIuxlwKiehnQ0a9WBbdNX29L0QgF',7,1,2,'2021-09-26 04:20:02.525622','2021-09-26 04:20:02.525649',NULL),(8,'M7BcrU79NsGyFpBucNcxlTOc210AHl',8,1,2,'2021-09-26 04:33:06.289832','2021-09-26 04:33:06.289856',NULL),(9,'carYs0qH5Bjn3yTl0i1tZtKrFLVQ1h',9,1,2,'2021-09-26 04:46:45.890483','2021-09-26 04:46:45.890509',NULL),(10,'W0vqs68v3sEj0cBU0ce5LS1HEZRFlF',10,1,4,'2021-09-26 05:02:09.527967','2021-09-26 05:02:09.527993',NULL),(11,'kx8NEZF7sM4ImsMeFTRFMttniYO29B',11,1,2,'2021-09-26 05:56:34.168879','2021-09-26 05:56:34.168910',NULL),(12,'YU6NLwXOh3t7tzTA0XRWHbQHutx8Ex',12,1,4,'2021-09-26 06:24:56.883930','2021-09-26 06:24:56.883959',NULL),(13,'rVdg0XYELGx6PBBV3QrYXSJQFbiYqr',13,1,2,'2021-09-26 06:47:55.263935','2021-09-26 06:47:55.263975',NULL),(14,'0HLBPSzSMWNU4PHbQ5vRDRXvhJcpjX',14,1,2,'2021-09-26 12:16:27.551855','2021-09-26 12:16:27.551896',NULL),(15,'y2AqZ9nBeyRpOmiuIczUrUoY6w5ELY',15,1,4,'2021-09-26 12:17:34.603043','2021-09-26 12:17:34.603088',NULL),(16,'GccKwlF0tXEyTaapZhH0OiljCeezi4',16,1,6,'2021-09-27 02:55:30.021488','2021-09-27 02:55:30.021516',NULL),(17,'HEKIvQ34D2roPhMO2ZciB6b7MKNe7Z',17,1,6,'2021-09-27 03:01:43.534682','2021-09-27 03:01:43.534709',NULL),(18,'fr9thjXGO5KEUIxirQT1eDFMYpoNEb',18,1,6,'2021-09-27 03:03:10.961448','2021-09-27 03:03:10.961480',NULL),(19,'0d1FmdWpuipmUjPjVTMz3AJU3rlFi8',19,1,6,'2021-09-27 03:03:46.985915','2021-09-27 03:03:46.985944',NULL),(20,'jPp1hV9BgJIciBcVsREXJanNYAu05D',20,1,6,'2021-09-27 03:05:51.595667','2021-09-27 03:05:51.595697',NULL),(21,'RHMta1LkB7KKqUMejraqsQO8NWdMm9',21,1,6,'2021-09-27 04:07:09.298600','2021-09-27 04:07:09.298629',NULL),(22,'z7cilUROL3NL9DP6nAnMCgauddmswB',22,1,6,'2021-09-27 06:04:49.003327','2021-09-27 06:04:49.003355',NULL),(23,'YbUch8QgrvLJrvEK1czcamMu2meY0P',23,1,2,'2021-09-27 09:58:49.867504','2021-09-27 09:58:49.867536',NULL),(24,'de4gk1DqeUInpdEPosIvEdSijd8nn2',24,1,6,'2021-09-27 09:59:38.456045','2021-09-27 09:59:38.456073',NULL),(25,'ztSSkhq6rpT6NgjARZfuZua8J5lKg4',25,1,4,'2021-09-27 10:43:48.201924','2021-09-27 10:43:48.201971',NULL),(26,'vmJYtoOvLNIKIfGqJ6nWjNev2xqvU1',26,1,6,'2021-09-27 10:46:34.353227','2021-09-27 10:46:34.353259',NULL),(27,'29RwMwXbDY0NAd0C2EW899jScHJxKF',27,1,6,'2021-09-28 01:59:04.287137','2021-09-28 01:59:04.287169',NULL),(28,'SFdIdWlJM5E5EVCxTfQ67u5v15hJgk',28,1,4,'2021-09-28 10:39:39.753088','2021-09-28 10:39:39.753119',NULL),(29,'M9Ga2BMkarhlpkfWxbrzljVelJZC1W',29,1,4,'2021-09-28 11:05:38.018447','2021-09-28 11:05:38.018482',NULL),(30,'UCzcP2qeKVeUzeCtO4yyjDKPSSQkyW',30,1,2,'2021-09-28 11:53:12.158428','2021-09-28 11:53:12.158457',NULL),(31,'BdbITCX1eYlZri1411isWlf8lbCWy4',31,1,2,'2021-09-28 11:54:39.015130','2021-09-28 11:54:39.015156',NULL),(32,'ekoXbAxjbSMXpv7yDLpdJ1xBp4i2N5',32,1,4,'2021-09-28 11:55:52.475606','2021-09-28 11:55:52.475635',NULL),(33,'N7cQHMilPNFFbNFTwsfhKpw55ixebt',33,1,2,'2021-09-28 12:00:52.822216','2021-09-28 12:00:52.822247',NULL),(34,'Sb1i8rlpcHw6i0h6MhUbOTVOEyXjkR',34,1,3,'2021-09-28 12:01:29.125015','2021-09-28 12:01:29.125041',NULL),(35,'QL3v29UpDO2xbjTajljwXhZolUkW4y',35,1,2,'2021-09-28 14:10:49.814967','2021-09-28 14:10:49.814996',NULL),(36,'pMZB4udrg3OQGzR6tHQMKV9CD4hKDK',36,1,10,'2021-09-28 14:11:29.429572','2021-09-28 14:11:29.429601',NULL),(37,'Qz2liO5uSN6j8vqole0TNEHChyoNpU',37,1,4,'2021-09-28 14:12:21.386661','2021-09-28 14:12:21.386690',NULL),(38,'VzxreR2J0LlHhfj4bncHeVy6QeVYWm',38,1,4,'2021-09-28 14:12:27.386930','2021-09-28 14:12:27.386957',NULL),(39,'uDAMRO5G5ia1qiFUkb4qy4r8ZyDIqH',39,1,4,'2021-09-28 14:19:52.128605','2021-09-28 14:19:52.128631',NULL),(40,'uLSFAqdNbmYpwIVi8WdTEfi2T7jgZA',40,1,2,'2021-09-28 14:31:05.695826','2021-09-28 14:31:05.695854',NULL),(41,'J21p08XuTiQfYkYwZGS9Ku2E0vzGLI',41,1,3,'2021-09-28 14:34:12.437582','2021-09-28 14:34:12.437612',NULL),(42,'CZvx8a5NQ32MI7dZXgRI7f9S5CeIMH',42,1,10,'2021-09-28 14:39:09.168575','2021-09-28 14:39:09.168604',NULL),(43,'ZgFiAudZgpI1743S4TeBguSulz8nbL',43,1,2,'2021-09-28 14:42:21.254341','2021-09-28 14:42:21.254369',NULL),(44,'i6dG4tDdjDOD1vnb4DqYR7jzsQWGzm',44,1,6,'2021-09-28 14:50:46.037317','2021-09-28 14:50:46.037341',NULL),(45,'TwcShhrUxvCN5umN96ePvy11XQjXeV',45,1,2,'2021-09-28 15:00:50.031804','2021-09-28 15:00:50.031834',NULL);
 /*!40000 ALTER TABLE `oauth2_provider_refreshtoken` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -708,7 +709,7 @@ DROP TABLE IF EXISTS `quan_ly`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `quan_ly` (
   `nguoi_dung_id` bigint NOT NULL,
-  `log` longtext COLLATE utf8mb4_unicode_ci,
+  `log` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`nguoi_dung_id`),
   CONSTRAINT `quan_ly_nguoi_dung_id_725fb816_fk_nguoi_dung_id` FOREIGN KEY (`nguoi_dung_id`) REFERENCES `nguoi_dung` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -720,6 +721,7 @@ CREATE TABLE `quan_ly` (
 
 LOCK TABLES `quan_ly` WRITE;
 /*!40000 ALTER TABLE `quan_ly` DISABLE KEYS */;
+INSERT INTO `quan_ly` VALUES (6,'2021-09-28 10:15:45.303603: Duyet tai khoan nha tuyen dung ID: 11\n2021-09-28 10:15:47.393735: Duyet tai khoan nha tuyen dung ID: 13\n2021-09-28 10:15:49.131651: Duyet tai khoan nha tuyen dung ID: 12\n');
 /*!40000 ALTER TABLE `quan_ly` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -742,7 +744,7 @@ CREATE TABLE `ung_tuyen` (
   KEY `ung_tuyen_ung_vien_id_b81a3f14_fk_ung_vien_nguoi_dung_id` (`ung_vien_id`),
   CONSTRAINT `ung_tuyen_ung_vien_id_b81a3f14_fk_ung_vien_nguoi_dung_id` FOREIGN KEY (`ung_vien_id`) REFERENCES `ung_vien` (`nguoi_dung_id`),
   CONSTRAINT `ung_tuyen_viec_lam_id_e26bec97_fk_viec_lam_id` FOREIGN KEY (`viec_lam_id`) REFERENCES `viec_lam` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -751,6 +753,7 @@ CREATE TABLE `ung_tuyen` (
 
 LOCK TABLES `ung_tuyen` WRITE;
 /*!40000 ALTER TABLE `ung_tuyen` DISABLE KEYS */;
+INSERT INTO `ung_tuyen` VALUES (1,'2021-09-26','CHO XU LY',1,1,2),(2,'2021-09-26','CHAP NHAN',0,2,2),(3,'2021-09-26','CHO XU LY',1,4,2),(4,'2021-09-26','CHAP NHAN',0,6,2),(5,'2021-09-26','CHO XU LY',1,11,2),(6,'2021-09-28','CHO XU LY',1,11,3),(9,'2021-09-28','TU CHOI',1,1,10);
 /*!40000 ALTER TABLE `ung_tuyen` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -778,7 +781,7 @@ CREATE TABLE `ung_vien` (
 
 LOCK TABLES `ung_vien` WRITE;
 /*!40000 ALTER TABLE `ung_vien` DISABLE KEYS */;
-INSERT INTO `ung_vien` VALUES (2,NULL,NULL,'',NULL),(3,NULL,NULL,'',NULL);
+INSERT INTO `ung_vien` VALUES (2,'2021-05-10','12 Lê Lai','static/upload/2021/09/default.jpg','Tôi là nhân viên kinh doanh'),(3,'1999-01-02','13 Nguyễn Trãi','','Tôi là nhân viên kinh doanh'),(7,'1998-12-31','2 Cao Lỗ','','Tôi là nhân viên kinh doanh'),(9,'2000-10-30','3 Lê Lợi','','Tôi là nhân viên kinh doanh'),(10,'2000-03-13','4 Hồng Bàng','','Tôi là nhân viên kinh doanh');
 /*!40000 ALTER TABLE `ung_vien` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -798,7 +801,7 @@ CREATE TABLE `ung_vien_bang_cap` (
   KEY `ung_vien_bang_cap_bangcap_id_c76cfcd5_fk_bang_cap_id` (`bangcap_id`),
   CONSTRAINT `ung_vien_bang_cap_bangcap_id_c76cfcd5_fk_bang_cap_id` FOREIGN KEY (`bangcap_id`) REFERENCES `bang_cap` (`id`),
   CONSTRAINT `ung_vien_bang_cap_ungvien_id_d79858a1_fk_ung_vien_nguoi_dung_id` FOREIGN KEY (`ungvien_id`) REFERENCES `ung_vien` (`nguoi_dung_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -807,6 +810,7 @@ CREATE TABLE `ung_vien_bang_cap` (
 
 LOCK TABLES `ung_vien_bang_cap` WRITE;
 /*!40000 ALTER TABLE `ung_vien_bang_cap` DISABLE KEYS */;
+INSERT INTO `ung_vien_bang_cap` VALUES (1,2,1),(2,2,3);
 /*!40000 ALTER TABLE `ung_vien_bang_cap` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -826,7 +830,7 @@ CREATE TABLE `ung_vien_kinh_nghiem` (
   KEY `ung_vien_kinh_nghiem_kinhnghiem_id_c8ef1111_fk_kinh_nghiem_id` (`kinhnghiem_id`),
   CONSTRAINT `ung_vien_kinh_nghiem_kinhnghiem_id_c8ef1111_fk_kinh_nghiem_id` FOREIGN KEY (`kinhnghiem_id`) REFERENCES `kinh_nghiem` (`id`),
   CONSTRAINT `ung_vien_kinh_nghiem_ungvien_id_ae0ba4e5_fk_ung_vien_` FOREIGN KEY (`ungvien_id`) REFERENCES `ung_vien` (`nguoi_dung_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -835,6 +839,7 @@ CREATE TABLE `ung_vien_kinh_nghiem` (
 
 LOCK TABLES `ung_vien_kinh_nghiem` WRITE;
 /*!40000 ALTER TABLE `ung_vien_kinh_nghiem` DISABLE KEYS */;
+INSERT INTO `ung_vien_kinh_nghiem` VALUES (1,2,1);
 /*!40000 ALTER TABLE `ung_vien_kinh_nghiem` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -854,7 +859,7 @@ CREATE TABLE `ung_vien_ky_nang` (
   KEY `ung_vien_ky_nang_kynang_id_d586083e_fk_ky_nang_id` (`kynang_id`),
   CONSTRAINT `ung_vien_ky_nang_kynang_id_d586083e_fk_ky_nang_id` FOREIGN KEY (`kynang_id`) REFERENCES `ky_nang` (`id`),
   CONSTRAINT `ung_vien_ky_nang_ungvien_id_87156984_fk_ung_vien_nguoi_dung_id` FOREIGN KEY (`ungvien_id`) REFERENCES `ung_vien` (`nguoi_dung_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -863,6 +868,7 @@ CREATE TABLE `ung_vien_ky_nang` (
 
 LOCK TABLES `ung_vien_ky_nang` WRITE;
 /*!40000 ALTER TABLE `ung_vien_ky_nang` DISABLE KEYS */;
+INSERT INTO `ung_vien_ky_nang` VALUES (1,2,1);
 /*!40000 ALTER TABLE `ung_vien_ky_nang` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -882,7 +888,7 @@ CREATE TABLE `ung_vien_nganh_nghe` (
   KEY `ung_vien_nganh_nghe_nganhnghe_id_31489f90_fk_nganh_nghe_id` (`nganhnghe_id`),
   CONSTRAINT `ung_vien_nganh_nghe_nganhnghe_id_31489f90_fk_nganh_nghe_id` FOREIGN KEY (`nganhnghe_id`) REFERENCES `nganh_nghe` (`id`),
   CONSTRAINT `ung_vien_nganh_nghe_ungvien_id_88e5c9d5_fk_ung_vien_` FOREIGN KEY (`ungvien_id`) REFERENCES `ung_vien` (`nguoi_dung_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -891,6 +897,7 @@ CREATE TABLE `ung_vien_nganh_nghe` (
 
 LOCK TABLES `ung_vien_nganh_nghe` WRITE;
 /*!40000 ALTER TABLE `ung_vien_nganh_nghe` DISABLE KEYS */;
+INSERT INTO `ung_vien_nganh_nghe` VALUES (1,2,1),(2,2,2),(3,2,3);
 /*!40000 ALTER TABLE `ung_vien_nganh_nghe` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -942,7 +949,7 @@ CREATE TABLE `viec_lam_bang_cap` (
   KEY `viec_lam_bang_cap_bangcap_id_371171b9_fk_bang_cap_id` (`bangcap_id`),
   CONSTRAINT `viec_lam_bang_cap_bangcap_id_371171b9_fk_bang_cap_id` FOREIGN KEY (`bangcap_id`) REFERENCES `bang_cap` (`id`),
   CONSTRAINT `viec_lam_bang_cap_vieclam_id_c2652e00_fk_viec_lam_id` FOREIGN KEY (`vieclam_id`) REFERENCES `viec_lam` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -951,7 +958,7 @@ CREATE TABLE `viec_lam_bang_cap` (
 
 LOCK TABLES `viec_lam_bang_cap` WRITE;
 /*!40000 ALTER TABLE `viec_lam_bang_cap` DISABLE KEYS */;
-INSERT INTO `viec_lam_bang_cap` VALUES (1,1,1),(2,1,3),(3,1,5);
+INSERT INTO `viec_lam_bang_cap` VALUES (1,1,1),(2,1,3),(3,1,5),(6,4,1),(7,4,2),(8,4,3),(4,10,1),(5,10,2);
 /*!40000 ALTER TABLE `viec_lam_bang_cap` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -971,7 +978,7 @@ CREATE TABLE `viec_lam_kinh_nghiem` (
   KEY `viec_lam_kinh_nghiem_kinhnghiem_id_4de4579b_fk_kinh_nghiem_id` (`kinhnghiem_id`),
   CONSTRAINT `viec_lam_kinh_nghiem_kinhnghiem_id_4de4579b_fk_kinh_nghiem_id` FOREIGN KEY (`kinhnghiem_id`) REFERENCES `kinh_nghiem` (`id`),
   CONSTRAINT `viec_lam_kinh_nghiem_vieclam_id_7e06fdb6_fk_viec_lam_id` FOREIGN KEY (`vieclam_id`) REFERENCES `viec_lam` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -980,7 +987,7 @@ CREATE TABLE `viec_lam_kinh_nghiem` (
 
 LOCK TABLES `viec_lam_kinh_nghiem` WRITE;
 /*!40000 ALTER TABLE `viec_lam_kinh_nghiem` DISABLE KEYS */;
-INSERT INTO `viec_lam_kinh_nghiem` VALUES (1,1,1),(2,1,3),(3,1,5);
+INSERT INTO `viec_lam_kinh_nghiem` VALUES (1,1,1),(2,1,3),(3,1,5),(6,4,1),(7,4,2),(4,10,1),(5,10,3);
 /*!40000 ALTER TABLE `viec_lam_kinh_nghiem` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1000,7 +1007,7 @@ CREATE TABLE `viec_lam_ky_nang` (
   KEY `viec_lam_ky_nang_kynang_id_310e4401_fk_ky_nang_id` (`kynang_id`),
   CONSTRAINT `viec_lam_ky_nang_kynang_id_310e4401_fk_ky_nang_id` FOREIGN KEY (`kynang_id`) REFERENCES `ky_nang` (`id`),
   CONSTRAINT `viec_lam_ky_nang_vieclam_id_7faf76a3_fk_viec_lam_id` FOREIGN KEY (`vieclam_id`) REFERENCES `viec_lam` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1009,7 +1016,7 @@ CREATE TABLE `viec_lam_ky_nang` (
 
 LOCK TABLES `viec_lam_ky_nang` WRITE;
 /*!40000 ALTER TABLE `viec_lam_ky_nang` DISABLE KEYS */;
-INSERT INTO `viec_lam_ky_nang` VALUES (1,1,1),(2,1,3);
+INSERT INTO `viec_lam_ky_nang` VALUES (1,1,1),(2,1,3),(5,4,1),(6,4,2),(7,4,3),(3,10,1),(4,10,3);
 /*!40000 ALTER TABLE `viec_lam_ky_nang` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1029,7 +1036,7 @@ CREATE TABLE `viec_lam_nganh_nghe` (
   KEY `viec_lam_nganh_nghe_nganhnghe_id_940f192e_fk_nganh_nghe_id` (`nganhnghe_id`),
   CONSTRAINT `viec_lam_nganh_nghe_nganhnghe_id_940f192e_fk_nganh_nghe_id` FOREIGN KEY (`nganhnghe_id`) REFERENCES `nganh_nghe` (`id`),
   CONSTRAINT `viec_lam_nganh_nghe_vieclam_id_924aacea_fk_viec_lam_id` FOREIGN KEY (`vieclam_id`) REFERENCES `viec_lam` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1038,7 +1045,7 @@ CREATE TABLE `viec_lam_nganh_nghe` (
 
 LOCK TABLES `viec_lam_nganh_nghe` WRITE;
 /*!40000 ALTER TABLE `viec_lam_nganh_nghe` DISABLE KEYS */;
-INSERT INTO `viec_lam_nganh_nghe` VALUES (1,1,1),(2,1,3);
+INSERT INTO `viec_lam_nganh_nghe` VALUES (1,1,1),(3,1,2),(2,1,3),(4,1,4),(8,4,1),(9,4,2),(5,10,1),(6,10,2),(7,10,3);
 /*!40000 ALTER TABLE `viec_lam_nganh_nghe` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1058,7 +1065,7 @@ CREATE TABLE `viec_lam_phuc_loi` (
   KEY `viec_lam_phuc_loi_phucloi_id_90cffc67_fk_phuc_loi_id` (`phucloi_id`),
   CONSTRAINT `viec_lam_phuc_loi_phucloi_id_90cffc67_fk_phuc_loi_id` FOREIGN KEY (`phucloi_id`) REFERENCES `phuc_loi` (`id`),
   CONSTRAINT `viec_lam_phuc_loi_vieclam_id_2b26bce0_fk_viec_lam_id` FOREIGN KEY (`vieclam_id`) REFERENCES `viec_lam` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1067,7 +1074,7 @@ CREATE TABLE `viec_lam_phuc_loi` (
 
 LOCK TABLES `viec_lam_phuc_loi` WRITE;
 /*!40000 ALTER TABLE `viec_lam_phuc_loi` DISABLE KEYS */;
-INSERT INTO `viec_lam_phuc_loi` VALUES (1,1,1),(2,1,3);
+INSERT INTO `viec_lam_phuc_loi` VALUES (1,1,1),(2,1,3),(5,4,1),(6,4,2),(3,10,2),(4,10,3);
 /*!40000 ALTER TABLE `viec_lam_phuc_loi` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -1080,4 +1087,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-09-25 21:07:29
+-- Dump completed on 2021-09-28 22:04:42

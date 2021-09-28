@@ -85,7 +85,7 @@ class QuanLy(models.Model):
         on_delete=models.CASCADE,
         primary_key=True,
     )
-    log = models.TextField(null=True)
+    log = models.TextField(blank=True, default="")
 
 
 # Thông tinh đánh giá của Ứng viên đến Nhà tuyển dụng

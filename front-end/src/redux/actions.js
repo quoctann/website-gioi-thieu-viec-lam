@@ -1,4 +1,4 @@
-import { LOGIN, LOGOUT, VIEW_HIRING_PAGE } from "./actionTypes";
+import { LOGIN, LOGOUT, VIEW_HIRING_PAGE, XEM_CHI_TIET_UNG_VIEN } from "./actionTypes";
 
 export const login = (userData) => ({
 	type: LOGIN,
@@ -16,3 +16,11 @@ export const viewHiringPage = (hiringId) => ({
 		id: hiringId
 	}
 });
+
+export const xemChiTietUngVien = (ungvienId, vieclamId) => ({
+	type: XEM_CHI_TIET_UNG_VIEN,
+	payload: {
+		ungvienId: ungvienId,
+		vieclamId: vieclamId,
+	}
+})

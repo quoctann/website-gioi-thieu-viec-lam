@@ -27,11 +27,12 @@ import PostDetailPage from "./pages/PostDetailPage";
 import HiringDetailPage from "./pages/HiringDetailPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import ServerErrorPage from "./pages/ServerErrorPage";
-import AboutPage from "./pages/AboutPage";
+import GioiThieuPage from "./pages/GioiThieuPage";
 import HiringDashboardPage from "./pages/HiringDashboardPage";
 import ApplicantDashboardPage from "./pages/ApplicantDashboardPage";
 import QuanTriVienPage from "./pages/QuanTriVienPage";
 import ForbiddenPage from "./pages/ForbiddenPage";
+import UngVienChiTietPage from "./pages/UngVienChiTietPage";
 
 
 ReactDOM.render(
@@ -48,11 +49,12 @@ ReactDOM.render(
 					<Route exact path={Routes.HiringDetailPage.path} component={HiringDetailPage} />
 					<Route exact path={Routes.NotFoundPage.path} component={NotFoundPage} />
 					<Route exact path={Routes.ServerError.path} component={ServerErrorPage} />
-					<Route exact path={Routes.AboutPage.path} component={AboutPage} />
+					<Route exact path={Routes.GioiThieuPage.path} component={GioiThieuPage} />
 					<Route exact path={Routes.HiringDashboardPage.path} component={HiringDashboardPage} />
 					<Route exact path={Routes.ApplicantDashboardPage.path} component={ApplicantDashboardPage} />
 					<Route exact path={Routes.QuanTriVienPage.path} component={QuanTriVienPage} />
 					<Route exact path={Routes.ForbiddenPage.path} component={ForbiddenPage} />
+					<Route exact path={Routes.UngVienChiTietPage.path} component={UngVienChiTietPage} />
 				</Switch>
 				{/* <Footer /> */}
 			</BrowserRouter>

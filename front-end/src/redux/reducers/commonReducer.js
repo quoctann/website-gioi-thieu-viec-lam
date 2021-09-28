@@ -1,8 +1,10 @@
-import { VIEW_HIRING_PAGE } from "../actionTypes"
+import { VIEW_HIRING_PAGE, XEM_CHI_TIET_UNG_VIEN } from "../actionTypes"
 
 // State mặc định
 const init = {
     hiringId: 0,
+    ungvienId: 0,
+    vieclamId: 0,
 }
 
 // Nếu không nhận vào state nào thì state vẫn như cũ (init)
@@ -15,6 +17,13 @@ const commonReducer = (state = init, action) => {
                 [name]: id
             };
         }
+        case XEM_CHI_TIET_UNG_VIEN:
+            const { ungvienId, vieclamId } = action.payload;
+            return {
+                ...state,
+                ungvienId: ungvienId,
+                vieclamId: vieclamId,
+            }
         default:
             return state;
     }

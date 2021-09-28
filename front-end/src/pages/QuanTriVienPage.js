@@ -20,8 +20,10 @@ const QuanTriVienPage = (props) => {
 
     // Cập nhật trạng thái nhà tuyển dụng được duyệt
     const duyetNhaTuyenDung = async (nhatuyendungId) => {
-        console.log(nhatuyendungId)
-        const res = await API.patch(endpoints["kich-hoat"](nhatuyendungId))
+        // console.log(nhatuyendungId)
+        const res = await API.patch(endpoints["kich-hoat"](nhatuyendungId), {
+            quanLyId: user.nguoi_dung.id
+        })
         // console.log(res.data)
         if (res.status === 200) {
             getDsXetDuyet();
@@ -30,56 +32,53 @@ const QuanTriVienPage = (props) => {
         else alert("Lỗi!")
     };
 
-    // Lấy thông tin thống kê
-    const [thongKe, setThongKe] = useState({});
-    const thongKeTheoQuy = async (quy, nam) => {
-        const res = await API.get(endpoints['thong-ke-theo-quy'](quy, nam));
-            setThongKe(res.data)
-            console.log(res.data)
+    // Xử lý ô select chọn dữ liệu lọc
+    const [quyThongKe, setQuyThongKe] = useState(0)
+    const [namThongKe, setNamThongKe] = useState(2018)
+    const xuLySelect = (event) => {
+        if (event.target.name === "nam") {
+            setNamThongKe(event.target.value);
+            setQuyThongKe(0)
+        }
+        if (event.target.name === "quy") {
+            setQuyThongKe(event.target.value);
+        }           
     };
-
-    const thongKeTheoNam = async (nam) => {
-        const res = await API.get(endpoints['thong-ke-theo-nam'](nam));
-        setThongKe(res.data)
-        console.log(res.data)
+    // Nếu server trả tra dữ liệu hợp lệ thì set = true
+    const [coDuLieu, setCoDuLieu] = useState(false);
+    // Lưu dữ liệu thô trả ra từ server để hiển thị tính toán
+    const [duLieuTho, setDuLieuTho] = useState({})
+    // Cấu trúc data đổ vào của chartjs-2
+    const [duLieuThongKe, setDuLieuThongKe] = useState({
+		labels: [],
+		datasets: [
+			{
+				backgroundColor: ["#F5BFD2", "#E5DB9C", "#D0BCAC", "#BEB4C5", "#E6A57E", "#698396", "#A9C8C0", "#DBBC8E", "#AE8A8C", "#7C98AB"],
+				data: [],
+			},
+		]
+	});
+    // Lấy dữ liệu thống kê từ server
+    const thongKe = async () => {
+        const res = await API.get(endpoints['thong-ke'](quyThongKe, namThongKe));
+        // Kiểm tra xem res (array) trả về có giá trị không (tổng các value lớn hơn 0)
+        if (Object.values(res.data).reduce((a, b) => a + b, 0) === 0) {
+            setCoDuLieu(false);
+        }
+        else {
+            setDuLieuTho(res.data)
+            setDuLieuThongKe({
+                ...duLieuThongKe,
+                labels: Object.keys(res.data),
+                datasets: [{
+                    ...duLieuThongKe.datasets[0],
+                    ...duLieuThongKe.datasets[1],
+                    data: Object.values(res.data)
+                }]
+            })
+            setCoDuLieu(true)
+        }
     };
-
-    const [barData, setBardata] = useState({
-        labels: ['January', 'February', 'March', 'April', 'May'],
-        datasets: [
-            {
-                label: 'Rainfall',
-                backgroundColor: 'rgba(75,192,192,1)',
-                borderColor: 'rgba(0,0,0,1)',
-                borderWidth: 2,
-                data: [65, 59, 80, 81, 56]
-            }
-        ]
-    });
-
-    const [pieData, setPieData] = useState({
-        labels: ['January', 'February', 'March', 'April', 'May'],
-        datasets: [
-            {
-                label: 'Rainfall',
-                backgroundColor: [
-                    '#B21F00',
-                    '#C9DE00',
-                    '#2FDE00',
-                    '#00A6B4',
-                    '#6800B4'
-                ],
-                hoverBackgroundColor: [
-                    '#501800',
-                    '#4B5000',
-                    '#175000',
-                    '#003350',
-                    '#35014F'
-                ],
-                data: [65, 59, 80, 81, 56]
-            }
-        ]
-    });
 
     useEffect(() => {
         getDsXetDuyet();
@@ -96,18 +95,40 @@ const QuanTriVienPage = (props) => {
                         <Card className="p-4 mb-4" border="dark">
                             <Row className="my-2">
                                 <Col>
-                                    <h4 className="text-center">Tieu de bieu do</h4>
-                                    <Bar className="my-2" data={barData} />
-                                    <p className="text-justify">{fakeTextGenerator(1)}</p>
+                                    <h3 className="text-center fw-bold my-4">Thống kê số lượng ứng viên ứng tuyển theo ngành nghề</h3>
+                                    {coDuLieu ? (
+                                        <>
+                                            <Bar 
+                                                className="my-2" 
+                                                data={duLieuThongKe} 
+                                                options={{
+                                                    plugins: {
+                                                        legend: {
+                                                            display: false
+                                                        }
+                                                    }
+                                                }}
+                                            />
+                                            <p className="text-justify">{fakeTextGenerator(1)}</p>
+                                        </>
+                                    ) : (
+                                        <Alert variant="secondary">Không có dữ liệu</Alert>
+                                    )}
                                 </Col>
                             </Row>
                             <hr />
                             <Row className="my-2">
-                                <Col><Doughnut data={pieData} /></Col>
-                                <Col>
-                                    <h4 className="text-center">Tieu de bieu do</h4>
-                                    <p className="text-justify">{fakeTextGenerator(1)}</p>
-                                </Col>
+                                {coDuLieu ? (
+                                    <>
+                                        <Col><Doughnut data={duLieuThongKe} /></Col>
+                                        <Col>
+                                            <h3 className="text-center">Thống kê dữ liệu</h3>
+                                            <p className="text-justify">{fakeTextGenerator(1)}</p>
+                                        </Col>
+                                    </>
+                                ) : (
+                                    <Col><Alert variant="secondary">Không có dữ liệu</Alert></Col>
+                                )}                               
                             </Row>
                         </Card>
 
@@ -146,14 +167,14 @@ const QuanTriVienPage = (props) => {
                     </Col>
                     <Col md={4} sm={12}>
                         <Card className="p-4 mb-4" border="dark">
-                            <h4 className="text-center fw-bold">Bảng điều khiển</h4>
+                            <h3 className="text-center fw-bold">Bảng điều khiển</h3>
                             <Card className="p-2 mb-3 shadow">
                                 {/* Lọc ứng viên nộp đơn theo ngành nghề theo quý hoặc năm */}
                                 <p>Thống kê ứng viên nộp đơn theo ngành nghề (hàng quý)</p>
                                 <Form>
                                     <Form.Group className="mb-3">
                                         <FloatingLabel label="Quý">
-                                            <Form.Select>
+                                            <Form.Select onChange={(e) => xuLySelect(e)} name="quy">
                                                 <option value="1">1</option>
                                                 <option value="2">2</option>
                                                 <option value="3">3</option>
@@ -163,7 +184,7 @@ const QuanTriVienPage = (props) => {
                                     </Form.Group>
                                     <Form.Group className="mb-3">
                                         <FloatingLabel label="Năm">
-                                            <Form.Select>
+                                            <Form.Select onChange={(e) => xuLySelect(e)} name="nam">
                                                 <option value="2018">2018</option>
                                                 <option value="2019">2019</option>
                                                 <option value="2020">2020</option>
@@ -171,7 +192,7 @@ const QuanTriVienPage = (props) => {
                                             </Form.Select>
                                         </FloatingLabel>
                                     </Form.Group>
-                                    <Button className="mt-2">Lọc kết quả</Button>
+                                    <Button className="mt-2" onClick={thongKe}>Lọc kết quả</Button>
                                 </Form>
                             </Card>
 
@@ -181,7 +202,10 @@ const QuanTriVienPage = (props) => {
                                 <Form>
                                     <Form.Group className="mb-3">
                                         <FloatingLabel label="Năm">
-                                            <Form.Select>
+                                            <Form.Select 
+                                                onChange={(e) => xuLySelect(e)} 
+                                                name="nam"
+                                            >
                                                 <option value="2018">2018</option>
                                                 <option value="2019">2019</option>
                                                 <option value="2020">2020</option>
@@ -189,7 +213,7 @@ const QuanTriVienPage = (props) => {
                                             </Form.Select>
                                         </FloatingLabel>
                                     </Form.Group>
-                                    <Button className="mt-2">Lọc kết quả</Button>
+                                    <Button className="mt-2" onClick={thongKe}>Lọc kết quả</Button>
                                 </Form>
                             </Card>
                         </Card>

@@ -91,7 +91,7 @@ const NavigationBar = (props) => {
 							<Nav.Link as={Link} to={Routes.ViewPostPage.path}>
 								Xem tin tuyển dụng
 							</Nav.Link>
-							<Nav.Link as={Link} to={Routes.AboutPage.path}>
+							<Nav.Link as={Link} to={Routes.GioiThieuPage.path}>
 								Giới thiệu
 							</Nav.Link>
 						</Nav>

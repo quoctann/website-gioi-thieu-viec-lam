@@ -8,11 +8,12 @@ const Routes = {
     HiringDetailPage: {path: "/chi-tiet-nha-tuyen-dung/"},
     NotFoundPage: {path: "/404-not-found/"},
     ServerError: {path: "/500-internal-server-error/"},
-    AboutPage: {path: "/gioi-thieu/"},
+    GioiThieuPage: {path: "/gioi-thieu/"},
     HiringDashboardPage: {path: "/nha-tuyen-dung/dashboard"},
     ApplicantDashboardPage: {path: "/ung-vien/dashboard"},
     QuanTriVienPage: {path: "/quan-tri-vien/"},
     ForbiddenPage: {path: "/403-forbidden/"},
+    UngVienChiTietPage: {path: "/chi-tiet-ung-vien/"},
 }
 
 export default Routes;
