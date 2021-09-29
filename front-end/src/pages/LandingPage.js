@@ -43,7 +43,7 @@ const LandingPage = (props) => {
 			title="Mọi nhu cầu công việc ở một nơi"
 			text={
 				<>
-					<span className="brand-font">Job on the go! </span>chuyên
+					<span className="brand-font">VIỆC NHANH! </span>chuyên
 					cung cấp các giải pháp việc làm tối ưu, cầu nối giữa ứng
 					viên và nhà tuyển dụng. Uy tín và chất lượng luôn được quan
 					tâm đặt lên hàng đầu.
@@ -54,7 +54,7 @@ const LandingPage = (props) => {
 			title="Dễ dàng tìm công việc phù hợp"
 			text={
 				<>
-					Với <span className="brand-font">Job on the go! </span>
+					Với <span className="brand-font">VIỆC NHANH! </span>
 					bạn có thể dễ dàng tìm kiếm các công việc phù hợp với trình
 					độ, kỹ năng của bản thân.
 				</>
@@ -66,7 +66,7 @@ const LandingPage = (props) => {
 				<>
 					Giải pháp giúp việc tuyển dụng của doanh nghiệp hiệu quả và
 					đơn giản hơn, đừng bỏ lỡ những ứng viên tiềm năng tại{" "}
-					<span className="brand-font">Job on the go!</span>
+					<span className="brand-font">VIỆC NHANH!</span>
 				</>
 			}
 		/>,

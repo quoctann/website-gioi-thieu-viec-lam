@@ -32,6 +32,18 @@ export let endpoints = {
     "nha-tuyen-dung-doi-xet-duyet": "/nha-tuyen-dung/doi-xet-duyet/",
     "kich-hoat": (nhatuyendungId) => `/nha-tuyen-dung/${nhatuyendungId}/duyet-nha-tuyen-dung/`,
     "ung-vien-chi-tiet": (ungvienId) => `/ung-vien/${ungvienId}/`,
+    "ung-vien":  (nganhNghe, bangCap, kinhNghiem, kyNang) => {
+        let url = "/ung-vien/?";
+        if(nganhNghe)
+            url += `nganh-nghe=${nganhNghe}&`;
+        if(bangCap)
+            url += `bang-cap=${bangCap}&`;
+        if(kinhNghiem)
+            url += `kinh-nghiem=${kinhNghiem}&`;
+        if(kyNang)
+            url += `ky-nang=${kyNang}&`;
+        return url;
+    },
     "bang-cap": "/bang-cap/",
     "ky-nang": "/ky-nang/",
     "kinh-nghiem": "/kinh-nghiem/",

@@ -238,36 +238,81 @@ class UngTuyenViewSet(viewsets.ViewSet, generics.ListAPIView):
         uv_id = request.data.get('ung_vien')
         vl_id = request.data.get('viec_lam')
         trang_thai_ho_so = request.data.get('trang_thai_ho_so')
+        ung_vien_nop_don = request.data.get('ung_vien_nop_don')
+        nguoi_yeu_cau = request.data.get('nguoi_yeu_cau')
 
-        check = UngTuyen.objects.filter(ung_vien_id=uv_id, viec_lam_id=vl_id)
-        # Nếu như ứng viên ứng tuyển một công việc mà nhà tuyển dụng gửi cho thì chỉ cập nhật trạng thái thôi
-        cap_nhat = check.first()
-        if cap_nhat.ung_vien_nop_don is False:
-            cap_nhat.trang_thai_ho_so = UngTuyen.DUOC_CHAP_NHAN
-            cap_nhat.save()
-            return Response({"cap nhat thanh cong": "chap nhan de nghi viec lam cua nha tuyen dung thanh cong"},
-                            status.HTTP_200_OK)
+        ung_tuyen = UngTuyen.objects.filter(ung_vien_id=uv_id, viec_lam_id=vl_id)
 
-        # Nếu như ứng viên ứng tuyển công việc đã ứng tuyển rồi thì res 409
-        if len(check) > 0 and trang_thai_ho_so is None:
+        # Cập nhật trạng thái (có bản ghi dưới csdl rồi)
+        if len(ung_tuyen) > 0:
+            print(ung_tuyen)
+            ung_tuyen = ung_tuyen.first()
+            # Nhà tuyển dụng chấp nhận/từ chối hồ sơ ứng viên gửi (ung_vien_nop_don == True)
+            if nguoi_yeu_cau == NguoiDung.NHA_TUYEN_DUNG:
+                if ung_tuyen.ung_vien_nop_don is True:
+                    ung_tuyen.trang_thai_ho_so = trang_thai_ho_so
+                    ung_tuyen.save()
+                    return Response({"cap nhat thanh cong": "nha tuyen dung da chap nhan/tu choi ho so ung vien"},
+                                    status.HTTP_200_OK)
+
+            # Ứng viên chấp nhận hồ sơ nhà tuyển dụng gửi (ung_vien_nop_don == False)
+            if nguoi_yeu_cau == NguoiDung.UNG_VIEN:
+                if ung_tuyen.ung_vien_nop_don is False:
+                    ung_tuyen.trang_thai_ho_so = UngTuyen.DUOC_CHAP_NHAN
+                    ung_tuyen.save()
+                    return Response({"cap nhat thanh cong": "ung vien da chap nhan de nghi viec lam thanh cong"})
+
             return Response(data={'loi': 'tai nguyen da ton tai, khong the ghi de'},
                             status=status.HTTP_409_CONFLICT)
-        elif len(check) > 0 and trang_thai_ho_so is not None:
-            cap_nhat = UngTuyen.objects.get(ung_vien_id=uv_id, viec_lam_id=vl_id)
-            cap_nhat.trang_thai_ho_so = trang_thai_ho_so
-            cap_nhat.save()
-            return Response({"cap nhat": "nha tuyen dung cap nhat trang thai thanh cong"},
-                            status.HTTP_200_OK)
 
-        if trang_thai_ho_so is not None:
-            res = UngTuyen.objects.create(ung_vien_id=uv_id,
-                                          viec_lam_id=vl_id,
-                                          ung_vien_nop_don=False,
-                                          trang_thai_ho_so=trang_thai_ho_so)
-        else:
-            res = UngTuyen.objects.create(ung_vien_id=uv_id, viec_lam_id=vl_id)
+        # Tạo mới bản ghi
+        if len(ung_tuyen) == 0:
+            # Nhà tuyển dụng gửi đề nghị việc làm cho ứng viên
+            if nguoi_yeu_cau == NguoiDung.NHA_TUYEN_DUNG:
+                res = UngTuyen.objects.create(ung_vien_id=uv_id,
+                                              viec_lam_id=vl_id,
+                                              ung_vien_nop_don=False,
+                                              trang_thai_ho_so=trang_thai_ho_so)
+                return Response(UngTuyenSerializer(res).data, status=status.HTTP_201_CREATED)
 
-        return Response(UngTuyenSerializer(res).data, status=status.HTTP_201_CREATED)
+            # Ứng viên nộp đơn ứng tuyển cho nhà tuyển dụng
+            if nguoi_yeu_cau == NguoiDung.UNG_VIEN:
+                res = UngTuyen.objects.create(ung_vien_id=uv_id,
+                                              viec_lam_id=vl_id,
+                                              ung_vien_nop_don=True,
+                                              trang_thai_ho_so=trang_thai_ho_so)
+                return Response(UngTuyenSerializer(res).data, status=status.HTTP_201_CREATED)
+
+        return Response(status.HTTP_400_BAD_REQUEST)
+        # check = UngTuyen.objects.filter(ung_vien_id=uv_id, viec_lam_id=vl_id)
+        # # Nếu như ứng viên ứng tuyển một công việc mà nhà tuyển dụng gửi cho thì chỉ cập nhật trạng thái thôi
+        # cap_nhat = check.first()
+        # if cap_nhat.ung_vien_nop_don is False:
+        #     cap_nhat.trang_thai_ho_so = UngTuyen.DUOC_CHAP_NHAN
+        #     cap_nhat.save()
+        #     return Response({"cap nhat thanh cong": "chap nhan de nghi viec lam cua nha tuyen dung thanh cong"},
+        #                     status.HTTP_200_OK)
+        #
+        # # Nếu như ứng viên ứng tuyển công việc đã ứng tuyển rồi thì res 409
+        # if len(check) > 0 and trang_thai_ho_so is None:
+        #     return Response(data={'loi': 'tai nguyen da ton tai, khong the ghi de'},
+        #                     status=status.HTTP_409_CONFLICT)
+        # elif len(check) > 0 and trang_thai_ho_so is not None:
+        #     cap_nhat = UngTuyen.objects.get(ung_vien_id=uv_id, viec_lam_id=vl_id)
+        #     cap_nhat.trang_thai_ho_so = trang_thai_ho_so
+        #     cap_nhat.save()
+        #     return Response({"cap nhat": "nha tuyen dung cap nhat trang thai thanh cong"},
+        #                     status.HTTP_200_OK)
+        #
+        # if trang_thai_ho_so is not None:
+        #     res = UngTuyen.objects.create(ung_vien_id=uv_id,
+        #                                   viec_lam_id=vl_id,
+        #                                   ung_vien_nop_don=False,
+        #                                   trang_thai_ho_so=trang_thai_ho_so)
+        # else:
+        #     res = UngTuyen.objects.create(ung_vien_id=uv_id, viec_lam_id=vl_id)
+        #
+        # return Response(UngTuyenSerializer(res).data, status=status.HTTP_201_CREATED)
 
     # Lấy danh sách việc làm ứng viên nộp đơn cho nhà tuyển dụng và đợi duyệt
     @action(methods=['get'], detail=True, url_path='ung-vien-doi-duyet')
@@ -332,9 +377,32 @@ class UngTuyenViewSet(viewsets.ViewSet, generics.ListAPIView):
         return Response(data, status.HTTP_200_OK)
 
 
-class UngVienViewSet(viewsets.ViewSet, generics.RetrieveAPIView):
+class UngVienViewSet(viewsets.ViewSet, generics.RetrieveAPIView, generics.ListAPIView):
     queryset = UngVien.objects.all()
     serializer_class = UngVienSerializer
+
+    def get_queryset(self):
+        ung_vien = UngVien.objects.filter(nguoi_dung__is_active=True)
+
+        # Có param nào thì filter theo param đó, lưu ý giá trị gửi lên là id
+        nganh_nghe = self.request.query_params.get('nganh-nghe')
+        bang_cap = self.request.query_params.get('bang-cap')
+        kinh_nghiem = self.request.query_params.get('kinh-nghiem')
+        ky_nang = self.request.query_params.get('ky-nang')
+
+        if nganh_nghe is not None:
+            ung_vien = ung_vien.filter(nganh_nghe__id=nganh_nghe)
+
+        if bang_cap is not None:
+            ung_vien = ung_vien.filter(bang_cap__id=bang_cap)
+
+        if kinh_nghiem is not None:
+            ung_vien = ung_vien.filter(kinh_nghiem__id=kinh_nghiem)
+
+        if ky_nang is not None:
+            ung_vien = ung_vien.filter(ky_nang__id=ky_nang)
+
+        return ung_vien
 
 
 # API để lấy thông tin client_id, client_secret xin token chứng thực (đăng nhập)

@@ -19,17 +19,17 @@ import { connect } from "react-redux";
 import { useLocation } from "react-router-dom";
 import LoadingOverlay from "../components/LoadingOverlay";
 import API, { endpoints } from "../utils/API";
-import { VAI_TRO } from "../utils/GlobalConstants";
+import { TRANG_THAI_UNG_TUYEN, VAI_TRO } from "../utils/GlobalConstants";
 import Routes from "../routes";
 
 const PostDetailPage = (props) => {
 	// Đối tượng của react router lưu thông tin param
 	const params = new URLSearchParams(useLocation().search);
-
+    // Lấy id tin tuyển dụng (id việc làm) từ query param 
 	const postId = params.get("id");
-
+    // Biến lưu giá trị của một tin tuyển dụng
 	const [post, setPost] = useState();
-
+    // Lấy thông tin chi tiết của một tin tuyển dụng (từ bảng việc làm)
 	const getPostDetail = async (id = postId) => {
 		try {
 			const res = await API.get(endpoints["viec-lam-chi-tiet"](id));
@@ -40,7 +40,7 @@ const PostDetailPage = (props) => {
 		}
 	};
 
-    // Đổi định dạng yyyy/mm/dd thành dd/mm/yyyy
+    // Đổi định dạng yyyy/mm/dd thành dd/mm/yyyy (dùng momentjs tiện hơn)
     const formatDate = (date) => {
         /* Sử dụng regex:
             \d : lấy giá trị là digit 0-9
@@ -55,6 +55,7 @@ const PostDetailPage = (props) => {
 		return day + "/" + month + "/" + year;
 	};
 
+    // Render ra các yêu cầu ngành nghề bằng cấp này kia cho đỡ lặp code phức tạp
     const infoDetail = (item) => {
         return (
             <div className="text-center">
@@ -69,6 +70,7 @@ const PostDetailPage = (props) => {
         );
     }
 
+    // Lấy từ redux thông tin ứng viên (người dùng) hiện tại đang sử dụng web
     const user = props.userInfo.userReducer;
 
     // Gọi khi nút Nộp đơn ứng tuyển được nhấn
@@ -89,9 +91,11 @@ const PostDetailPage = (props) => {
         const apply = async () => {
             try {
                 const create = await API.post(endpoints["ung-tuyen"], {
-                    "viec_lam": jobId,
-                    "ung_vien": userId,
-                    "tu_choi": false,
+                    viec_lam: jobId,
+                    ung_vien: userId,
+                    trang_thai_ho_so: TRANG_THAI_UNG_TUYEN.CHO_XU_LY,
+                    ung_vien_nop_don: true,
+                    nguoi_yeu_cau: VAI_TRO.UNG_VIEN,
                 })
                 // Nếu tạo bản ghi dưới csdl thành công
                 if (create.status === 201)
@@ -99,7 +103,8 @@ const PostDetailPage = (props) => {
                 else if (create.status === 200) {
                     alert("Xác nhận đã nhận công việc thành công!");
                     props.history.push(Routes.ApplicantDashboardPage.path);
-                }
+                } else if (create.status === 409)
+                    alert("Bạn đã nộp đơn ứng tuyển công việc này trước đó rồi, hoặc công việc đã được gửi đến bạn!")
                     
             } catch (ex) {
                 // console.log(ex.response.status)
@@ -115,6 +120,7 @@ const PostDetailPage = (props) => {
 		getPostDetail();
 	}, []);
 
+    // Nếu như lấy được chi tiết tin tuyển dụng thành công thì render nội dung, chưa lấy được thì render spinner xoay xoay
 	if (post)
 		return (
 			<>

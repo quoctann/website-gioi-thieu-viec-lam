@@ -1,4 +1,5 @@
 import { LOGIN, LOGOUT } from "../actionTypes"
+import storage from "redux-persist/lib/storage";
 
 // State mặc định
 const initialState = {
@@ -17,6 +18,7 @@ const userReducer = (state = initialState, action) => {
             }
         }
         case LOGOUT: {
+            storage.removeItem('persist:root')
             return {...state.user}
         }
         default:

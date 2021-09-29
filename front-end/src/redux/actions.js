@@ -17,10 +17,11 @@ export const viewHiringPage = (hiringId) => ({
 	}
 });
 
-export const xemChiTietUngVien = (ungvienId, vieclamId) => ({
+export const xemChiTietUngVien = (ungvienId, vieclamId, tenViecLam) => ({
 	type: XEM_CHI_TIET_UNG_VIEN,
 	payload: {
 		ungvienId: ungvienId,
 		vieclamId: vieclamId,
+		tenViecLam: tenViecLam
 	}
 })

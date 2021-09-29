@@ -104,11 +104,12 @@ const ApplicantDashboardPage = (props) => {
 		getOffer();
     }, []);
 
-	// Các trường hợp truy cập vào trang thông qua url sẽ được redirect đi nơi khác
+	// Chỉ người dùng đã đăng nhập mới xem được
     if (!cookies.load("user"))
         return <Redirect to={Routes.LoginPage.path} />
-
-    if (user.nguoi_dung.vai_tro === VAI_TRO.TUYEN_DUNG)
+		
+	// Nhưng đăng nhập với vai trò ứng viên hoặc khác thì trả về 404
+    if (user.nguoi_dung.vai_tro !== VAI_TRO.UNG_VIEN)
         return <Redirect to={Routes.NotFoundPage.path} />
 
 	// Trả về template chính

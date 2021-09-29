@@ -13,14 +13,19 @@ import { xemChiTietUngVien } from "../redux/actions";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Moment from 'react-moment';
 import 'moment-timezone';
+import PaginationBar from "../components/PaginationBar";
 
 const HiringDashboardPage = (props) => {
+	// Lấy thông tin nhà tuyển dụng (người dùng) đang đăng nhập sử dụng web
     const user = props.store.userReducer;
+	// Phương thức cập nhật thông tin cá nhân nhà tuyển dụng
     const updateUserInfo = () => {};
+	// Trường avatar lưu media file
     const avatar = React.createRef();
+	// Tiện ích để handle các ô input (SimpleInput)
     const { handleSubmit, handleInputChange, inputs } = useSubmitForm(updateUserInfo);
 
-	// Get thông tin có sẵn trên server các danh mục để lọc
+	// Get thông tin có sẵn trên server các danh mục để lọc (nên gom lại 1 object cho gọn)
 	const [degrees, setDegrees] = useState([]);
 	const [skills, setSkills] = useState([]);
 	const [experiences, setExperiences] = useState([]);
@@ -38,6 +43,7 @@ const HiringDashboardPage = (props) => {
 		setCareers(careersRes.data);
 	};
 
+	// Thông tin các ứng viên đang đợi duyệt nhận đơn ứng tuyển (lưu trữ)
 	const [applyInfo, setApplyInfo] = useState([])
 
 	// Lấy danh sách các ứng viên đợi được chấp nhận đơn ứng tuyển
@@ -56,12 +62,27 @@ const HiringDashboardPage = (props) => {
 		"skill": "1",
 	})
 
-	// Handle thay đổi giá trị select của người dùng
+	// Xử lý thay đổi giá trị select của người dùng
 	const handleSelectChange = (event) => {
 		setFilterData({
 			...filterData,
 			[event.target.name]: event.target.value
 		})
+	}
+	
+	// Kết quả trả về có phân trang
+	const [ketQua, setKetQua] = useState({
+		count: 0,
+		next: null,
+		previous: null,
+		results: []
+	})
+
+	// Lọc ứng viên và trả về kết quả khi người dùng nhấn nút
+	const locUngVien = async (page = 1) => {
+		const res = await API.get(endpoints["ung-vien"](filterData.career, filterData.degree, filterData.experience, filterData.skill))
+		setKetQua(res.data)
+		console.log(res.data, ketQua)
 	}
 
 	useEffect(() => {
@@ -71,11 +92,14 @@ const HiringDashboardPage = (props) => {
 		return () => ac.abort();
     }, []);
 
+	// Chỉ người dùng đã đăng nhập mới xem được
     if (!cookies.load("user"))
         return <Redirect to={Routes.LoginPage.path} />
 
-    if (user.nguoi_dung.vai_tro === VAI_TRO.UNG_VIEN)
+	// Nhưng đăng nhập với vai trò ứng viên hoặc khác thì trả về 404
+    if (user.nguoi_dung.vai_tro !== VAI_TRO.TUYEN_DUNG)
         return <Redirect to={Routes.NotFoundPage.path} />
+
     return (
 		<>
 			<Container>
@@ -215,7 +239,7 @@ const HiringDashboardPage = (props) => {
 													onChange={handleInputChange}
 												/>
 											</Form.Group>
-											<Button>
+											<Button variant="success">
 												Lưu thông tin cá nhân
 											</Button>
 										</Form>
@@ -246,9 +270,10 @@ const HiringDashboardPage = (props) => {
 													<Moment fromNow>{applyInfo[index].ngay_ung_tuyen}</Moment></p>
 												
 													<Button 
-														variant="primary me-2"
+														variant="outline-primary me-2"
 														onClick={() => {
-															props.emit(applyInfo[index].ung_vien.nguoi_dung.id, applyInfo[index].viec_lam.id);
+															props.emit(applyInfo[index].ung_vien.nguoi_dung.id, 
+																applyInfo[index].viec_lam.id, applyInfo[index].viec_lam.tieu_de);
 															props.history.push(Routes.UngVienChiTietPage.path);
 														}}
 													>
@@ -359,8 +384,36 @@ const HiringDashboardPage = (props) => {
 										</FloatingLabel>
 									</Col>
 								</Row>
-								<Button>Lọc ứng viên</Button>
+								<Button
+									onClick={() => locUngVien()}
+									className="mb-4"
+								>Lọc ứng viên</Button>
+								{ketQua.results.length > 0 ? ketQua.results.map((uv, idx) => (
+									<Card className="p-3 mb-3">
+										<p className="fw-bold text-primary">{uv.nguoi_dung.last_name} {uv.nguoi_dung.first_name}</p>
+										<p className="text-justify">{(uv.gioi_thieu).substr(0, 50)}</p>
+										<Button 
+											variant="outline-primary"
+											onClick={() => {
+												props.emit(uv.nguoi_dung.id, 0, "");
+												props.history.push(Routes.UngVienChiTietPage.path);
+											}}
+										>Xem hồ sơ</Button>
+									</Card>
+								)) : (<></>)}
+								{ketQua.count > 0 ? (
+									<div className="mx-auto">
+										<PaginationBar
+											count={ketQua.count}
+											next={ketQua.next}
+											previous={ketQua.previous}
+											defaultGet={6}
+											getPost={locUngVien}
+										/>
+									</div>
+								) : (<></>)}
 							</Card></Col>
+
 						</Row>
 					</Col>
 				</Row>
@@ -377,7 +430,7 @@ export default connect(
     },
 	(dispatch) => {
 		return {
-			emit: (ungvienId, vieclamId) => dispatch(xemChiTietUngVien(ungvienId, vieclamId))
+			emit: (ungvienId, vieclamId, tenViecLam) => dispatch(xemChiTietUngVien(ungvienId, vieclamId, tenViecLam))
 		}
 	}
 )(HiringDashboardPage);

@@ -5,6 +5,7 @@ const init = {
     hiringId: 0,
     ungvienId: 0,
     vieclamId: 0,
+    tenViecLam: "",
 }
 
 // Nếu không nhận vào state nào thì state vẫn như cũ (init)
@@ -18,11 +19,12 @@ const commonReducer = (state = init, action) => {
             };
         }
         case XEM_CHI_TIET_UNG_VIEN:
-            const { ungvienId, vieclamId } = action.payload;
+            const { ungvienId, vieclamId, tenViecLam } = action.payload;
             return {
                 ...state,
                 ungvienId: ungvienId,
                 vieclamId: vieclamId,
+                tenViecLam: tenViecLam
             }
         default:
             return state;
