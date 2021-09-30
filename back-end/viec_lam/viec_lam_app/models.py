@@ -51,7 +51,7 @@ class NhaTuyenDung(models.Model):
     quy_mo = models.IntegerField(default=0)
     diem_danh_gia_tb = models.FloatField(default=0.0)
     doi_xet_duyet = models.BooleanField(default=True)
-    gioi_thieu = models.TextField(null=True)
+    gioi_thieu = models.TextField(blank=True, default="")
 
 
 # User với vai trò là Ứng viên
@@ -67,7 +67,7 @@ class UngVien(models.Model):
     ngay_sinh = models.DateField(null=True)
     dia_chi = models.CharField(max_length=150, null=True)
     cv = models.FileField(upload_to='static/upload/%Y/%m', null=True)
-    gioi_thieu = models.TextField(null=True)
+    gioi_thieu = models.TextField(blank=True, default="")
 
     bang_cap = models.ManyToManyField('BangCap')
     ky_nang = models.ManyToManyField('KyNang')

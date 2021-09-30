@@ -21,6 +21,7 @@ import LoadingOverlay from "../components/LoadingOverlay";
 import API, { endpoints } from "../utils/API";
 import { TRANG_THAI_UNG_TUYEN, VAI_TRO } from "../utils/GlobalConstants";
 import Routes from "../routes";
+import { viewHiringPage } from "../redux/actions"
 
 const PostDetailPage = (props) => {
 	// Đối tượng của react router lưu thông tin param
@@ -71,7 +72,7 @@ const PostDetailPage = (props) => {
     }
 
     // Lấy từ redux thông tin ứng viên (người dùng) hiện tại đang sử dụng web
-    const user = props.userInfo.userReducer;
+    const user = props.store.userReducer;
 
     // Gọi khi nút Nộp đơn ứng tuyển được nhấn
     const applyOffer = (jobId = postId, userId = user.nguoi_dung.id) => {
@@ -134,7 +135,12 @@ const PostDetailPage = (props) => {
 								<Card.Subtitle>
                                     <Row as="h5" className="fw-bold">
                                         <Col sm={1}><FontAwesomeIcon icon={faBuilding} /></Col>
-                                        <Col>{post.nha_tuyen_dung.ten_cong_ty}</Col>
+                                        <Col>
+                                            <span style={{cursor: "pointer"}} onClick={() => {
+                                                props.emit(post.nha_tuyen_dung.nguoi_dung.id);
+                                                props.history.push(Routes.HiringDetailPage.path)
+                                            }}>{post.nha_tuyen_dung.ten_cong_ty}</span>
+                                        </Col>
                                     </Row>
                                     <Row as="h5" className=" fw-bold">
                                         <Col sm={1}><FontAwesomeIcon icon={faCommentDollar}/></Col>
@@ -234,7 +240,12 @@ const PostDetailPage = (props) => {
 export default connect(
     (state) => {
         return {
-            userInfo: state
+            store: state
+        }
+    },
+    (dispatch) => {
+        return {
+            emit: (nhatuyendungId) => dispatch(viewHiringPage(nhatuyendungId))
         }
     }
 )(PostDetailPage);

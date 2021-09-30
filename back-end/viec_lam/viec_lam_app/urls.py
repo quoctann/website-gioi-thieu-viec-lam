@@ -32,6 +32,7 @@ router.register('ky-nang', views.KyNangViewSet)
 router.register('bang-cap', views.BangCapViewSet)
 router.register('ung-tuyen', views.UngTuyenViewSet)
 router.register('ung-vien', views.UngVienViewSet)
+router.register('danh-gia-nha-tuyen-dung', views.DanhGiaNhaTuyenDungViewSet)
 
 
 urlpatterns = [

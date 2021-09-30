@@ -109,7 +109,7 @@ const LandingPage = (props) => {
 		const res = await API.get(endpoints["nha-tuyen-dung-tim-kiem"](text) + `&page=${page}`)
 		
 		if (res.data) {
-			console.log(res.data)
+			// console.log(res.data)
 			let results = [];
 			for (let i = 0; i < res.data.results.length; i++) {
 				results.push(res.data.results[i])
