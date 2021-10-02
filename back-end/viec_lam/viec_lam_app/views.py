@@ -1,8 +1,9 @@
 # Tập tin này để xử lý request và trả về các response (tương tự controller trong
 # MVC, là thành phần Views trong MVT)
 import datetime
+import math
 
-from django.db.models import Count, Q
+from django.db.models import Count, Q, Avg
 from rest_framework import viewsets, generics, permissions, status
 from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404
@@ -223,7 +224,7 @@ class NhaTuyenDungViewSet(viewsets.ViewSet, generics.ListAPIView, generics.Retri
     # Lấy các bài đánh giá của một nhà tuyển dụng
     @action(methods=['get'], detail=True, url_path='danh-gia')
     def danh_gia(self, request, pk):
-        danh_gia = DanhGiaNhaTuyenDung.objects.filter(nha_tuyen_dung_id=pk)
+        danh_gia = DanhGiaNhaTuyenDung.objects.filter(nha_tuyen_dung_id=pk).order_by("-ngay_tao")
 
         return Response(DanhGiaNhaTuyenDungSerializer(danh_gia, many=True).data,
                         status=status.HTTP_200_OK)
@@ -306,6 +307,22 @@ class UngTuyenViewSet(viewsets.ViewSet, generics.ListAPIView):
 
         return Response(data=data, status=status.HTTP_200_OK)
 
+    # Lấy danh sách các công việc một ứng viên cụ thể đã ứng tuyển vào một nhà tuyển dụng cụ thể
+    # và được chấp nhận để được phép thao tác đánh giá
+    @action(methods=['get'], detail=False, url_path='duoc-chap-nhan')
+    def duoc_chap_nhan(self, request):
+        ung_vien_id = request.query_params.get('ung_vien_id')
+        nha_tuyen_dung_id = request.query_params.get('nha_tuyen_dung_id')
+        try:
+            danh_sach = UngTuyen.objects.filter(trang_thai_ho_so=UngTuyen.DUOC_CHAP_NHAN,
+                                                ung_vien_id=ung_vien_id,
+                                                viec_lam__nha_tuyen_dung_id=nha_tuyen_dung_id)
+            # print(danh_sach.values())
+            return Response(self.serializer_class(danh_sach, many=True).data, status.HTTP_200_OK)
+        except Exception as e:
+            print(e)
+            return Response(status.HTTP_400_BAD_REQUEST)
+
     # Thống kê theo quý (nếu có truyền vào) ứng viên nộp đơn vào những ngành nghề nào
     @action(methods=['get'], detail=False, url_path='thong-ke')
     def thong_ke(self, request):
@@ -380,16 +397,16 @@ class DanhGiaNhaTuyenDungViewSet(viewsets.ViewSet, generics.CreateAPIView):
     queryset = DanhGiaNhaTuyenDung.objects.all()
     serializer_class = DanhGiaNhaTuyenDungSerializer
 
-    # Lấy một bài đánh giá cụ thể
+    # Lấy các bài đánh giá của ứng viên cụ thể đến nhà tuyển dụng
     @action(methods=['get'], detail=False, url_path='ung-vien-danh-gia')
     def ung_vien_danh_gia(self, request):
         uv_id = request.query_params.get('ungvien-id')
         ntd_id = request.query_params.get('nhatuyendung-id')
 
         if uv_id is not None and ntd_id is not None:
-            danh_gia = DanhGiaNhaTuyenDung.objects.filter(ung_vien_id=uv_id,
-                                                          nha_tuyen_dung_id=ntd_id)
-            print(danh_gia)
+            danh_gia = DanhGiaNhaTuyenDung.objects.filter(ung_vien_id=uv_id, nha_tuyen_dung_id=ntd_id)\
+                .order_by("-ngay_tao")
+            # print(danh_gia)
             if len(danh_gia) > 0:
                 data = self.serializer_class(danh_gia, many=True).data
                 return Response(data, status.HTTP_200_OK)
@@ -400,7 +417,39 @@ class DanhGiaNhaTuyenDungViewSet(viewsets.ViewSet, generics.CreateAPIView):
                             status.HTTP_400_BAD_REQUEST)
 
     def create(self, request, *args, **kwargs):
-        pass
+        ung_vien_id = request.data.get('ung_vien_id')
+        viec_lam_id = request.data.get('viec_lam_id')
+        nha_tuyen_dung_id = request.data.get('nha_tuyen_dung_id')
+        noi_dung = request.data.get('noi_dung')
+        diem_danh_gia = request.data.get('diem_danh_gia')
+
+        try:
+            defaults = {
+                'ung_vien_id': ung_vien_id,
+                'viec_lam_id': viec_lam_id,
+                'nha_tuyen_dung_id': nha_tuyen_dung_id,
+                'noi_dung': noi_dung,
+                'diem_danh_gia': diem_danh_gia
+            }
+            # QuerySet.update_or_create sẽ fetch dữ liệu từ dưới csdl lên theo **kwargs
+            # nếu có thì cập nhật, ko thì tạo mới theo giá trị của dict khai báo trong defaults
+            # phương thức này trả về tuple (obj, created)
+            danh_gia = DanhGiaNhaTuyenDung.objects.update_or_create(ung_vien_id=ung_vien_id,
+                                                                    viec_lam_id=viec_lam_id,
+                                                                    nha_tuyen_dung_id=nha_tuyen_dung_id,
+                                                                    defaults=defaults)
+            diem_tb = DanhGiaNhaTuyenDung.objects.filter(nha_tuyen_dung_id=nha_tuyen_dung_id).aggregate(Avg('diem_danh_gia'))
+            ntd = NhaTuyenDung.objects.get(nguoi_dung_id=nha_tuyen_dung_id)
+            ntd.diem_danh_gia_tb = math.floor(diem_tb['diem_danh_gia__avg'] * 10) / 10
+            ntd.save()
+            # print(diem_tb)
+            if danh_gia[1] is True:
+                return Response(self.serializer_class(danh_gia[0]).data, status.HTTP_201_CREATED)
+            elif danh_gia[1] is False:
+                return Response(self.serializer_class(danh_gia[0]).data, status.HTTP_200_OK)
+        except Exception as e:
+            print(e)
+            return Response({"Loi request": "thieu du lieu"}, status.HTTP_400_BAD_REQUEST)
 
 
 # API để lấy thông tin client_id, client_secret xin token chứng thực (đăng nhập)

@@ -22,6 +22,7 @@ export let endpoints = {
     "viec-lam-goi-y": (nguoidungId) => `/viec-lam/${nguoidungId}/goi-y/`,
     "ung-tuyen": "/ung-tuyen/",
     "ung-vien-doi-duyet": (nhatuyendungId) => `/ung-tuyen/${nhatuyendungId}/ung-vien-doi-duyet/`,
+    "viec-lam-duoc-chap-nhan": (ungvienId, nhatuyendungId) => `/ung-tuyen/duoc-chap-nhan/?ung_vien_id=${ungvienId}&nha_tuyen_dung_id=${nhatuyendungId}`,
     "de-xuat-viec-lam": (ungvienId) => `/ung-tuyen/${ungvienId}/de-xuat-viec-lam/`,
     "thong-ke": (quy, nam) => `/ung-tuyen/thong-ke/?quy=${quy}&nam=${nam}`,
     "nha-tuyen-dung": "/nha-tuyen-dung/",
@@ -45,6 +46,7 @@ export let endpoints = {
         return url;
     },
     "ung-vien-danh-gia": (ungvienId, nhatuyendungId) => `/danh-gia-nha-tuyen-dung/ung-vien-danh-gia/?ungvien-id=${ungvienId}&nhatuyendung-id=${nhatuyendungId}`,
+    "danh-gia-nha-tuyen-dung": "/danh-gia-nha-tuyen-dung/",
     "bang-cap": "/bang-cap/",
     "ky-nang": "/ky-nang/",
     "kinh-nghiem": "/kinh-nghiem/",
