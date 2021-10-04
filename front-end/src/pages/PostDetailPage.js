@@ -166,7 +166,7 @@ const PostDetailPage = (props) => {
                                 </Card.Body>
                                 <hr />
                                 <Button onClick={() => applyOffer()} variant="success">Nộp đơn ứng tuyển</Button>
-                                <u style={{cursor: "pointer"}} className="text-primary text-center mt-1">Báo cáo vi phạm</u>
+                                {/* <u style={{cursor: "pointer"}} className="text-primary text-center mt-1">Báo cáo vi phạm</u> */}
                             </Card>
 						</Col>
 						<Col sm={12} md={4} className="mb-2">

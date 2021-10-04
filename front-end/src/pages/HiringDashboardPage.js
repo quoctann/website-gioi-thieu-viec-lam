@@ -1,35 +1,46 @@
 import React, { useEffect, useState } from "react";
-import { Container, Row, Col, Card, Form, Button, FloatingLabel } from "react-bootstrap";
+import { Container, Row, Col, Card, Form, Button, FloatingLabel, Modal } from "react-bootstrap";
 import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
-import SimpleInput from "../components/SimpleInput"
-import useSubmitForm from "../utils/CustomHooks"
-import API, { endpoints } from "../utils/API"
-import { VAI_TRO } from "../utils/GlobalConstants"
-import { faAddressCard, faBriefcase, faBuilding, faClock, faCogs, faEnvelope, faGraduationCap, faKey, faMapMarkerAlt, faMedal, faPhone, faUsers } from "@fortawesome/free-solid-svg-icons";
+import SimpleInput from "../components/SimpleInput";
+import useSubmitForm from "../utils/CustomHooks";
+import API, { endpoints } from "../utils/API";
+import { VAI_TRO } from "../utils/GlobalConstants";
+import { faAddressCard, faBriefcase, faBuilding, faClock, faCogs, faEnvelope, faGraduationCap, faHandHoldingUsd, faHeading, faKey, faMapMarkerAlt, faMedal, faPhone, faUsers } from "@fortawesome/free-solid-svg-icons";
 import cookies from "react-cookies";
 import Routes from "../routes";
 import { xemChiTietUngVien } from "../redux/actions";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Moment from 'react-moment';
-import 'moment-timezone';
+import "moment-timezone";
+import Select from 'react-select';
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import PaginationBar from "../components/PaginationBar";
+import moment from "moment";
 
 const HiringDashboardPage = (props) => {
 	// Lấy thông tin nhà tuyển dụng (người dùng) đang đăng nhập sử dụng web
-    const user = props.store.userReducer;
+    const [user, setUser] = useState(props.store.userReducer);
+	// Đổ ra giao diện để xử lý chức năng cập nhật
+	const handleUserChange = (event) => {
+		event.persist();
+		setUser((inputs) => ({
+			...inputs,
+			[event.target.name]: event.target.value,
+		}));
+	};
 	// Phương thức cập nhật thông tin cá nhân nhà tuyển dụng
     const updateUserInfo = () => {};
 	// Trường avatar lưu media file
     const avatar = React.createRef();
-	// Tiện ích để handle các ô input (SimpleInput)
-    const { handleSubmit, handleInputChange, inputs } = useSubmitForm(updateUserInfo);
 
 	// Get thông tin có sẵn trên server các danh mục để lọc (nên gom lại 1 object cho gọn)
 	const [degrees, setDegrees] = useState([]);
 	const [skills, setSkills] = useState([]);
 	const [experiences, setExperiences] = useState([]);
 	const [careers, setCareers] = useState([]);
+	const [benefits, setBenefits] = useState([])
 
 	// Gửi request để lấy dữ liệu danh mục
 	const getFilterCategory = async () => {
@@ -37,10 +48,12 @@ const HiringDashboardPage = (props) => {
 		const skillsRes = await API.get(endpoints["ky-nang"]);
 		const expRes = await API.get(endpoints["kinh-nghiem"]);
 		const careersRes = await API.get(endpoints["nganh-nghe"]);
+		const benefitsRes = await API.get(endpoints["phuc-loi"])
 		setDegrees(degreesRes.data);
 		setSkills(skillsRes.data);
 		setExperiences(expRes.data);
 		setCareers(careersRes.data);
+		setBenefits(benefitsRes.data);
 	};
 
 	// Thông tin các ứng viên đang đợi duyệt nhận đơn ứng tuyển (lưu trữ)
@@ -85,6 +98,54 @@ const HiringDashboardPage = (props) => {
 		console.log(res.data, ketQua)
 	}
 
+	// Chức năng đăng tin tuyển dụng
+	// Hiện modal đăng tin tuyển dụng tùy thuộc biến show này
+	const [showDangTin, setShowDangTin] = useState(false)
+	// Các dữ liệu để gửi lên server tạo bản ghi
+	const [ngayHetHan, setNgayHetHan] = useState(new Date());
+	const [tinTuyenDung, setTinTuyenDung] = useState({
+		tieu_de: "",
+		luong: "",
+		noi_dung: "",
+		bang_cap: [],
+		ky_nang: [],
+		kinh_nghiem: [],
+		nganh_nghe: [],
+		phuc_loi: [],
+	})
+
+	// Phương thức gửi dữ liệu lên server để tạo bản ghi
+	const dangTinTuyenDung = async () => {
+		// console.log(tinTuyenDung)
+		const res = await API.post(endpoints["viec-lam"], tinTuyenDung)
+		// console.log(res.data)
+		if (res.data === 201) {
+			alert("Tạo việc làm thành công!")
+			setShowDangTin(false);
+		} else if (res.data === 400) {
+			alert("Hệ thống đang lỗi vui lòng thử lại sau!")
+		}
+	}
+
+	// Parse dữ liệu đổ ra ô multi select trong đăng tin tuyển dụng (tạm thời theo format của react-select)
+	let options = {}
+	let arr = []
+	degrees.map(item => arr.push({value: item.id, label: item.ten}))
+	options['degrees'] = arr;
+	arr = []
+	experiences.map(item => arr.push({value: item.id, label: item.ten}))
+	options['experiences'] = arr;
+	arr = []
+	skills.map(item => arr.push({value: item.id, label: item.ten}))
+	options['skills'] = arr;
+	arr = []
+	careers.map(item => arr.push({value: item.id, label: item.ten}))
+	options['careers'] = arr;
+	arr = []
+	benefits.map(item => arr.push({value: item.id, label: item.ten}))
+	options['benefits'] = arr;
+	arr = []
+
 	useEffect(() => {
 		const ac = new AbortController();
         getFilterCategory();
@@ -122,11 +183,8 @@ const HiringDashboardPage = (props) => {
 												label="Tên của bạn"
 												faIcon={faAddressCard}
 												type="text"
-												placeholder={
-													user.nguoi_dung.first_name
-												}
-												value={inputs.first_name}
-												onChange={handleInputChange}
+												value={user.nguoi_dung.first_name}
+												onChange={handleUserChange}
 												name="first_name"
 											/>
 
@@ -134,11 +192,8 @@ const HiringDashboardPage = (props) => {
 												label="Họ của bạn"
 												faIcon={faAddressCard}
 												type="text"
-												placeholder={
-													user.nguoi_dung.last_name
-												}
-												value={inputs.last_name}
-												onChange={handleInputChange}
+												value={user.nguoi_dung.last_name}
+												onChange={handleUserChange}
 												name="last_name"
 											/>
 
@@ -146,11 +201,8 @@ const HiringDashboardPage = (props) => {
 												label="Email"
 												faIcon={faEnvelope}
 												type="email"
-												placeholder={
-													user.nguoi_dung.email
-												}
-												value={inputs.email}
-												onChange={handleInputChange}
+												value={user.nguoi_dung.email}
+												onChange={handleUserChange}
 												name="email"
 											/>
 
@@ -158,33 +210,9 @@ const HiringDashboardPage = (props) => {
 												label="Số điện thoại"
 												faIcon={faPhone}
 												type="text"
-												placeholder={
-													user.nguoi_dung
-														.so_dien_thoai
-												}
-												value={inputs.so_dien_thoai}
-												onChange={handleInputChange}
+												value={user.nguoi_dung.so_dien_thoai}
+												onChange={handleUserChange}
 												name="so_dien_thoai"
-											/>
-
-											<SimpleInput
-												label="Mật khẩu"
-												faIcon={faKey}
-												type="password"
-												placeholder="********"
-												value={inputs.password}
-												onChange={handleInputChange}
-												name="password"
-											/>
-
-											<SimpleInput
-												label="Nhập lại mật khẩu"
-												faIcon={faKey}
-												type="password"
-												placeholder="********"
-												value={inputs.confirm_password}
-												onChange={handleInputChange}
-												name="confirm_password"
 											/>
 											<Form.Group
 												className="my-4"
@@ -202,27 +230,24 @@ const HiringDashboardPage = (props) => {
                                                 label="Tên công ty"
                                                 faIcon={faBuilding}
                                                 type="text"
-                                                placeholder={user.ten_cong_ty}
-                                                value={inputs.ten_cong_ty}
-                                                onChange={handleInputChange}
+                                                value={user.ten_cong_ty}
+                                                onChange={handleUserChange}
                                                 name="ten_cong_ty"
                                             />
                                             <SimpleInput
                                                 label="Số lượng nhân viên"
                                                 faIcon={faUsers}
                                                 type="text"
-                                                placeholder={user.quy_mo}
-                                                value={inputs.quy_mo}
-                                                onChange={handleInputChange}
+                                                value={user.quy_mo}
+                                                onChange={handleUserChange}
                                                 name="quy_mo"
                                             />
 											<SimpleInput
 												label="Địa chỉ"
 												faIcon={faMapMarkerAlt}
 												type="text"
-												placeholder={user.dia_chi}
-												value={inputs.dia_chi}
-												onChange={handleInputChange}
+												value={user.dia_chi}
+												onChange={handleUserChange}
 												name="dia_chi"
 											/>
 											<Form.Group className="my-4">
@@ -232,17 +257,17 @@ const HiringDashboardPage = (props) => {
 												<Form.Control
 													as="textarea"
 													name="gioi_thieu"
-													placeholder={
-														user.gioi_thieu
-													}
-													value={inputs.gioi_thieu}
-													onChange={handleInputChange}
+													value={user.gioi_thieu}
+													onChange={handleUserChange}
 												/>
 											</Form.Group>
 											<Button variant="success">
 												Lưu thông tin cá nhân
 											</Button>
 										</Form>
+										<hr />
+										<p>Đổi mật khẩu 3 ô input</p>
+
 									</Card.Body>
 								</Card>
 							</Col>
@@ -302,7 +327,7 @@ const HiringDashboardPage = (props) => {
 									<p className="my-2 text-center">
 										{user.nguoi_dung.email}
 									</p>
-									<Button variant="primary">Đăng tin tuyển dụng</Button>
+									<Button onClick={() => setShowDangTin(true)} variant="primary">Đăng tin tuyển dụng</Button>
 								</Card>
 							</Col>
 						</Row>
@@ -418,6 +443,134 @@ const HiringDashboardPage = (props) => {
 					</Col>
 				</Row>
 			</Container>
+			{/* Modal của chức năng đăng tin */}
+			<Modal 
+				show={showDangTin} 
+				onHide={() => setShowDangTin(false)} 
+				centered 
+				size="lg"
+				backdrop="static"
+			>
+				<Modal.Header closeButton>
+					<Modal.Title>Đăng tin tuyển dụng</Modal.Title>
+				</Modal.Header>
+				
+				<Modal.Body>
+					<Form onSubmit={dangTinTuyenDung}>
+						<SimpleInput
+							label="Tiêu đề bài viết tuyển dụng"
+							faIcon={faHeading}
+							type="text"
+							placeholder="Nhập tiêu đề bài viết"
+							value={tinTuyenDung.tieu_de}
+							onChange={(e) => setTinTuyenDung({
+								...tinTuyenDung, 
+								tieu_de: e.target.value,
+								nha_tuyen_dung_id: user.nguoi_dung.id,
+							})}
+							name="tieu_de"
+							required={true}
+						/>
+						<SimpleInput
+							label="Mức lương (VNĐ)"
+							faIcon={faHandHoldingUsd}
+							type="text"
+							placeholder="Nhập mức lương (nhập 0 nếu lương là thương lượng)"
+							value={tinTuyenDung.luong}
+							onChange={(e) => setTinTuyenDung({...tinTuyenDung, luong: e.target.value})}
+							name="luong"
+							required={true}
+						/>
+						<Form.Group className="my-4">
+							<Form.Label>Ngày hết hạn</Form.Label>
+							<DatePicker
+								selected={ngayHetHan} 
+								onChange={(date) => {
+									setNgayHetHan(date)
+									setTinTuyenDung({...tinTuyenDung, ngay_het_han: moment(date).format("YYYY-MM-DD").toString()})
+								}}
+								className="form-control"
+								required
+							/>
+						</Form.Group>
+						<Form.Group className="my-4">
+							<Form.Label>Nội dung</Form.Label>
+							<Form.Control
+								as="textarea"
+								placeholder="Nội dung của bài viết tuyển dụng"
+								name="noi_dung"
+								value={tinTuyenDung.noi_dung}
+								onChange={(e) => setTinTuyenDung({...tinTuyenDung, noi_dung: e.target.value})}
+								required={true}
+							/>
+						</Form.Group>
+						<Form.Group className="my-4">
+							<Form.Label>Bằng cấp</Form.Label>
+							<Select
+								closeMenuOnSelect={false}
+								isMulti
+								options={options.degrees}
+								name="bang_cap"
+								value={tinTuyenDung.bang_cap}
+								onChange={(e) => setTinTuyenDung({...tinTuyenDung, bang_cap: e}) }
+							/>
+						</Form.Group>
+						<Form.Group className="my-4">
+							<Form.Label>Kỹ năng</Form.Label>
+							<Select
+								closeMenuOnSelect={false}
+								isMulti
+								options={options.skills}
+								name="ky_nang"
+								value={tinTuyenDung.ky_nang}
+								onChange={(e) => setTinTuyenDung({...tinTuyenDung, ky_nang: e}) }
+							/>
+						</Form.Group>
+						<Form.Group className="my-4">
+							<Form.Label>Kinh nghiệm</Form.Label>
+							<Select
+								closeMenuOnSelect={false}
+								isMulti
+								options={options.experiences}
+								name="kinh_nghiem"
+								value={tinTuyenDung.kinh_nghiem}
+								onChange={(e) => setTinTuyenDung({...tinTuyenDung, kinh_nghiem: e}) }
+							/>
+						</Form.Group>
+						<Form.Group className="my-4">
+							<Form.Label>Ngành nghề</Form.Label>
+							<Select
+								closeMenuOnSelect={false}
+								isMulti
+								options={options.careers}
+								name="nganh_nghe"
+								value={tinTuyenDung.nganh_nghe}
+								onChange={(e) => setTinTuyenDung({...tinTuyenDung, nganh_nghe: e}) }
+							/>
+						</Form.Group>
+						<Form.Group className="my-4">
+							<Form.Label>Phúc lợi</Form.Label>
+							<Select
+								closeMenuOnSelect={false}
+								isMulti
+								options={options.benefits}
+								name="nganh_nghe"
+								value={tinTuyenDung.benefits}
+								onChange={(e) => setTinTuyenDung({...tinTuyenDung, phuc_loi: e}) }
+							/>
+						</Form.Group>
+					</Form>
+				</Modal.Body>
+				<Modal.Footer>
+					<Button variant="secondary" onClick={() => setShowDangTin(false)}>
+						Hủy
+					</Button>
+					<Button variant="primary" onClick={() => dangTinTuyenDung()}>
+						Đăng tin
+					</Button>
+				</Modal.Footer>
+				
+			</Modal>
 		</>
 	);
 }

@@ -153,6 +153,56 @@ class ViecLamViewSet(viewsets.ViewSet, generics.ListAPIView):
         serializer = ViecLamSerializer(vieclam)
         return Response(serializer.data)
 
+    # Nhà tuyển dụng tạo một việc làm mới
+    def create(self, request):
+        try:
+            # Các trường n-n phải add riêng
+            nganh_nghe_list = request.data.get('nganh_nghe')
+            bang_cap_list = request.data.get('bang_cap')
+            kinh_nghiem_list = request.data.get('kinh_nghiem')
+            ky_nang_list = request.data.get('ky_nang')
+            phuc_loi_list = request.data.get('phuc_loi')
+
+            # Tạo trước đối tượng việc làm cơ bản
+            viec_lam = ViecLam(nha_tuyen_dung_id=request.data.get('nha_tuyen_dung_id'),
+                               tieu_de=request.data.get('tieu_de'),
+                               noi_dung=request.data.get('noi_dung'),
+                               luong=int(request.data.get('luong')),
+                               ngay_het_han=request.data.get('ngay_het_han'))
+            viec_lam.save()
+
+            # Tạo các quan hệ n-n
+            if nganh_nghe_list is not None:
+                for nghe in nganh_nghe_list:
+                    nganh_nghe = NganhNghe.objects.get(pk=nghe['value'])
+                    viec_lam.nganh_nghe.add(nganh_nghe)
+
+            if bang_cap_list is not None:
+                for bang in bang_cap_list:
+                    bang_cap = BangCap.objects.get(pk=bang['value'])
+                    viec_lam.bang_cap.add(bang_cap)
+
+            if kinh_nghiem_list is not None:
+                for knghiem in kinh_nghiem_list:
+                    kinh_nghiem = KinhNghiem.objects.get(pk=knghiem['value'])
+                    viec_lam.kinh_nghiem.add(kinh_nghiem)
+
+            if ky_nang_list is not None:
+                for kynang in ky_nang_list:
+                    ky_nang = KyNang.objects.get(pk=kynang['value'])
+                    viec_lam.ky_nang.add(ky_nang)
+
+            if phuc_loi_list is not None:
+                for phucloi in phuc_loi_list:
+                    phuc_loi = PhucLoi.objects.get(pk=phucloi['value'])
+                    viec_lam.phuc_loi.add(phuc_loi)
+
+            return Response(status.HTTP_201_CREATED)
+
+        except Exception as ex:
+            print(ex)
+            return Response(status.HTTP_400_BAD_REQUEST)
+
     # Lấy dữ liệu công việc gợi ý dựa trên ngành nghề của ứng viên (id gửi lên)
     @action(methods=['get'], detail=True, url_path='goi-y')
     def goi_y(self, request, pk):
@@ -404,7 +454,7 @@ class DanhGiaNhaTuyenDungViewSet(viewsets.ViewSet, generics.CreateAPIView):
         ntd_id = request.query_params.get('nhatuyendung-id')
 
         if uv_id is not None and ntd_id is not None:
-            danh_gia = DanhGiaNhaTuyenDung.objects.filter(ung_vien_id=uv_id, nha_tuyen_dung_id=ntd_id)\
+            danh_gia = DanhGiaNhaTuyenDung.objects.filter(ung_vien_id=uv_id, nha_tuyen_dung_id=ntd_id) \
                 .order_by("-ngay_tao")
             # print(danh_gia)
             if len(danh_gia) > 0:
@@ -438,7 +488,8 @@ class DanhGiaNhaTuyenDungViewSet(viewsets.ViewSet, generics.CreateAPIView):
                                                                     viec_lam_id=viec_lam_id,
                                                                     nha_tuyen_dung_id=nha_tuyen_dung_id,
                                                                     defaults=defaults)
-            diem_tb = DanhGiaNhaTuyenDung.objects.filter(nha_tuyen_dung_id=nha_tuyen_dung_id).aggregate(Avg('diem_danh_gia'))
+            diem_tb = DanhGiaNhaTuyenDung.objects.filter(nha_tuyen_dung_id=nha_tuyen_dung_id).aggregate(
+                Avg('diem_danh_gia'))
             ntd = NhaTuyenDung.objects.get(nguoi_dung_id=nha_tuyen_dung_id)
             ntd.diem_danh_gia_tb = math.floor(diem_tb['diem_danh_gia__avg'] * 10) / 10
             ntd.save()

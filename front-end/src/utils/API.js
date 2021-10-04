@@ -51,6 +51,7 @@ export let endpoints = {
     "ky-nang": "/ky-nang/",
     "kinh-nghiem": "/kinh-nghiem/",
     "nganh-nghe": "/nganh-nghe/",
+    "phuc-loi": "/phuc-loi/",
 }
 
 export const baseURL = "http://127.0.0.1:8000";
