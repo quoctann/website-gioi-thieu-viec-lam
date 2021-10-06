@@ -3,13 +3,12 @@ import { Container, Row, Col, Card, Form, Button, FloatingLabel, Modal } from "r
 import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
 import SimpleInput from "../components/SimpleInput";
-import useSubmitForm from "../utils/CustomHooks";
-import API, { endpoints } from "../utils/API";
+import API, { baseURL, endpoints } from "../utils/API";
 import { VAI_TRO } from "../utils/GlobalConstants";
 import { faAddressCard, faBriefcase, faBuilding, faClock, faCogs, faEnvelope, faGraduationCap, faHandHoldingUsd, faHeading, faKey, faMapMarkerAlt, faMedal, faPhone, faUsers } from "@fortawesome/free-solid-svg-icons";
 import cookies from "react-cookies";
 import Routes from "../routes";
-import { xemChiTietUngVien } from "../redux/actions";
+import { xemChiTietUngVien, login } from "../redux/actions";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Moment from 'react-moment';
 import "moment-timezone";
@@ -23,15 +22,59 @@ const HiringDashboardPage = (props) => {
 	// Lấy thông tin nhà tuyển dụng (người dùng) đang đăng nhập sử dụng web
     const [user, setUser] = useState(props.store.userReducer);
 	// Đổ ra giao diện để xử lý chức năng cập nhật
-	const handleUserChange = (event) => {
+	const thongTinNhaTuyenDung = (event) => {
 		event.persist();
-		setUser((inputs) => ({
-			...inputs,
-			[event.target.name]: event.target.value,
-		}));
+		setUser({
+			...user,
+			[event.target.name]: event.target.value
+		})
 	};
+
+	const thongTinNguoiDung = (event) => {
+		event.persist();
+		setUser({
+			...user,
+			nguoi_dung: {
+				...user.nguoi_dung,
+				[event.target.name]: event.target.value
+			}
+		})
+	}
+
 	// Phương thức cập nhật thông tin cá nhân nhà tuyển dụng
-    const updateUserInfo = () => {};
+    const capNhatThongTin = async () => {
+		// console.log(user)
+		const formData = new FormData();
+		// Duyệt qua người dùng lưu trong redux đã chỉnh sửa (nếu có) xong gán vào form data 
+		for (let u in user) {
+			if (u === "nguoi_dung")
+				for (let i in user.nguoi_dung)
+					if (i !==  "anh_dai_dien")
+						formData.append(i, user.nguoi_dung[i]);
+			else
+				formData.append(u, user[u]);
+		}
+
+		if (avatar.current.files[0])
+			formData.append("anh_dai_dien", avatar.current.files[0]);
+		
+		const capNhat = await API.put(endpoints["nha-tuyen-dung"], formData, {
+			headers: {
+				"Content-Type": "multipart/form-data",
+			}
+		})
+
+		if (capNhat.status === 200) {
+			console.log(capNhat.data)
+			cookies.save("user", capNhat.data)
+			props.capNhatThanhCong(capNhat.data)
+			alert("Cập nhật thông tin thành công!")
+			window.location.reload()
+		} else if (capNhat.status === 400) {
+			alert("Thông tin không hợp lệ!")
+		}
+	};
+
 	// Trường avatar lưu media file
     const avatar = React.createRef();
 
@@ -184,7 +227,7 @@ const HiringDashboardPage = (props) => {
 												faIcon={faAddressCard}
 												type="text"
 												value={user.nguoi_dung.first_name}
-												onChange={handleUserChange}
+												onChange={thongTinNguoiDung}
 												name="first_name"
 											/>
 
@@ -193,7 +236,7 @@ const HiringDashboardPage = (props) => {
 												faIcon={faAddressCard}
 												type="text"
 												value={user.nguoi_dung.last_name}
-												onChange={handleUserChange}
+												onChange={thongTinNguoiDung}
 												name="last_name"
 											/>
 
@@ -202,7 +245,7 @@ const HiringDashboardPage = (props) => {
 												faIcon={faEnvelope}
 												type="email"
 												value={user.nguoi_dung.email}
-												onChange={handleUserChange}
+												onChange={thongTinNguoiDung}
 												name="email"
 											/>
 
@@ -211,7 +254,7 @@ const HiringDashboardPage = (props) => {
 												faIcon={faPhone}
 												type="text"
 												value={user.nguoi_dung.so_dien_thoai}
-												onChange={handleUserChange}
+												onChange={thongTinNguoiDung}
 												name="so_dien_thoai"
 											/>
 											<Form.Group
@@ -231,7 +274,7 @@ const HiringDashboardPage = (props) => {
                                                 faIcon={faBuilding}
                                                 type="text"
                                                 value={user.ten_cong_ty}
-                                                onChange={handleUserChange}
+                                                onChange={thongTinNhaTuyenDung}
                                                 name="ten_cong_ty"
                                             />
                                             <SimpleInput
@@ -239,7 +282,7 @@ const HiringDashboardPage = (props) => {
                                                 faIcon={faUsers}
                                                 type="text"
                                                 value={user.quy_mo}
-                                                onChange={handleUserChange}
+                                                onChange={thongTinNhaTuyenDung}
                                                 name="quy_mo"
                                             />
 											<SimpleInput
@@ -247,7 +290,7 @@ const HiringDashboardPage = (props) => {
 												faIcon={faMapMarkerAlt}
 												type="text"
 												value={user.dia_chi}
-												onChange={handleUserChange}
+												onChange={thongTinNhaTuyenDung}
 												name="dia_chi"
 											/>
 											<Form.Group className="my-4">
@@ -258,16 +301,16 @@ const HiringDashboardPage = (props) => {
 													as="textarea"
 													name="gioi_thieu"
 													value={user.gioi_thieu}
-													onChange={handleUserChange}
+													onChange={thongTinNhaTuyenDung}
 												/>
 											</Form.Group>
-											<Button variant="success">
-												Lưu thông tin cá nhân
-											</Button>
+											<Button 
+												variant="success"
+												onClick={() => capNhatThongTin()}
+											>Lưu thông tin cá nhân</Button>
 										</Form>
-										<hr />
-										<p>Đổi mật khẩu 3 ô input</p>
-
+										{/* <hr />
+										<p>Đổi mật khẩu 3 ô input</p> */}
 									</Card.Body>
 								</Card>
 							</Col>
@@ -297,7 +340,7 @@ const HiringDashboardPage = (props) => {
 													<Button 
 														variant="outline-primary me-2"
 														onClick={() => {
-															props.emit(applyInfo[index].ung_vien.nguoi_dung.id, 
+															props.xemChiTietUngVien(applyInfo[index].ung_vien.nguoi_dung.id, 
 																applyInfo[index].viec_lam.id, applyInfo[index].viec_lam.tieu_de);
 															props.history.push(Routes.UngVienChiTietPage.path);
 														}}
@@ -319,7 +362,9 @@ const HiringDashboardPage = (props) => {
 						<Row className="mb-4">
 							<Col>
 								<Card className="p-4" border="dark">
-									<Card.Img variant="top" src={user.nguoi_dung.anh_dai_dien} />
+									<Card.Img variant="top" src={
+										(user.nguoi_dung.anh_dai_dien).substr(0, 4) !== "http" ? (baseURL + user.nguoi_dung.anh_dai_dien) : user.nguoi_dung.anh_dai_dien
+									} />
 									<h4 className="mt-4 mb-2 text-center">
 										{user.nguoi_dung.last_name}{" "}
 										{user.nguoi_dung.first_name}
@@ -420,7 +465,7 @@ const HiringDashboardPage = (props) => {
 										<Button 
 											variant="outline-primary"
 											onClick={() => {
-												props.emit(uv.nguoi_dung.id, 0, "");
+												props.xemChiTietUngVien(uv.nguoi_dung.id, 0, "");
 												props.history.push(Routes.UngVienChiTietPage.path);
 											}}
 										>Xem hồ sơ</Button>
@@ -583,7 +628,8 @@ export default connect(
     },
 	(dispatch) => {
 		return {
-			emit: (ungvienId, vieclamId, tenViecLam) => dispatch(xemChiTietUngVien(ungvienId, vieclamId, tenViecLam))
+			xemChiTietUngVien: (ungvienId, vieclamId, tenViecLam) => dispatch(xemChiTietUngVien(ungvienId, vieclamId, tenViecLam)),
+			capNhatThanhCong: (user) => dispatch(login(user))
 		}
 	}
 )(HiringDashboardPage);

@@ -23,6 +23,9 @@ import { viewHiringPage } from "../redux/actions"
 import Routes from "../routes";
 
 const LandingPage = (props) => {
+	// Thông tin người dùng hiện tại
+	const nguoidung = props.store.userReducer;
+	
 	// Đoạn chữ cạnh hình (carousel)
 	const CarouselCaption = (props) => {
 		return (
@@ -270,8 +273,12 @@ const LandingPage = (props) => {
 														</Card.Text>
 														<Button 
 															onClick={() => {
-																props.viewHiringPage(result.nguoi_dung.id);
-																props.history.push(Routes.HiringDetailPage.path);
+																if (nguoidung.hasOwnProperty("nguoi_dung")) {
+																	props.viewHiringPage(result.nguoi_dung.id);
+																	props.history.push(Routes.HiringDetailPage.path);
+																} else {
+																	props.history.push(Routes.LoginPage.path)
+																}
 															}} 
 															variant="primary"
 														>
@@ -473,7 +480,9 @@ const LandingPage = (props) => {
 }
 export default connect(
 	(state) => {
-		return {}
+		return {
+			store: state
+		}
 	},
 	(dispatch) => {
 		return {

@@ -216,7 +216,8 @@ class ViecLamViewSet(viewsets.ViewSet, generics.ListAPIView):
         return Response(self.serializer_class(viec_lam, many=True).data, status=status.HTTP_200_OK)
 
 
-class NhaTuyenDungViewSet(viewsets.ViewSet, generics.ListAPIView, generics.RetrieveAPIView):
+class NhaTuyenDungViewSet(viewsets.ViewSet, generics.ListAPIView,
+                          generics.RetrieveAPIView, generics.UpdateAPIView):
     serializer_class = NhaTuyenDungSerializer
     queryset = NhaTuyenDung.objects.filter(doi_xet_duyet=False)
 
@@ -229,6 +230,43 @@ class NhaTuyenDungViewSet(viewsets.ViewSet, generics.ListAPIView, generics.Retri
             ntd = ntd.filter(ten_cong_ty__icontains=tim_kiem)
 
         return ntd
+
+    # Cập nhật thông tin nhà tuyển dụng (ghi đè generics update)
+    def put(self, request, *args, **kwargs):
+        try:
+            # Lấy dữ liệu từ 2 bảng để cập nhật thông tin
+            ntd = NhaTuyenDung.objects.get(pk=request.data['id'])
+            nguoidung = NguoiDung.objects.get(pk=request.data['id'])
+
+            # Có trường nào thì cập nhật trường đó
+            if request.data.get('email') is not None:
+                nguoidung.email = request.data.get('email')
+            if request.data.get('first_name') is not None:
+                nguoidung.first_name = request.data.get('first_name')
+            if request.data.get('last_name') is not None:
+                nguoidung.last_name = request.data.get('last_name')
+            if request.data.get('so_dien_thoai') is not None:
+                nguoidung.so_dien_thoai = request.data.get('so_dien_thoai')
+            if request.data.get('anh_dai_dien') is not None:
+                nguoidung.anh_dai_dien = request.data.get('anh_dai_dien')
+
+            if request.data.get('ten_cong_ty') is not None:
+                ntd.ten_cong_ty = request.data.get('ten_cong_ty')
+            if request.data.get('dia_chi') is not None:
+                ntd.dia_chi = request.data.get('dia_chi')
+            if request.data.get('quy_mo') is not None:
+                ntd.quy_mo = request.data.get('quy_mo')
+            if request.data.get('gioi_thieu') is not None:
+                ntd.gioi_thieu = request.data.get('gioi_thieu')
+
+            nguoidung.save()
+            ntd.save()
+
+            return Response(data=self.serializer_class(ntd).data, status=status.HTTP_200_OK)
+
+        except Exception as e:
+            print(e)
+            return Response({"Bad request": "Du lieu gui len khong dung yeu cau"}, status.HTTP_400_BAD_REQUEST)
 
     # API trả ra tất cả bài viết (tin tuyển dụng việc làm) đang mở của một ntd cụ thể (id)
     @action(methods=['get'], detail=True, url_path='viec-lam')

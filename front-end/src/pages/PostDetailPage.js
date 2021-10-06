@@ -75,7 +75,7 @@ const PostDetailPage = (props) => {
     const user = props.store.userReducer;
 
     // Gọi khi nút Nộp đơn ứng tuyển được nhấn
-    const applyOffer = (jobId = postId, userId = user.nguoi_dung.id) => {
+    const applyOffer = (jobId = postId, userId = 0) => {
         // Kiểm tra trạng thái đăng nhập có hợp lệ hay không
         if (!user.hasOwnProperty("nguoi_dung")) {
             alert("Bạn cần đăng nhập tài khoản Ứng viên để thực hiện nộp đơn ứng tuyển!");
@@ -88,6 +88,8 @@ const PostDetailPage = (props) => {
             return;
         }
 
+        userId = user.nguoi_dung.id
+        
         // Nếu hợp lệ thì tiến hành request tạo dữ liệu dưới csdl
         const apply = async () => {
             try {
