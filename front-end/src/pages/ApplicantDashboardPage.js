@@ -5,27 +5,100 @@ import "react-datepicker/dist/react-datepicker.css";
 import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
 import SimpleInput from "../components/SimpleInput"
-import useSubmitForm from "../utils/CustomHooks"
-import API, { endpoints } from "../utils/API"
+import API, { baseURL, endpoints } from "../utils/API"
 import { VAI_TRO } from "../utils/GlobalConstants"
-import { faAddressCard, faEnvelope, faKey, faMapMarkerAlt, faPhone } from "@fortawesome/free-solid-svg-icons";
+import { faAddressCard, faEnvelope, faMapMarkerAlt, faPhone } from "@fortawesome/free-solid-svg-icons";
 import cookies from "react-cookies";
 import Routes from "../routes"
+import Select from 'react-select';
+import moment from "moment";
+import { login } from "../redux/actions";
 
 const ApplicantDashboardPage = (props) => {
-	// Người dùng lưu trong cookies được gắn lên redux
-    const user = props.store.userReducer;
-	
-	// Phương thức để cập nhật thông tin người dùng
-    const updateUserInfo = () => {};
-
-	// Các thông tin các ô input dạng text thông thường, handle form cơ bản, gọi callback để submit form
-	const { handleSubmit, handleInputChange, inputs } = useSubmitForm(updateUserInfo);
+	// Người dùng lưu trong cookies được gắn lên redux, convert array để tương thích với react-select
+    const [user, setUser] = useState({
+		...props.store.userReducer,
+		nganh_nghe: (props.store.userReducer.nganh_nghe).map(item => ({value: item.id, label: item.ten})),
+		bang_cap: (props.store.userReducer.bang_cap).map(item => ({value: item.id, label: item.ten})),
+		ky_nang: (props.store.userReducer.ky_nang).map(item => ({value: item.id, label: item.ten})),
+		kinh_nghiem: (props.store.userReducer.kinh_nghiem).map(item => ({value: item.id, label: item.ten})),
+	});
 
 	// Các ô input chứa dữ liệu file, ngày tháng khác với thông thường
     const avatar = React.createRef();
     const cv = React.createRef();
-    const [birthday, setBirthday] = useState(new Date());
+    const [ngaySinh, setNgaySinh] = useState(new Date(user.ngay_sinh));
+
+	// Onchange thông tin thuộc bảng ứng viên
+	const thongTinUngVien = (event) => {
+		event.persist();
+		setUser({
+			...user,
+			[event.target.name]: event.target.value
+		})
+	}
+
+	// Onchange thông tin thuộc bảng người dùng
+	const thongTinNguoiDung = (event) => {
+		event.persist();
+		setUser({
+			...user,
+			nguoi_dung: {
+				...user.nguoi_dung,
+				[event.target.name]: event.target.value
+			}
+		})
+	}
+	
+	// Tiến hàng gửi request lên server để cập nhật dữ liệu
+	const capNhatThongTin = async () => {
+		// console.log(user)
+		const formData = new FormData()
+		// Duyệt qua người dùng lưu trong redux đã chỉnh sửa (nếu có) xong gán vào form data 
+		for (let u in user) {
+			// console.log(u)
+			if (u === "nguoi_dung") {
+				for (let i in user.nguoi_dung) {
+					// console.log(i)
+					if (i !== "anh_dai_dien")
+						formData.append(i, user.nguoi_dung[i]);
+				}
+			} 
+			else if (u === "nganh_nghe" || u === "bang_cap" || u === "ky_nang" || u === "kinh_nghiem") {
+				formData.append(u, JSON.stringify(user[u]));
+			}
+			else if (u !== "cv")
+				formData.append(u, user[u]);
+		}
+
+		if (avatar.current.files[0])
+			formData.append("anh_dai_dien", avatar.current.files[0]);
+		
+		if (cv.current.files[0])
+			formData.append("cv", cv.current.files[0]);
+		
+		// for (var key of formData.keys()) {
+		// 	if (key === "nganh_nghe")
+		// 		console.log(formData.get(key).nganh_nghe)
+		// 	console.log(key, formData.get(key));
+		// }
+
+		const capNhat = await API.put(endpoints["ung-vien-cap-nhat"], formData, {
+			headers: {
+				"Content-Type": "multipart/form-data",
+			}
+		})
+
+		if (capNhat.status === 200) {
+			console.log(capNhat.status)
+			cookies.save("user", capNhat.data)
+			props.capNhatThanhCong(capNhat.data)
+			alert("Cập nhật thông tin thành công!")
+			window.location.reload()
+		} else if (capNhat.status === 400) {
+			alert("Thông tin không hợp lệ!")
+		}
+	}
 
     // Get thông tin có sẵn trên server các danh mục để lọc
     const [degrees, setDegrees] = useState([]);
@@ -56,36 +129,9 @@ const ApplicantDashboardPage = (props) => {
 	const [offer, setOffer] = useState([])
 	const getOffer = async () => {
 		const res = await API.get(endpoints["de-xuat-viec-lam"](user.nguoi_dung.id))
-		console.log(res.data)
+		// console.log(res.data)
 		setOffer(res.data)
 	}
-    
-	// Các ô select của ngành nghề, bằng cấp,... lựa chọn nhiều
-	const [filterData, setFilterData] = useState({});
-    const handleSelectChange = (event) => {
-        var options = event.target.options;
-        var value = [];
-        for (var i = 0, l = options.length; i < l; i++) {
-          if (options[i].selected) {
-            value.push(options[i].value);
-          }
-        }
-        setFilterData({
-            ...filterData, 
-            [event.target.name]: value
-        })
-        console.log(filterData)
-    }
-
-	// Ô select nào đã được chọn (res trả ra) thì tô màu
-    const selectedStyle = (arr, id) => {
-        let style="";
-        for (let i = 0; i < arr.length; i++)
-            if (arr[i].id == id) {
-                style="text-success fw-bold"
-            }
-        return style;
-    }
 
 	// Bấm nút xem chi tiết công việc để đến trang chi tiết việc làm
 	const denTrangChiTietViecLam = (postId) => {
@@ -96,6 +142,21 @@ const ApplicantDashboardPage = (props) => {
 	const currency = (number) => {
 		return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(number)
 	}
+
+	// Parse dữ liệu đổ ra ô multi select trong đăng tin tuyển dụng (tạm thời theo format của react-select)
+	let options = {}
+	let arr = []
+	degrees.map(item => arr.push({value: item.id, label: item.ten}))
+	options['degrees'] = arr;
+	arr = []
+	experiences.map(item => arr.push({value: item.id, label: item.ten}))
+	options['experiences'] = arr;
+	arr = []
+	skills.map(item => arr.push({value: item.id, label: item.ten}))
+	options['skills'] = arr;
+	arr = []
+	careers.map(item => arr.push({value: item.id, label: item.ten}))
+	options['careers'] = arr;
 
 	// Vừa nạp trang thì lấy danh mục, thông tin tuyển dụng, việc làm gợi ý
     useEffect(() => {
@@ -133,11 +194,8 @@ const ApplicantDashboardPage = (props) => {
 												label="Tên của bạn"
 												faIcon={faAddressCard}
 												type="text"
-												placeholder={
-													user.nguoi_dung.first_name
-												}
-												value={inputs.first_name}
-												onChange={handleInputChange}
+												value={user.nguoi_dung.first_name}
+												onChange={thongTinNguoiDung}
 												name="first_name"
 											/>
 
@@ -145,11 +203,8 @@ const ApplicantDashboardPage = (props) => {
 												label="Họ của bạn"
 												faIcon={faAddressCard}
 												type="text"
-												placeholder={
-													user.nguoi_dung.last_name
-												}
-												value={inputs.last_name}
-												onChange={handleInputChange}
+												value={user.nguoi_dung.last_name}
+												onChange={thongTinNguoiDung}
 												name="last_name"
 											/>
 
@@ -157,11 +212,8 @@ const ApplicantDashboardPage = (props) => {
 												label="Email"
 												faIcon={faEnvelope}
 												type="email"
-												placeholder={
-													user.nguoi_dung.email
-												}
-												value={inputs.email}
-												onChange={handleInputChange}
+												value={user.nguoi_dung.email}
+												onChange={thongTinNguoiDung}
 												name="email"
 											/>
 
@@ -169,131 +221,94 @@ const ApplicantDashboardPage = (props) => {
 												label="Số điện thoại"
 												faIcon={faPhone}
 												type="text"
-												placeholder={
-													user.nguoi_dung
-														.so_dien_thoai
-												}
-												value={inputs.so_dien_thoai}
-												onChange={handleInputChange}
+												value={user.nguoi_dung.so_dien_thoai}
+												onChange={thongTinNguoiDung}
 												name="so_dien_thoai"
 											/>
-
-											<SimpleInput
-												label="Mật khẩu"
-												faIcon={faKey}
-												type="password"
-												placeholder="********"
-												value={inputs.password}
-												onChange={handleInputChange}
-												name="password"
-											/>
-
-											<SimpleInput
-												label="Nhập lại mật khẩu"
-												faIcon={faKey}
-												type="password"
-												placeholder="********"
-												value={inputs.confirm_password}
-												onChange={handleInputChange}
-												name="confirm_password"
-											/>
-											<Form.Group
-												className="my-4"
-												controlId="avatar"
-											>
-												<Form.Label>
-													Ảnh đại diện
-												</Form.Label>
-												<Form.Control
-													type="file"
-													ref={avatar}
-												/>
+											<Form.Group className="my-4" controlId="avatar" >
+												<Form.Label>Ảnh đại diện</Form.Label>
+												<Form.Control type="file" ref={avatar}/>
 											</Form.Group>
-											<hr />
 											<SimpleInput
 												label="Địa chỉ"
 												faIcon={faMapMarkerAlt}
 												type="text"
-												placeholder={user.dia_chi}
-												value={inputs.dia_chi}
-												onChange={handleInputChange}
+												value={user.dia_chi}
+												onChange={thongTinUngVien}
 												name="dia_chi"
 											/>
 											<Form.Group className="my-4">
-												<Form.Label>
-													Giới thiệu
-												</Form.Label>
+												<Form.Label>Giới thiệu</Form.Label>
 												<Form.Control
 													as="textarea"
 													name="gioi_thieu"
-													placeholder={
-														user.gioi_thieu
-													}
-													value={inputs.gioi_thieu}
-													onChange={handleInputChange}
+													value={user.gioi_thieu}
+													onChange={thongTinUngVien}
 												/>
 											</Form.Group>
-                                            <hr />
                                             <Form.Group>
-                                                <Form.Label>Ngày sinh</Form.Label>
+                                                <Form.Label>Ngày sinh (Tháng - Ngày - Năm)</Form.Label>
                                                 <DatePicker 
                                                     className="form-control"
-                                                    selected={birthday} 
-                                                    onChange={(date) => setBirthday(date)}
+                                                    selected={ngaySinh} 
+                                                    onChange={(date) => {
+														setNgaySinh(date)
+														setUser({...user, ngay_sinh: moment(date).format("YYYY-MM-DD").toString()})
+													}}
                                                 />
                                             </Form.Group>
                                             <Form.Group className="my-4" controlId="cv">
-                                                <Form.Label>CV</Form.Label>
-                                                <Form.Control
-                                                    type="file"
-                                                    ref={cv}
-                                                />
+                                                <Form.Label>CV {user.cv ? <a href={user.cv}>Đã upload</a> : "(Chưa upload)"}</Form.Label>
+                                                <Form.Control type="file" ref={cv} />
                                             </Form.Group>
                                             <Form.Group className="my-4">
                                                 <Form.Label>Ngành nghề</Form.Label>
-                                                <Form.Select name="nganh_nghe" onChange={handleSelectChange} multiple>
-                                                    {careers.map((career, index) => {
-                                                        let style = selectedStyle(user.nganh_nghe, career.id)
-                                                        return (
-                                                            <option value={career.id} className={style}>{career.ten}</option>
-                                                        )
-                                                    })}
-                                                </Form.Select>
+												<Select
+													closeMenuOnSelect={false}
+													isMulti
+													name="nganh_nghe"
+													options={options.careers}
+													value={user.nganh_nghe}
+													onChange={(e) => setUser({...user, nganh_nghe: e})}
+												/>
                                             </Form.Group>
                                             <Form.Group className="my-4">
                                                 <Form.Label>Kỹ năng</Form.Label>
-                                                <Form.Select name="ky_nang" onChange={handleSelectChange} multiple>
-                                                    {skills.map((skill, index) => {
-                                                        let style = selectedStyle(user.ky_nang, skill.id)
-                                                        return (
-                                                            <option value={skill.id} className={style}>{skill.ten}</option>
-                                                        )
-                                                    })}
-                                                </Form.Select>
+                                                <Select
+													closeMenuOnSelect={false}
+													isMulti
+													name="ky_nang"
+													options={options.skills}
+													value={user.ky_nang}
+													onChange={(e) => setUser({...user, ky_nang: e})}
+												/>
                                             </Form.Group>
                                             <Form.Group className="my-4">
                                                 <Form.Label>Kinh nghiệm</Form.Label>
-                                                <Form.Select name="kinh_nghiem" onChange={handleSelectChange} multiple>
-                                                    {experiences.map((exp, index) => {
-                                                        let style = selectedStyle(user.kinh_nghiem, exp.id)
-                                                        return (
-                                                            <option value={exp.id} className={style}>{exp.ten}</option>
-                                                        )
-                                                    })}
-                                                </Form.Select>
+                                                <Select
+													closeMenuOnSelect={false}
+													isMulti
+													name="kinh_nghiem"
+													options={options.experiences}
+													value={user.kinh_nghiem}
+													onChange={(e) => setUser({...user, kinh_nghiem: e})}
+												/>
                                             </Form.Group>
                                             <Form.Group className="my-4">
                                                 <Form.Label>Bằng cấp</Form.Label>
-                                                <Form.Select name="bang_cap" onChange={handleSelectChange} multiple>
-                                                    {degrees.map((deg, index) => {
-                                                        let style = selectedStyle(user.bang_cap, deg.id)	
-                                                        return (
-                                                            <option value={deg.id} className={style}>{deg.ten}</option>
-                                                        )
-                                                    })}
-                                                </Form.Select>
+                                                <Select
+													closeMenuOnSelect={false}
+													isMulti
+													name="bang_cap"
+													options={options.degrees}
+													value={user.bang_cap}
+													onChange={(e) => setUser({...user, bang_cap: e})}
+												/>
                                             </Form.Group>
-											<Button variant="success">Lưu những thay đổi</Button>
+											<Button 
+												variant="success"
+												onClick={() => capNhatThongTin()}
+											>Lưu những thay đổi</Button>
 										</Form>
 									</Card.Body>
 								</Card>
@@ -334,7 +349,9 @@ const ApplicantDashboardPage = (props) => {
 						<Row className="mb-4">
 							<Col>
 								<Card className="p-4" border="dark">
-									<Card.Img className="shadow" variant="top" src={user.nguoi_dung.anh_dai_dien} />
+									<Card.Img className="shadow" variant="top" src={
+										(user.nguoi_dung.anh_dai_dien).substr(0, 4) !== "http" ? (baseURL + user.nguoi_dung.anh_dai_dien) : user.nguoi_dung.anh_dai_dien
+									} />
 									<h4 className="mt-4 mb-2 text-center">
 										{user.nguoi_dung.last_name}{" "}
 										{user.nguoi_dung.first_name}
@@ -384,5 +401,10 @@ export default connect(
         return {
             store: state,
         };
-    }
+    },
+	(dispatch) => {
+		return {
+			capNhatThanhCong: (nguoidung) => dispatch(login(nguoidung))
+		}
+	}
 )(ApplicantDashboardPage);

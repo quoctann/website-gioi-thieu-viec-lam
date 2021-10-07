@@ -1,3 +1,4 @@
+// Component này là một cụm ô input hoàn chỉnh (có icon) cho ngắn gọn hơn
 import { Form, InputGroup } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 

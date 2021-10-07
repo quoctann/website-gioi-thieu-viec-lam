@@ -1,3 +1,4 @@
+// Component sẽ được nạp đầu tiên, hiển thị thanh điều hướng
 import { Container, Nav, Navbar, Button } from "react-bootstrap";
 import { Link, useHistory } from "react-router-dom";
 import SimpleLogo from "./SimpleLogo";
@@ -14,6 +15,7 @@ const NavigationBar = (props) => {
 	let user = props.userInfo.userReducer;
 	// console.log("NAV\n", user)
 
+	// Xử lý thao tác đăng xuất, xóa cookies, reset redux state, chuyển về trang chủ
 	const signOut = () => {
 		cookies.remove("user");
 		cookies.remove("access_token");
@@ -21,6 +23,7 @@ const NavigationBar = (props) => {
 		history.push(Routes.LandingPage.path);
 	}
 
+	// Cụm nút đăng nhập đăng ký
 	let rightCorner = (
 		<>
 			<Nav.Item>
@@ -38,7 +41,8 @@ const NavigationBar = (props) => {
 			</Nav.Item>
 		</>
 	);
-	// Nếu user không rỗng
+
+	// Nếu user không rỗng (đã đăng nhập)
 	if (user.hasOwnProperty("nguoi_dung")) {
 		rightCorner = (
 			<>
@@ -70,6 +74,7 @@ const NavigationBar = (props) => {
 			</>
 		);
 	}
+	
 	return (
 		<>
 			<Navbar

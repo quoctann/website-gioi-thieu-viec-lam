@@ -1,9 +1,8 @@
+// Component này là cụm nút phân trang (nếu có xử lý phân trang theo django)
 import { useState } from "react";
 import { Pagination } from "react-bootstrap";
 
 const PaginationBar = (props) => {
-	// UI component phân trang
-
 	// Số item mà server trả ra một lần
 	const defaultGet = props.defaultGet;
 

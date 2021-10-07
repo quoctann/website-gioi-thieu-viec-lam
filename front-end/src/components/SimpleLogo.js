@@ -1,3 +1,4 @@
+// Component này là cụm text format như logo
 export default function SimpleLogo() {
     return (
         <div className="d-flex flex-column">

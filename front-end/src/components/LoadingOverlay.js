@@ -1,3 +1,4 @@
+// Component này để render hoạt ảnh loading
 import { Spinner, Container } from "react-bootstrap";
 const LoadingOverlay = () => {
 	return (

@@ -2,6 +2,7 @@
 # MVC, là thành phần Views trong MVT)
 import datetime
 import math
+import json
 
 from django.db.models import Count, Q, Avg
 from rest_framework import viewsets, generics, permissions, status
@@ -453,7 +454,8 @@ class UngTuyenViewSet(viewsets.ViewSet, generics.ListAPIView):
         return Response(data, status.HTTP_200_OK)
 
 
-class UngVienViewSet(viewsets.ViewSet, generics.RetrieveAPIView, generics.ListAPIView):
+class UngVienViewSet(viewsets.ViewSet, generics.RetrieveAPIView,
+                     generics.ListAPIView, generics.UpdateAPIView):
     queryset = UngVien.objects.all()
     serializer_class = UngVienSerializer
 
@@ -480,6 +482,75 @@ class UngVienViewSet(viewsets.ViewSet, generics.RetrieveAPIView, generics.ListAP
 
         return ung_vien
 
+    # Ghi đè lại phương thức put của generics để cập nhật thông tin người dùng là ứng viên
+    def put(self, request, *args, **kwargs):
+        try:
+            # Lấy dữ liệu từ 2 bảng để cập nhật thông tin
+            ungvien = UngVien.objects.get(pk=request.data['id'])
+            nguoidung = NguoiDung.objects.get(pk=request.data['id'])
+
+            # Có trường nào thì cập nhật trường đó
+            if request.data.get('email') is not None:
+                nguoidung.email = request.data.get('email')
+            if request.data.get('first_name') is not None:
+                nguoidung.first_name = request.data.get('first_name')
+            if request.data.get('last_name') is not None:
+                nguoidung.last_name = request.data.get('last_name')
+            if request.data.get('so_dien_thoai') is not None:
+                nguoidung.so_dien_thoai = request.data.get('so_dien_thoai')
+            if request.data.get('anh_dai_dien') is not None:
+                nguoidung.anh_dai_dien = request.data.get('anh_dai_dien')
+
+            if request.data.get('ngay_sinh') is not None:
+                ungvien.ngay_sinh = request.data.get('ngay_sinh')
+            if request.data.get('dia_chi') is not None:
+                ungvien.dia_chi = request.data.get('dia_chi')
+            if request.data.get('cv') is not None:
+                ungvien.cv = request.data.get('cv')
+            if request.data.get('gioi_thieu') is not None:
+                ungvien.gioi_thieu = request.data.get('gioi_thieu')
+
+            # Vì dữ liệu gửi lên là đối tượng của FormData nên phải parse json mới ra được dict của python
+            nganh_nghe_list = json.loads(request.data.get('nganh_nghe'))
+            bang_cap_list = json.loads(request.data.get('bang_cap'))
+            kinh_nghiem_list = json.loads(request.data.get('kinh_nghiem'))
+            ky_nang_list = json.loads(request.data.get('ky_nang'))
+
+            # Phần nào có thì cập nhật
+            if nganh_nghe_list is not None:
+                # Phương thức clear sẽ tạm thời không link các trường m2m lại, không thực sự xóa dưới csdl
+                ungvien.nganh_nghe.clear()
+                for nghe in nganh_nghe_list:
+                    nganh_nghe = NganhNghe.objects.get(pk=nghe['value'])
+                    ungvien.nganh_nghe.add(nganh_nghe)
+
+            if bang_cap_list is not None:
+                ungvien.bang_cap.clear()
+                for bang in bang_cap_list:
+                    bang_cap = BangCap.objects.get(pk=bang['value'])
+                    ungvien.bang_cap.add(bang_cap)
+
+            if kinh_nghiem_list is not None:
+                ungvien.kinh_nghiem.clear()
+                for knghiem in kinh_nghiem_list:
+                    kinh_nghiem = KinhNghiem.objects.get(pk=knghiem['value'])
+                    ungvien.kinh_nghiem.add(kinh_nghiem)
+
+            if ky_nang_list is not None:
+                ungvien.ky_nang.clear()
+                for kynang in ky_nang_list:
+                    ky_nang = KyNang.objects.get(pk=kynang['value'])
+                    ungvien.ky_nang.add(ky_nang)
+
+            nguoidung.save()
+            ungvien.save()
+
+            return Response(data=self.serializer_class(ungvien).data, status=status.HTTP_200_OK)
+
+        except Exception as e:
+            print(e)
+            return Response({"Bad request": "Du lieu gui len khong dung yeu cau"}, status.HTTP_400_BAD_REQUEST)
+
 
 class DanhGiaNhaTuyenDungViewSet(viewsets.ViewSet, generics.CreateAPIView):
     queryset = DanhGiaNhaTuyenDung.objects.all()
@@ -504,6 +575,7 @@ class DanhGiaNhaTuyenDungViewSet(viewsets.ViewSet, generics.CreateAPIView):
             return Response({"yeu cau khong hop le": "can query param la ungvien-id va vieclam-id"},
                             status.HTTP_400_BAD_REQUEST)
 
+    # Ghi đè generics create để tạo bài đánh giá
     def create(self, request, *args, **kwargs):
         ung_vien_id = request.data.get('ung_vien_id')
         viec_lam_id = request.data.get('viec_lam_id')

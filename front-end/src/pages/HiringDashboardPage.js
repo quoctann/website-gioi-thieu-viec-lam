@@ -527,7 +527,7 @@ const HiringDashboardPage = (props) => {
 							required={true}
 						/>
 						<Form.Group className="my-4">
-							<Form.Label>Ngày hết hạn</Form.Label>
+							<Form.Label>Ngày hết hạn (Tháng - Ngày - Năm)</Form.Label>
 							<DatePicker
 								selected={ngayHetHan} 
 								onChange={(date) => {
