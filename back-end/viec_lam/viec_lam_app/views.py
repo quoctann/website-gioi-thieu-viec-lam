@@ -259,6 +259,7 @@ class NhaTuyenDungViewSet(viewsets.ViewSet, generics.ListAPIView,
                 ntd.quy_mo = request.data.get('quy_mo')
             if request.data.get('gioi_thieu') is not None:
                 ntd.gioi_thieu = request.data.get('gioi_thieu')
+            ntd.doi_xet_duyet = False
 
             nguoidung.save()
             ntd.save()
